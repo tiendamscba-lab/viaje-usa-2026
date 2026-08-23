@@ -655,7 +655,7 @@
         {label:'Recorrido a pie de la zona', mode:'walking', pts:['SoHo, New York','Little Italy, New York','Chinatown, New York','Katz\'s Delicatessen, New York','East Village, New York','Pier 35, New York']}
       ],
       best:{do:'Joe’s Shanghai — no tenés NADA de Chinatown guardado y los soup dumplings son la razón de ser del barrio.', eat:'Katz’s ya está en el plan. Si querés algo más barato, L’industrie Pizzeria Little Italy (4.7★).'},
-      tip:'Hoy es lunes: el 9/11 Memorial tiene entrada gratis a las 17:30 y las reservas salen a las 7am de este mismo día. Si conseguís cupo, movés el memorial acá y te liberás el jueves.'},
+      tip:'Hoy también es lunes, así que también sirve para el museo del 9/11 gratis de las 17:30 — pero recién llegaron y este día ya está lleno. Quedó agendado para el lunes 5/10, que es día libre.'},
 
     {date:'2026-09-29', dow:'MAR', city:'ny', title:'West Side moderno', zones:['chelsea','meatpacking','hudsonyards'],
       stops:['Chelsea Market','Little Island','Pier 57','The High Line','Vessel','The Edge'],
@@ -679,7 +679,7 @@
         {label:'Recorrido a pie hasta DUMBO', mode:'walking', pts:['9/11 Memorial & Museum, New York','Oculus, New York','Pier 17, New York','Brooklyn Bridge, New York','DUMBO Manhattan Bridge View, Brooklyn','Time Out Market New York, Brooklyn','Empire Stores, Brooklyn','Pier 1, Brooklyn Bridge Park, Brooklyn']}
       ],
       best:{do:'DUMBO Manhattan Bridge View (4.8★) — la foto icónica del puente entre los edificios. Ir antes de las 10 o hay fila.', eat:'Time Out Market ya está en el plan y es la mejor decisión: 20 puestos, cada uno come lo que quiere.'},
-      tip:'El día con más lugares tuyos sin usar. La ruta cruza el puente a pie al mediodía y cae en DUMBO, donde tenés Time Out, Empire Stores, el mirador y Pier 1 para el atardecer.'},
+      tip:'Hoy ven las piletas del Memorial, que son al aire libre y gratis: el MUSEO quedó para el lunes 5/10, que entra gratis a las 17:30. La ruta cruza el puente a pie al mediodía y cae en DUMBO, donde tenés Time Out, Empire Stores, el mirador y Pier 1 para el atardecer.'},
 
     {date:'2026-10-02', dow:'VIE', city:'ny', title:'Central Park', zones:['centralpark','uws'],
       stops:['Columbus Circle','Central Park','Museo de Historia Natural','Levain Bakery'],
@@ -709,19 +709,23 @@
       best:{do:'Si hay partido de los Yankees ese domingo, ir al estadio. Si no, cambiá el día por Williamsburg: Domino Park tiene la mejor vista del skyline y los sábados/domingos hay Smorgasburg.', eat:'En Williamsburg: Peter Luger (el steakhouse más famoso de NY) o los food trucks de Domino Park.'},
       tip:'Es el único día sin ningún lugar de tus listas. El Jardín Botánico del Bronx en octubre está en pleno color de otoño — esa sí es una razón para ir hasta allá.'},
 
-    {date:'2026-10-05', dow:'LUN', city:'ny', title:'Día libre / compras', zones:['flatiron','unionsquare','midtowneast','greenwich'],
-      stops:['Union Square','Strand Book Store','Eataly','Harry Potter Shop','Flatiron District'],
+    {date:'2026-10-05', dow:'LUN', city:'ny', title:'Día libre / compras + museo 9/11', zones:['flatiron','unionsquare','midtowneast','greenwich','fidi'],
+      stops:['Union Square','Strand Book Store','Eataly','Harry Potter Shop','Flatiron District','9/11 Memorial & Museum (17:30, gratis)'],
       routes:[
         {label:'Ruta a pie desde el hotel', mode:'walking', pts:['@hotel','Union Square, New York','Strand Book Store, New York','Eataly NYC Flatiron, New York','Harry Potter New York, New York','Flatiron Building, New York']},
+        {label:'A la tarde: al museo del 9/11 en subte', mode:'transit', fixed:true, pts:['Union Square, New York','9/11 Memorial & Museum, New York']},
         {label:'Extra: teleférico a Roosevelt Island', mode:'transit', pts:['@hotel','Roosevelt Island Tramway, New York']}
       ],
-      best:{do:'Teleférico a Roosevelt Island — cuesta lo mismo que el subte con la misma tarjeta y da la mejor vista barata del East River.', eat:'Eataly (4.2★) frente al Flatiron: comen, compran y recorren en el mismo lugar.'},
-      tip:'Día ideal para los pendientes. Union Square, Strand, Eataly, Harry Potter y el Flatiron están todos en 8 cuadras, y el hotel está a 12 cuadras de Union Square: se hace todo caminando.'},
+      best:{do:'Museo del 9/11 a las 17:30: los lunes la entrada es gratis y hoy es el único lunes libre que les queda. Son USD 36 por cabeza que no gastan — USD 144 los cuatro.', eat:'Eataly (4.2★) frente al Flatiron a la tarde; después del museo, cualquier cosa en Brookfield Place o el Oculus.'},
+      tip:'OJO CON EL HORARIO: las entradas gratis de los lunes se reservan online a las 7am de ESE MISMO día y se agotan en minutos. Pongan la alarma. Si no consiguen, el museo igual se puede pagar, o lo dejan pasar: las piletas del Memorial ya las vieron el 1/10 y esas son gratis siempre. Desde Union Square al museo son 15 min en subte (línea 4/5 hasta Fulton St).'},
 
     {date:'2026-10-06', dow:'MAR', city:'miami', title:'Nueva York → Miami', zones:['southbeach'],
       flight:{route:'NYC → MIA', dep:'09:24', arr:'12:33', dur:'3h 09m', airline:'American Airlines'},
-      stops:['South Beach'],
-      routes:[{label:'Hotel → South Beach', mode:'driving', pts:['@hotel','South Beach, Miami Beach, FL']}],
+      stops:['Aeropuerto MIA','South Beach'],
+      routes:[
+        {label:'MIA → hotel en auto', mode:'driving', fixed:true, pts:['Miami International Airport','@hotel']},
+        {label:'Hotel → South Beach', mode:'driving', pts:['@hotel','South Beach, Miami Beach, FL']}
+      ],
       best:{do:'Llegan 12:33: alcanza para dejar valijas y meterse a la playa la misma tarde. South Pointe Park al atardecer para ver entrar los cruceros.', eat:'Skinny Louie (4.9★) — la mejor puntuada de todo el viaje.'},
       tip:'Vuelo 9:24 significa salir del hotel ~6:30. Preparen todo la noche anterior. En Miami van a necesitar auto o Uber: nada es caminable entre zonas.'},
 
@@ -758,7 +762,7 @@
 
   var activities = [
     {name:'Paseo en barco por NY (Circle Line)', price:47, url:'https://www.circleline.com/sightseeing-cruises/best-of-nyc', note:'Sale del Pier 83, Hell’s Kitchen. Sábado 3/10.'},
-    {name:'9/11 Memorial & Museum', price:36, url:'https://www.911memorial.org/visit/visit-museum-1', note:'Lunes 17:30 gratis — las reservas salen a las 7am de ese día.'},
+    {name:'9/11 Memorial & Museum', price:36, url:'https://www.911memorial.org/visit/visit-museum-1', note:'AGENDADO GRATIS el lunes 5/10 a las 17:30. Reservar online a las 7am de ese mismo día. Si no consiguen cupo, este es el precio por persona.'},
     {name:'Top of the Rock', price:52, url:'https://www.rockefellercenter.com/buy-tickets/timed-admission/choose-quantity', note:'La única vista que incluye el Empire State en la foto.'},
     {name:'The Edge', price:34, url:'https://www.edgenyc.com/get-tickets/', note:'Balcón al aire libre con piso de vidrio.'},
     {name:'Summit One Vanderbilt', price:44, url:'https://summitov.com/es/tickets/', note:'El más impactante de los tres. Pegado a Grand Central.'},
@@ -882,11 +886,13 @@
     return url;
   }
   function routesFor(day, idx){
-    var rs = (day.routes || []).map(function(r){ return {label:r.label, mode:r.mode, pts:r.pts.slice()}; });
+    var rs = (day.routes || []).map(function(r){ return {label:r.label, mode:r.mode, fixed:!!r.fixed, pts:r.pts.slice()}; });
     var extras = addedPlaces(idx);
     if(extras.length && rs.length){
       var target = null;
-      for(var i=0;i<rs.length;i++){ if(rs[i].mode === 'walking' || rs[i].mode === 'driving'){ target = rs[i]; break; } }
+      // fixed:true marca traslados (aeropuerto, ida a un horario fijo): no se les
+      // pueden colgar paradas sueltas sin arruinar el recorrido
+      for(var i=0;i<rs.length;i++){ if(!rs[i].fixed && (rs[i].mode === 'walking' || rs[i].mode === 'driving')){ target = rs[i]; break; } }
       if(!target) target = rs[rs.length-1];
       extras.forEach(function(p){ target.pts.push(p.n + (cityGeo(day.city) ? ', ' + cityGeo(day.city) : '')); });
     }
@@ -1388,6 +1394,28 @@
   function hideBar(){ bar.classList.remove('show'); onAct = null; }
   act.addEventListener('click', function(){ var f = onAct; hideBar(); if(f) f(); });
   document.getElementById('pwaDismiss').addEventListener('click', hideBar);
+
+  // Instalada en la pantalla de inicio, la app corre en su propia ventana sin
+  // barra del navegador. Ahi los <a target="_blank"> no tienen donde abrirse y
+  // en iPhone directamente no hacen nada: es por eso que las rutas de Google
+  // Maps y los links de entradas no respondian. Los abrimos a mano.
+  var STANDALONE = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+                   window.navigator.standalone === true;
+  if(STANDALONE){
+    document.addEventListener('click', function(ev){
+      var a = ev.target.closest('a[href]');
+      if(!a) return;
+      var href = a.getAttribute('href') || '';
+      if(!/^https?:/i.test(href)) return;
+      var externo = true;
+      try{ externo = new URL(a.href).origin !== location.origin; }catch(err){}
+      if(!externo) return;
+      ev.preventDefault();
+      var w = null;
+      try{ w = window.open(a.href, '_blank'); }catch(err){}
+      if(!w) window.location.href = a.href;   // iPhone: window.open devuelve null
+    });
+  }
 
   function paintNet(){ chip.classList.toggle('show', !navigator.onLine); }
   window.addEventListener('online', paintNet);

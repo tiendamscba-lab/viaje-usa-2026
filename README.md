@@ -61,6 +61,20 @@ La versión anterior guardaba `{posicionDelDia: [nombre]}`. La app migra sola es
 vez que abre, descartando lo que ya no exista, y **deja intacta la clave vieja** (`viajeUsa2026.added.v2`)
 como red de seguridad.
 
+## Links externos con la app instalada
+
+Instalada en la pantalla de inicio, la app corre en su propia ventana sin barra del navegador.
+Ahí los `<a target="_blank">` no tienen dónde abrirse y en iPhone directamente no hacen nada: por eso
+las rutas de Google Maps no respondían. La app detecta ese modo y abre los links externos a mano
+(`window.open`, y si devuelve `null` navega la ventana). Cualquier link nuevo a un dominio externo
+queda cubierto automáticamente.
+
+## Rutas fijas
+
+Una ruta puede llevar `fixed:true` (traslados al aeropuerto, ida a un horario fijo). Los lugares que
+el usuario suma a ese día **no** se cuelgan de esas rutas, para no arruinar un recorrido que tiene
+que ser directo.
+
 ## Al editar los datos
 
 Subí `VERSION` en `sw.js` (`'v1'` → `'v2'`) y volvé a publicar. La próxima vez que alguien abra la app con internet le aparece "Hay una versión nueva" con un botón para actualizar.
