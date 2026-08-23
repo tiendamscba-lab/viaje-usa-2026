@@ -426,7 +426,8 @@
   var MESES = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
   var HOTEL_NY  = 'Hotel and the City, 38 W 31st St, New York, NY 10001';
   var HOTEL_MIA = 'Roami at The Carmela, Miami, FL';
-  var STORE_KEY = 'viajeUsa2026.added.v2';
+  var STORE_KEY = 'viajeUsa2026.added.v2';   // formato viejo: {indiceDeDia: [nombre]}
+  var STATE_KEY = 'viajeUsa2026.state.v3';   // formato nuevo: {v:3, added:{fecha: [idDeLugar]}}
 
   var ZONE_NAMES = {
     koreatown:'Koreatown / Herald Sq', midtown:'Midtown', timessquare:'Times Square',
@@ -448,181 +449,181 @@
   // c: categoría · z: zona · r: rating · mine: sugerencia mía (no está en tus listas)
   var places = [
     // --- NY VER (tus listas) ---
-    {n:'SUMMIT One Vanderbilt', c:'ver', z:'midtowneast', r:4.7, pick:true, w:'El mirador más impactante de los tres que guardaste: espejos, vidrio y ascensor exterior. Pegado a Grand Central.'},
-    {n:'Edge Observatory', c:'ver', z:'hudsonyards', r:4.6, w:'Balcón al aire libre con piso de vidrio.'},
-    {n:'Vessel', c:'ver', z:'hudsonyards', r:4.6, w:'Se ve gratis desde afuera; subir es opcional.'},
-    {n:'Radio City Music Hall', c:'ver', z:'midtown', r:4.8, w:'Vale la foto de la marquesina aunque no entren al tour.'},
-    {n:'Tudor City Bridge', c:'ver', z:'midtowneast', r:4.8, pick:true, w:'El punto exacto para la foto del Chrysler enmarcado por la calle. Gratis y casi sin gente.'},
-    {n:'Teleférico Isla Roosevelt', c:'ver', z:'midtowneast', r:4.7, pick:true, w:'Cuesta lo mismo que el subte con la misma tarjeta y da la mejor vista barata del East River.'},
-    {n:'Tiffany & Co.', c:'ver', z:'midtown', r:4.1, w:'La 5ta Avenida clásica, aunque sea para mirar vidrieras.'},
-    {n:'M&M’S World New York', c:'ver', z:'timessquare', r:4.4, w:'Tres pisos de caramelos en pleno Times Square.'},
-    {n:'4 World Trade Center', c:'ver', z:'fidi', r:4.7, w:'Mirador menos concurrido, con vista directa al memorial.'},
-    {n:'Oculus Center', c:'ver', z:'fidi', r:4.7, pick:true, w:'La estructura blanca de Calatrava, cruzando la calle del memorial. Entrar es gratis.'},
-    {n:'Pier 17', c:'ver', z:'seaport', r:4.7, w:'Terraza con vista al puente de Brooklyn.'},
-    {n:'Pier 35', c:'ver', z:'les', r:4.6, w:'Parque sobre el río con hamacas mirando al Manhattan Bridge.'},
-    {n:'DUMBO Manhattan Bridge View', c:'ver', z:'dumbo', r:4.8, pick:true, w:'La foto icónica del puente entre los edificios. Ir antes de las 10 o hay fila.'},
-    {n:'Empire Stores', c:'ver', z:'dumbo', r:4.5, w:'Galpones reciclados con terraza y vista al skyline.'},
-    {n:'Pier 1', c:'ver', z:'dumbo', w:'Brooklyn Bridge Park: el mejor lugar para el atardecer sobre Manhattan.'},
-    {n:'Pier 57', c:'ver', z:'chelsea', r:4.7, w:'Azotea pública gratis con césped y vista al Hudson.'},
-    {n:'Little Island, Pier 55 at Hudson River Park', c:'ver', z:'chelsea', pick:true, w:'Parque flotante gratis. Se recorre en 30 min y engancha con la High Line.'},
-    {n:'Chelsea Market', c:'ver', z:'chelsea', r:4.6, w:'Mercado techado: comer y recorrer en el mismo lugar.'},
-    {n:'Círculo de Colón', c:'ver', z:'centralpark', r:4.5, w:'La entrada sur de Central Park.'},
-    {n:'90 Bedford St', c:'ver', z:'westvillage', w:'El edificio de Friends. Solo fachada, pero está a metros de todo.'},
-    {n:'Perry St', c:'ver', z:'westvillage', r:4.7, w:'La escalera de Carrie en Sex and the City (66 Perry St).'},
-    {n:'20 N Moore St', c:'ver', z:'tribeca', w:'El cuartel de los Cazafantasmas.'},
-    {n:'Bookmarc', c:'ver', z:'westvillage', r:4.0, w:'Librería chica de Marc Jacobs.'},
-    {n:'Williamsburg', c:'ver', z:'williamsburg', w:'Brooklyn hipster: murales, vintage y la mejor vista del skyline.'},
-    {n:'Greenwich Village', c:'ver', z:'greenwich', w:'Washington Square Park y el arco.'},
-    {n:'Flatiron District', c:'ver', z:'flatiron', w:'El edificio triangular y Madison Square Park.'},
-    {n:'Union Square', c:'ver', z:'unionsquare', w:'Feria de productores lun/mié/vie/sáb.'},
-    {n:'Meatpacking District', c:'ver', z:'meatpacking', w:'Adoquines, el Whitney y el arranque sur de la High Line.'},
-    {n:'Chelsea', c:'ver', z:'chelsea', w:'Galerías de arte gratuitas entre la 10ma y 11ma.'},
-    {n:'West Village', c:'ver', z:'westvillage', w:'El barrio más lindo para caminar sin rumbo.'},
-    {n:'Coney Island Beach', c:'ver', z:'playasny', r:4.5, w:'Parque de diversiones y boardwalk. 1h en subte.'},
-    {n:'Rockaway Beach', c:'ver', z:'playasny', r:4.6, w:'La playa surfer de Queens, ~1h15 en subte.'},
-    {n:'Long Beach', c:'ver', z:'playasny', w:'Playa de Long Island, en tren LIRR (~1h).'},
+    {id:'summit-one-vanderbilt', n:'SUMMIT One Vanderbilt', c:'ver', z:'midtowneast', r:4.7, pick:true, w:'El mirador más impactante de los tres que guardaste: espejos, vidrio y ascensor exterior. Pegado a Grand Central.'},
+    {id:'edge-observatory', n:'Edge Observatory', c:'ver', z:'hudsonyards', r:4.6, w:'Balcón al aire libre con piso de vidrio.'},
+    {id:'vessel', n:'Vessel', c:'ver', z:'hudsonyards', r:4.6, w:'Se ve gratis desde afuera; subir es opcional.'},
+    {id:'radio-city-music-hall', n:'Radio City Music Hall', c:'ver', z:'midtown', r:4.8, w:'Vale la foto de la marquesina aunque no entren al tour.'},
+    {id:'tudor-city-bridge', n:'Tudor City Bridge', c:'ver', z:'midtowneast', r:4.8, pick:true, w:'El punto exacto para la foto del Chrysler enmarcado por la calle. Gratis y casi sin gente.'},
+    {id:'teleferico-isla-roosevelt', n:'Teleférico Isla Roosevelt', c:'ver', z:'midtowneast', r:4.7, pick:true, w:'Cuesta lo mismo que el subte con la misma tarjeta y da la mejor vista barata del East River.'},
+    {id:'tiffany-co', n:'Tiffany & Co.', c:'ver', z:'midtown', r:4.1, w:'La 5ta Avenida clásica, aunque sea para mirar vidrieras.'},
+    {id:'m-ms-world-new-york', n:'M&M’S World New York', c:'ver', z:'timessquare', r:4.4, w:'Tres pisos de caramelos en pleno Times Square.'},
+    {id:'4-world-trade-center', n:'4 World Trade Center', c:'ver', z:'fidi', r:4.7, w:'Mirador menos concurrido, con vista directa al memorial.'},
+    {id:'oculus-center', n:'Oculus Center', c:'ver', z:'fidi', r:4.7, pick:true, w:'La estructura blanca de Calatrava, cruzando la calle del memorial. Entrar es gratis.'},
+    {id:'pier-17', n:'Pier 17', c:'ver', z:'seaport', r:4.7, w:'Terraza con vista al puente de Brooklyn.'},
+    {id:'pier-35', n:'Pier 35', c:'ver', z:'les', r:4.6, w:'Parque sobre el río con hamacas mirando al Manhattan Bridge.'},
+    {id:'dumbo-manhattan-bridge-view', n:'DUMBO Manhattan Bridge View', c:'ver', z:'dumbo', r:4.8, pick:true, w:'La foto icónica del puente entre los edificios. Ir antes de las 10 o hay fila.'},
+    {id:'empire-stores', n:'Empire Stores', c:'ver', z:'dumbo', r:4.5, w:'Galpones reciclados con terraza y vista al skyline.'},
+    {id:'pier-1', n:'Pier 1', c:'ver', z:'dumbo', w:'Brooklyn Bridge Park: el mejor lugar para el atardecer sobre Manhattan.'},
+    {id:'pier-57', n:'Pier 57', c:'ver', z:'chelsea', r:4.7, w:'Azotea pública gratis con césped y vista al Hudson.'},
+    {id:'little-island-pier-55-at-hudson-ri', n:'Little Island, Pier 55 at Hudson River Park', c:'ver', z:'chelsea', pick:true, w:'Parque flotante gratis. Se recorre en 30 min y engancha con la High Line.'},
+    {id:'chelsea-market', n:'Chelsea Market', c:'ver', z:'chelsea', r:4.6, w:'Mercado techado: comer y recorrer en el mismo lugar.'},
+    {id:'circulo-de-colon', n:'Círculo de Colón', c:'ver', z:'centralpark', r:4.5, w:'La entrada sur de Central Park.'},
+    {id:'90-bedford-st', n:'90 Bedford St', c:'ver', z:'westvillage', w:'El edificio de Friends. Solo fachada, pero está a metros de todo.'},
+    {id:'perry-st', n:'Perry St', c:'ver', z:'westvillage', r:4.7, w:'La escalera de Carrie en Sex and the City (66 Perry St).'},
+    {id:'20-n-moore-st', n:'20 N Moore St', c:'ver', z:'tribeca', w:'El cuartel de los Cazafantasmas.'},
+    {id:'bookmarc', n:'Bookmarc', c:'ver', z:'westvillage', r:4.0, w:'Librería chica de Marc Jacobs.'},
+    {id:'williamsburg', n:'Williamsburg', c:'ver', z:'williamsburg', w:'Brooklyn hipster: murales, vintage y la mejor vista del skyline.'},
+    {id:'greenwich-village', n:'Greenwich Village', c:'ver', z:'greenwich', w:'Washington Square Park y el arco.'},
+    {id:'flatiron-district', n:'Flatiron District', c:'ver', z:'flatiron', w:'El edificio triangular y Madison Square Park.'},
+    {id:'union-square', n:'Union Square', c:'ver', z:'unionsquare', w:'Feria de productores lun/mié/vie/sáb.'},
+    {id:'meatpacking-district', n:'Meatpacking District', c:'ver', z:'meatpacking', w:'Adoquines, el Whitney y el arranque sur de la High Line.'},
+    {id:'chelsea', n:'Chelsea', c:'ver', z:'chelsea', w:'Galerías de arte gratuitas entre la 10ma y 11ma.'},
+    {id:'west-village', n:'West Village', c:'ver', z:'westvillage', w:'El barrio más lindo para caminar sin rumbo.'},
+    {id:'coney-island-beach', n:'Coney Island Beach', c:'ver', z:'playasny', r:4.5, w:'Parque de diversiones y boardwalk. 1h en subte.'},
+    {id:'rockaway-beach', n:'Rockaway Beach', c:'ver', z:'playasny', r:4.6, w:'La playa surfer de Queens, ~1h15 en subte.'},
+    {id:'long-beach', n:'Long Beach', c:'ver', z:'playasny', w:'Playa de Long Island, en tren LIRR (~1h).'},
 
     // --- NY VER (mis sugerencias) ---
-    {n:'Empire State Building', c:'ver', z:'koreatown', r:4.7, mine:true, pick:true, w:'Está a CUATRO cuadras de tu hotel y no figura en ninguna lista. Es el mirador más icónico de la ciudad.'},
-    {n:'Estatua de la Libertad', c:'ver', z:'fidi', r:4.7, mine:true, pick:true, w:'El símbolo de Nueva York y no lo tenés en ningún lado. El ferry sale de Battery Park; reservar con anticipación.'},
-    {n:'Staten Island Ferry', c:'ver', z:'fidi', r:4.7, mine:true, pick:true, w:'Es gratis y pasa al lado de la Estatua de la Libertad. La mejor vista sin gastar un peso.'},
-    {n:'Museo de Arte Moderno (MoMA)', c:'ver', z:'midtown', r:4.6, mine:true, pick:true, w:'Van Gogh, Picasso, Dalí, Warhol. Viernes de 16 a 20 la entrada es gratis.'},
-    {n:'Metropolitan Museum of Art', c:'ver', z:'centralpark', r:4.8, mine:true, pick:true, w:'Uno de los tres mejores museos del mundo, sobre el borde este de Central Park.'},
-    {n:'New York Public Library', c:'ver', z:'midtown', r:4.7, mine:true, w:'La sala de lectura Rose es impresionante y entrar es gratis. Justo al lado de Bryant Park.'},
-    {n:'Grand Central Whispering Gallery', c:'ver', z:'midtowneast', r:4.6, mine:true, w:'Los arcos frente al Oyster Bar: si hablás bajito contra una esquina, te escuchan del otro lado.'},
-    {n:'Bethesda Terrace', c:'ver', z:'centralpark', r:4.8, mine:true, w:'La terraza y la fuente que salen en todas las películas.'},
-    {n:'Washington Square Park', c:'ver', z:'greenwich', r:4.7, mine:true, w:'Músicos, ajedrez y el arco. El corazón del Village.'},
-    {n:'Jane’s Carousel', c:'ver', z:'dumbo', r:4.7, mine:true, w:'Calesita de 1922 dentro de una caja de vidrio, con el puente atrás. Muy fotogénica.'},
-    {n:'Domino Park', c:'ver', z:'williamsburg', r:4.7, mine:true, w:'La mejor vista del skyline de Manhattan desde Brooklyn.'},
-    {n:'Tenement Museum', c:'ver', z:'les', r:4.7, mine:true, w:'La historia de los inmigrantes en un conventillo real. Muy fuerte si tenés abuelos inmigrantes.'},
-    {n:'Yankee Stadium', c:'ver', z:'bronx', r:4.7, mine:true, pick:true, w:'Si el domingo 4/10 hay partido, es LA razón para ir al Bronx. Chequeá el calendario.'},
-    {n:'Bronx Zoo', c:'ver', z:'bronx', r:4.6, mine:true, w:'El zoológico urbano más grande de EE.UU. Los miércoles la entrada es a voluntad.'},
-    {n:'New York Botanical Garden', c:'ver', z:'bronx', r:4.7, mine:true, w:'En octubre está en pleno color de otoño. La otra razón válida para ir al Bronx.'},
-    {n:'Whitney Museum of American Art', c:'ver', z:'meatpacking', r:4.7, mine:true, w:'Arte americano y terrazas con vista al Hudson, en el arranque de la High Line.'},
-    {n:'Strand Book Store', c:'compras', z:'unionsquare', r:4.7, mine:true, w:'“18 millas de libros”. Un clásico de Union Square.'},
-    {n:'Economy Candy', c:'compras', z:'les', r:4.6, mine:true, w:'Kiosco de 1937 con caramelos de todas las décadas. A 5 min de Katz’s.'},
+    {id:'empire-state-building', n:'Empire State Building', c:'ver', z:'koreatown', r:4.7, mine:true, pick:true, w:'Está a CUATRO cuadras de tu hotel y no figura en ninguna lista. Es el mirador más icónico de la ciudad.'},
+    {id:'estatua-de-la-libertad', n:'Estatua de la Libertad', c:'ver', z:'fidi', r:4.7, mine:true, pick:true, w:'El símbolo de Nueva York y no lo tenés en ningún lado. El ferry sale de Battery Park; reservar con anticipación.'},
+    {id:'staten-island-ferry', n:'Staten Island Ferry', c:'ver', z:'fidi', r:4.7, mine:true, pick:true, w:'Es gratis y pasa al lado de la Estatua de la Libertad. La mejor vista sin gastar un peso.'},
+    {id:'museo-de-arte-moderno-moma', n:'Museo de Arte Moderno (MoMA)', c:'ver', z:'midtown', r:4.6, mine:true, pick:true, w:'Van Gogh, Picasso, Dalí, Warhol. Viernes de 16 a 20 la entrada es gratis.'},
+    {id:'metropolitan-museum-of-art', n:'Metropolitan Museum of Art', c:'ver', z:'centralpark', r:4.8, mine:true, pick:true, w:'Uno de los tres mejores museos del mundo, sobre el borde este de Central Park.'},
+    {id:'new-york-public-library', n:'New York Public Library', c:'ver', z:'midtown', r:4.7, mine:true, w:'La sala de lectura Rose es impresionante y entrar es gratis. Justo al lado de Bryant Park.'},
+    {id:'grand-central-whispering-gallery', n:'Grand Central Whispering Gallery', c:'ver', z:'midtowneast', r:4.6, mine:true, w:'Los arcos frente al Oyster Bar: si hablás bajito contra una esquina, te escuchan del otro lado.'},
+    {id:'bethesda-terrace', n:'Bethesda Terrace', c:'ver', z:'centralpark', r:4.8, mine:true, w:'La terraza y la fuente que salen en todas las películas.'},
+    {id:'washington-square-park', n:'Washington Square Park', c:'ver', z:'greenwich', r:4.7, mine:true, w:'Músicos, ajedrez y el arco. El corazón del Village.'},
+    {id:'janes-carousel', n:'Jane’s Carousel', c:'ver', z:'dumbo', r:4.7, mine:true, w:'Calesita de 1922 dentro de una caja de vidrio, con el puente atrás. Muy fotogénica.'},
+    {id:'domino-park', n:'Domino Park', c:'ver', z:'williamsburg', r:4.7, mine:true, w:'La mejor vista del skyline de Manhattan desde Brooklyn.'},
+    {id:'tenement-museum', n:'Tenement Museum', c:'ver', z:'les', r:4.7, mine:true, w:'La historia de los inmigrantes en un conventillo real. Muy fuerte si tenés abuelos inmigrantes.'},
+    {id:'yankee-stadium', n:'Yankee Stadium', c:'ver', z:'bronx', r:4.7, mine:true, pick:true, w:'Si el domingo 4/10 hay partido, es LA razón para ir al Bronx. Chequeá el calendario.'},
+    {id:'bronx-zoo', n:'Bronx Zoo', c:'ver', z:'bronx', r:4.6, mine:true, w:'El zoológico urbano más grande de EE.UU. Los miércoles la entrada es a voluntad.'},
+    {id:'new-york-botanical-garden', n:'New York Botanical Garden', c:'ver', z:'bronx', r:4.7, mine:true, w:'En octubre está en pleno color de otoño. La otra razón válida para ir al Bronx.'},
+    {id:'whitney-museum-of-american-art', n:'Whitney Museum of American Art', c:'ver', z:'meatpacking', r:4.7, mine:true, w:'Arte americano y terrazas con vista al Hudson, en el arranque de la High Line.'},
+    {id:'strand-book-store', n:'Strand Book Store', c:'compras', z:'unionsquare', r:4.7, mine:true, w:'“18 millas de libros”. Un clásico de Union Square.'},
+    {id:'economy-candy', n:'Economy Candy', c:'compras', z:'les', r:4.6, mine:true, w:'Kiosco de 1937 con caramelos de todas las décadas. A 5 min de Katz’s.'},
 
     // --- NY COMER (tus listas) ---
-    {n:'Katz’s Delicatessen', c:'comer', z:'les', r:4.5, p:'$30-40', pick:true, w:'El pastrami más famoso del mundo. Caro, pero es LA comida de Nueva York.'},
-    {n:'L’industrie Pizzeria - Little Italy', c:'comer', z:'littleitaly', r:4.7, p:'$10-20', pick:true, w:'Considerada la mejor porción de pizza de NY hoy.'},
-    {n:'L’industrie Pizzeria - West Village', c:'comer', z:'westvillage', r:4.7, p:'$10-20', w:'La misma pizza, sucursal del Village.'},
-    {n:'Via Carota', c:'comer', z:'westvillage', r:4.4, p:'$40-100', pick:true, w:'El italiano de culto del Village. No toma reservas: ir temprano.'},
-    {n:'Carmine’s - 44th Street', c:'comer', z:'timessquare', r:4.5, p:'$30-90', pick:true, w:'Porciones familiares para compartir. Reservar sí o sí.'},
-    {n:'Joe’s Pizza Broadway', c:'comer', z:'greenwich', r:4.4, p:'$10-20', pick:true, w:'La porción clásica al paso, 26.000 reseñas.'},
-    {n:'Pasta de Pasta', c:'comer', z:'hellskitchen', r:4.8, p:'$10-20', pick:true, w:'4.8: el mejor puntaje de toda tu lista de comida.'},
-    {n:'Levain Bakery', c:'comer', z:'uws', r:4.7, p:'$1-10', pick:true, w:'Las cookies gigantes. A 10 min del Museo Natural.'},
-    {n:'Shake Shack Herald Square', c:'comer', z:'koreatown', r:4.4, p:'$10-20', pick:true, w:'A dos cuadras del hotel: la salvada de la primera noche.'},
-    {n:'Eileen’s Special Cheesecake', c:'comer', z:'littleitaly', r:4.6, p:'$1-10', w:'Cheesecake de porción individual.'},
-    {n:'Bleecker Street Pizza', c:'comer', z:'westvillage', r:4.5, p:'$1-10', w:'Otra candidata a mejor porción, abierta hasta tarde.'},
-    {n:'7th Street Burger West Village', c:'comer', z:'westvillage', r:4.7, p:'$10-20', w:'Smash burger simple y muy bien puntuada.'},
-    {n:'7th Street Burger', c:'comer', z:'eastvillage', r:4.6, p:'$10-20', w:'La sucursal original.'},
-    {n:'Corner Bistro', c:'comer', z:'westvillage', r:4.3, p:'$20-30', w:'Bar de barrio con una hamburguesa histórica.'},
-    {n:'Emily', c:'comer', z:'westvillage', r:4.5, p:'$20-60', w:'Famosa por la Emmy Burger.'},
-    {n:'Magnolia Bakery', c:'comer', z:'westvillage', r:4.3, p:'$10-20', w:'El banana pudding, más que los cupcakes.'},
-    {n:'Ichiran', c:'comer', z:'timessquare', r:4.5, p:'$20-30', w:'Ramen en cabinas individuales.'},
-    {n:'All’antico Vinaio', c:'comer', z:'timessquare', r:4.5, p:'$20-30', w:'Los paninos florentinos gigantes.'},
-    {n:'Gnocchi on 9th', c:'comer', z:'hellskitchen', r:4.7, p:'$10-20', w:'Ñoquis caseros baratos.'},
-    {n:'Eataly', c:'comer', z:'flatiron', r:4.2, pick:true, w:'Mercado italiano enorme frente al Flatiron.'},
-    {n:'Daily Provisions - Union Square', c:'comer', z:'unionsquare', r:4.6, p:'$10-20', w:'Los crullers y sándwiches de desayuno.'},
-    {n:'Westville Chelsea', c:'comer', z:'chelsea', r:4.6, p:'$20-30', w:'Comida americana con muchas verduras.'},
-    {n:'Los Tacos Hermanos', c:'comer', z:'westvillage', r:4.0, p:'$10-20', w:'Tacos rápidos y baratos.'},
-    {n:'Adel’s Famous Halal Food', c:'comer', z:'midtown', r:4.3, p:'$10-20', w:'El carrito halal clásico: plato enorme por poca plata.'},
-    {n:'Liberty Bagels 7 Ave', c:'comer', z:'koreatown', r:4.5, p:'$10-20', pick:true, w:'A metros del hotel. El desayuno neoyorquino por excelencia.'},
-    {n:'Leon’s Bagels', c:'comer', z:'chelsea', r:4.5, p:'$10-20', w:'Bagels artesanales, sucursal de Chelsea.'},
-    {n:'Leon’s Bagels (Hell’s Kitchen)', c:'comer', z:'hellskitchen', r:4.3, p:'$10-20', w:'La otra sucursal, cerca del Circle Line.'},
-    {n:'Sunday Morning', c:'comer', z:'eastvillage', r:4.7, p:'$10-20', w:'Panadería de barrio muy bien puntuada.'},
-    {n:'Panna II Garden Indian Restaurant', c:'comer', z:'eastvillage', r:3.5, p:'$20-30', w:'Curry con miles de luces de navidad: se va por el ambiente.'},
-    {n:'Yard House', c:'comer', z:'timessquare', r:4.5, p:'$20-60', w:'Carta larga, útil si no se ponen de acuerdo.'},
-    {n:'IHOP', c:'comer', z:'timessquare', r:4.1, p:'$20-30', w:'Panqueques a cualquier hora.'},
-    {n:'Wasabi Sushi & Bento Penn Station', c:'comer', z:'koreatown', r:3.5, p:'$10-20', w:'Sushi rápido cerca del hotel. Solo para salir del paso.'},
-    {n:'Chipotle Mexican Grill', c:'comer', z:'midtown', r:3.9, w:'Burrito bowl rápido y barato.'},
-    {n:'Cinnabon', c:'comer', z:'timessquare', r:5.0, w:'Los rolls de canela, para llevar.'},
-    {n:'Whole Foods Market', c:'comer', z:'midtown', r:4.4, w:'Barra de ensaladas al peso: la opción sana y barata.'},
-    {n:'Target', c:'compras', z:'koreatown', r:3.9, w:'A metros del hotel: agua, snacks y lo que se olvidaron.'},
+    {id:'katzs-delicatessen', n:'Katz’s Delicatessen', c:'comer', z:'les', r:4.5, p:'$30-40', pick:true, w:'El pastrami más famoso del mundo. Caro, pero es LA comida de Nueva York.'},
+    {id:'lindustrie-pizzeria-little-italy', n:'L’industrie Pizzeria - Little Italy', c:'comer', z:'littleitaly', r:4.7, p:'$10-20', pick:true, w:'Considerada la mejor porción de pizza de NY hoy.'},
+    {id:'lindustrie-pizzeria-west-village', n:'L’industrie Pizzeria - West Village', c:'comer', z:'westvillage', r:4.7, p:'$10-20', w:'La misma pizza, sucursal del Village.'},
+    {id:'via-carota', n:'Via Carota', c:'comer', z:'westvillage', r:4.4, p:'$40-100', pick:true, w:'El italiano de culto del Village. No toma reservas: ir temprano.'},
+    {id:'carmines-44th-street', n:'Carmine’s - 44th Street', c:'comer', z:'timessquare', r:4.5, p:'$30-90', pick:true, w:'Porciones familiares para compartir. Reservar sí o sí.'},
+    {id:'joes-pizza-broadway', n:'Joe’s Pizza Broadway', c:'comer', z:'greenwich', r:4.4, p:'$10-20', pick:true, w:'La porción clásica al paso, 26.000 reseñas.'},
+    {id:'pasta-de-pasta', n:'Pasta de Pasta', c:'comer', z:'hellskitchen', r:4.8, p:'$10-20', pick:true, w:'4.8: el mejor puntaje de toda tu lista de comida.'},
+    {id:'levain-bakery', n:'Levain Bakery', c:'comer', z:'uws', r:4.7, p:'$1-10', pick:true, w:'Las cookies gigantes. A 10 min del Museo Natural.'},
+    {id:'shake-shack-herald-square', n:'Shake Shack Herald Square', c:'comer', z:'koreatown', r:4.4, p:'$10-20', pick:true, w:'A dos cuadras del hotel: la salvada de la primera noche.'},
+    {id:'eileens-special-cheesecake', n:'Eileen’s Special Cheesecake', c:'comer', z:'littleitaly', r:4.6, p:'$1-10', w:'Cheesecake de porción individual.'},
+    {id:'bleecker-street-pizza', n:'Bleecker Street Pizza', c:'comer', z:'westvillage', r:4.5, p:'$1-10', w:'Otra candidata a mejor porción, abierta hasta tarde.'},
+    {id:'7th-street-burger-west-village', n:'7th Street Burger West Village', c:'comer', z:'westvillage', r:4.7, p:'$10-20', w:'Smash burger simple y muy bien puntuada.'},
+    {id:'7th-street-burger', n:'7th Street Burger', c:'comer', z:'eastvillage', r:4.6, p:'$10-20', w:'La sucursal original.'},
+    {id:'corner-bistro', n:'Corner Bistro', c:'comer', z:'westvillage', r:4.3, p:'$20-30', w:'Bar de barrio con una hamburguesa histórica.'},
+    {id:'emily', n:'Emily', c:'comer', z:'westvillage', r:4.5, p:'$20-60', w:'Famosa por la Emmy Burger.'},
+    {id:'magnolia-bakery', n:'Magnolia Bakery', c:'comer', z:'westvillage', r:4.3, p:'$10-20', w:'El banana pudding, más que los cupcakes.'},
+    {id:'ichiran', n:'Ichiran', c:'comer', z:'timessquare', r:4.5, p:'$20-30', w:'Ramen en cabinas individuales.'},
+    {id:'allantico-vinaio', n:'All’antico Vinaio', c:'comer', z:'timessquare', r:4.5, p:'$20-30', w:'Los paninos florentinos gigantes.'},
+    {id:'gnocchi-on-9th', n:'Gnocchi on 9th', c:'comer', z:'hellskitchen', r:4.7, p:'$10-20', w:'Ñoquis caseros baratos.'},
+    {id:'eataly', n:'Eataly', c:'comer', z:'flatiron', r:4.2, pick:true, w:'Mercado italiano enorme frente al Flatiron.'},
+    {id:'daily-provisions-union-square', n:'Daily Provisions - Union Square', c:'comer', z:'unionsquare', r:4.6, p:'$10-20', w:'Los crullers y sándwiches de desayuno.'},
+    {id:'westville-chelsea', n:'Westville Chelsea', c:'comer', z:'chelsea', r:4.6, p:'$20-30', w:'Comida americana con muchas verduras.'},
+    {id:'los-tacos-hermanos', n:'Los Tacos Hermanos', c:'comer', z:'westvillage', r:4.0, p:'$10-20', w:'Tacos rápidos y baratos.'},
+    {id:'adels-famous-halal-food', n:'Adel’s Famous Halal Food', c:'comer', z:'midtown', r:4.3, p:'$10-20', w:'El carrito halal clásico: plato enorme por poca plata.'},
+    {id:'liberty-bagels-7-ave', n:'Liberty Bagels 7 Ave', c:'comer', z:'koreatown', r:4.5, p:'$10-20', pick:true, w:'A metros del hotel. El desayuno neoyorquino por excelencia.'},
+    {id:'leons-bagels', n:'Leon’s Bagels', c:'comer', z:'chelsea', r:4.5, p:'$10-20', w:'Bagels artesanales, sucursal de Chelsea.'},
+    {id:'leons-bagels-hells-kitchen', n:'Leon’s Bagels (Hell’s Kitchen)', c:'comer', z:'hellskitchen', r:4.3, p:'$10-20', w:'La otra sucursal, cerca del Circle Line.'},
+    {id:'sunday-morning', n:'Sunday Morning', c:'comer', z:'eastvillage', r:4.7, p:'$10-20', w:'Panadería de barrio muy bien puntuada.'},
+    {id:'panna-ii-garden-indian-restaurant', n:'Panna II Garden Indian Restaurant', c:'comer', z:'eastvillage', r:3.5, p:'$20-30', w:'Curry con miles de luces de navidad: se va por el ambiente.'},
+    {id:'yard-house', n:'Yard House', c:'comer', z:'timessquare', r:4.5, p:'$20-60', w:'Carta larga, útil si no se ponen de acuerdo.'},
+    {id:'ihop', n:'IHOP', c:'comer', z:'timessquare', r:4.1, p:'$20-30', w:'Panqueques a cualquier hora.'},
+    {id:'wasabi-sushi-bento-penn-station', n:'Wasabi Sushi & Bento Penn Station', c:'comer', z:'koreatown', r:3.5, p:'$10-20', w:'Sushi rápido cerca del hotel. Solo para salir del paso.'},
+    {id:'chipotle-mexican-grill', n:'Chipotle Mexican Grill', c:'comer', z:'midtown', r:3.9, w:'Burrito bowl rápido y barato.'},
+    {id:'cinnabon', n:'Cinnabon', c:'comer', z:'timessquare', r:5.0, w:'Los rolls de canela, para llevar.'},
+    {id:'whole-foods-market', n:'Whole Foods Market', c:'comer', z:'midtown', r:4.4, w:'Barra de ensaladas al peso: la opción sana y barata.'},
+    {id:'target', n:'Target', c:'compras', z:'koreatown', r:3.9, w:'A metros del hotel: agua, snacks y lo que se olvidaron.'},
 
     // --- NY COMER (mis sugerencias) ---
-    {n:'Joe’s Shanghai', c:'comer', z:'chinatown', r:4.3, mine:true, pick:true, w:'Los soup dumplings que hicieron famoso a Chinatown. No tenés NADA de Chinatown en tus listas.'},
-    {n:'Xi’an Famous Foods', c:'comer', z:'chinatown', r:4.4, mine:true, w:'Fideos hechos a mano picantes, baratísimos. Cadena local de culto.'},
-    {n:'Ferrara Bakery & Cafe', c:'comer', z:'littleitaly', r:4.3, mine:true, w:'La pastelería italiana de 1892: cannoli y espresso en Little Italy.'},
-    {n:'Juliana’s Pizza', c:'comer', z:'dumbo', r:4.6, mine:true, pick:true, w:'Pizza al horno de carbón bajo el puente de Brooklyn. Mejor que la vecina Grimaldi’s.'},
-    {n:'Peter Luger Steak House', c:'comer', z:'williamsburg', r:4.4, mine:true, w:'El steakhouse más famoso de NY, desde 1887. Caro y solo efectivo o débito.'},
-    {n:'Smorgasburg Williamsburg', c:'comer', z:'williamsburg', r:4.5, mine:true, w:'Feria gastronómica al aire libre, solo sábados. Cae justo el 3/10 y el 10/10.'},
-    {n:'Los Tacos No. 1', c:'comer', z:'chelsea', r:4.7, mine:true, pick:true, w:'Dentro de Chelsea Market. Para muchos, los mejores tacos de Manhattan.'},
-    {n:'Russ & Daughters', c:'comer', z:'les', r:4.6, mine:true, w:'Bagel con salmón desde 1914, a 4 cuadras de Katz’s. La otra mitad del Lower East Side judío.'},
+    {id:'joes-shanghai', n:'Joe’s Shanghai', c:'comer', z:'chinatown', r:4.3, mine:true, pick:true, w:'Los soup dumplings que hicieron famoso a Chinatown. No tenés NADA de Chinatown en tus listas.'},
+    {id:'xian-famous-foods', n:'Xi’an Famous Foods', c:'comer', z:'chinatown', r:4.4, mine:true, w:'Fideos hechos a mano picantes, baratísimos. Cadena local de culto.'},
+    {id:'ferrara-bakery-cafe', n:'Ferrara Bakery & Cafe', c:'comer', z:'littleitaly', r:4.3, mine:true, w:'La pastelería italiana de 1892: cannoli y espresso en Little Italy.'},
+    {id:'julianas-pizza', n:'Juliana’s Pizza', c:'comer', z:'dumbo', r:4.6, mine:true, pick:true, w:'Pizza al horno de carbón bajo el puente de Brooklyn. Mejor que la vecina Grimaldi’s.'},
+    {id:'peter-luger-steak-house', n:'Peter Luger Steak House', c:'comer', z:'williamsburg', r:4.4, mine:true, w:'El steakhouse más famoso de NY, desde 1887. Caro y solo efectivo o débito.'},
+    {id:'smorgasburg-williamsburg', n:'Smorgasburg Williamsburg', c:'comer', z:'williamsburg', r:4.5, mine:true, w:'Feria gastronómica al aire libre, solo sábados. Cae justo el 3/10 y el 10/10.'},
+    {id:'los-tacos-no-1', n:'Los Tacos No. 1', c:'comer', z:'chelsea', r:4.7, mine:true, pick:true, w:'Dentro de Chelsea Market. Para muchos, los mejores tacos de Manhattan.'},
+    {id:'russ-daughters', n:'Russ & Daughters', c:'comer', z:'les', r:4.6, mine:true, w:'Bagel con salmón desde 1914, a 4 cuadras de Katz’s. La otra mitad del Lower East Side judío.'},
 
     // --- NY CAFÉ ---
-    {n:'787 Coffee', c:'cafe', z:'eastvillage', r:4.9, pick:true, w:'4.9 con casi 5.000 reseñas: el café mejor puntuado de toda tu lista.'},
-    {n:'The Green Room by Blank Street', c:'cafe', z:'westvillage', r:4.8, pick:true, w:'4.8: el segundo mejor puntuado.'},
-    {n:'Copper Mug Coffee', c:'cafe', z:'midtowneast', r:4.8, w:'4.8, cerca de Grand Central.'},
-    {n:'Devoción', c:'cafe', z:'flatiron', r:4.6, w:'Café colombiano con techo de vidrio.'},
-    {n:'Culture Espresso', c:'cafe', z:'midtown', r:4.6, w:'Además del café, una cookie muy buscada.'},
-    {n:'Fellini Coffee Chelsea', c:'cafe', z:'chelsea', r:4.6, w:'Parada natural antes o después de la High Line.'},
-    {n:'Remi43 Flower & Coffee', c:'cafe', z:'midtown', r:4.5, w:'Cafetería-florería, muy fotogénica.'},
-    {n:'Bedford Studio', c:'cafe', z:'williamsburg', r:4.5, w:'En plena Bedford Ave.'},
-    {n:'La Cabra', c:'cafe', z:'eastvillage', r:4.5, w:'Café danés y bollería de nivel.'},
-    {n:'Café Lyria', c:'cafe', z:'westvillage', r:4.5, w:'Chiquito y bien puntuado.'},
-    {n:'Birch Coffee', c:'cafe', z:'midtowneast', r:4.5, w:'Cadena local, buena para descansar.'},
-    {n:'Partners Coffee - West Village', c:'cafe', z:'westvillage', r:4.4, w:'Tostadores de Brooklyn.'},
-    {n:'Caffe Paradiso', c:'cafe', z:'littleitaly', r:4.4, w:'El café italiano de Little Italy de toda la vida.'},
-    {n:'Stumptown Coffee Roasters', c:'cafe', z:'koreatown', r:4.4, w:'En el lobby del Ace Hotel, a 3 cuadras del hospedaje.'},
-    {n:'Conwell Coffee & Cocktail Hall', c:'cafe', z:'fidi', r:4.4, w:'Café de día, cocktails de noche.'},
-    {n:'Black Press Coffee', c:'cafe', z:'uws', r:4.4, w:'Parada del Upper West Side.'},
-    {n:'La Colombe Coffee Workshop', c:'cafe', z:'chelsea', r:4.3, w:'Local grande para sentarse.'},
-    {n:'maman', c:'cafe', z:'midtown', r:4.2, w:'Estética francesa y la cookie de chocolate blanco.'},
-    {n:'Think Coffee', c:'cafe', z:'greenwich', r:4.1, w:'Cerca de Washington Square Park.'},
-    {n:'Café Leon Dore', c:'cafe', z:'littleitaly', r:4.0, w:'Dentro de la tienda de Aimé Leon Dore.'},
-    {n:'Glace Rockefeller Center', c:'cafe', z:'midtown', r:4.0, closed:true, w:'Figura como CERRADO TEMPORALMENTE en Google. Sacalo del plan.'},
+    {id:'787-coffee', n:'787 Coffee', c:'cafe', z:'eastvillage', r:4.9, pick:true, w:'4.9 con casi 5.000 reseñas: el café mejor puntuado de toda tu lista.'},
+    {id:'the-green-room-by-blank-street', n:'The Green Room by Blank Street', c:'cafe', z:'westvillage', r:4.8, pick:true, w:'4.8: el segundo mejor puntuado.'},
+    {id:'copper-mug-coffee', n:'Copper Mug Coffee', c:'cafe', z:'midtowneast', r:4.8, w:'4.8, cerca de Grand Central.'},
+    {id:'devocion', n:'Devoción', c:'cafe', z:'flatiron', r:4.6, w:'Café colombiano con techo de vidrio.'},
+    {id:'culture-espresso', n:'Culture Espresso', c:'cafe', z:'midtown', r:4.6, w:'Además del café, una cookie muy buscada.'},
+    {id:'fellini-coffee-chelsea', n:'Fellini Coffee Chelsea', c:'cafe', z:'chelsea', r:4.6, w:'Parada natural antes o después de la High Line.'},
+    {id:'remi43-flower-coffee', n:'Remi43 Flower & Coffee', c:'cafe', z:'midtown', r:4.5, w:'Cafetería-florería, muy fotogénica.'},
+    {id:'bedford-studio', n:'Bedford Studio', c:'cafe', z:'williamsburg', r:4.5, w:'En plena Bedford Ave.'},
+    {id:'la-cabra', n:'La Cabra', c:'cafe', z:'eastvillage', r:4.5, w:'Café danés y bollería de nivel.'},
+    {id:'cafe-lyria', n:'Café Lyria', c:'cafe', z:'westvillage', r:4.5, w:'Chiquito y bien puntuado.'},
+    {id:'birch-coffee', n:'Birch Coffee', c:'cafe', z:'midtowneast', r:4.5, w:'Cadena local, buena para descansar.'},
+    {id:'partners-coffee-west-village', n:'Partners Coffee - West Village', c:'cafe', z:'westvillage', r:4.4, w:'Tostadores de Brooklyn.'},
+    {id:'caffe-paradiso', n:'Caffe Paradiso', c:'cafe', z:'littleitaly', r:4.4, w:'El café italiano de Little Italy de toda la vida.'},
+    {id:'stumptown-coffee-roasters', n:'Stumptown Coffee Roasters', c:'cafe', z:'koreatown', r:4.4, w:'En el lobby del Ace Hotel, a 3 cuadras del hospedaje.'},
+    {id:'conwell-coffee-cocktail-hall', n:'Conwell Coffee & Cocktail Hall', c:'cafe', z:'fidi', r:4.4, w:'Café de día, cocktails de noche.'},
+    {id:'black-press-coffee', n:'Black Press Coffee', c:'cafe', z:'uws', r:4.4, w:'Parada del Upper West Side.'},
+    {id:'la-colombe-coffee-workshop', n:'La Colombe Coffee Workshop', c:'cafe', z:'chelsea', r:4.3, w:'Local grande para sentarse.'},
+    {id:'maman', n:'maman', c:'cafe', z:'midtown', r:4.2, w:'Estética francesa y la cookie de chocolate blanco.'},
+    {id:'think-coffee', n:'Think Coffee', c:'cafe', z:'greenwich', r:4.1, w:'Cerca de Washington Square Park.'},
+    {id:'cafe-leon-dore', n:'Café Leon Dore', c:'cafe', z:'littleitaly', r:4.0, w:'Dentro de la tienda de Aimé Leon Dore.'},
+    {id:'glace-rockefeller-center', n:'Glace Rockefeller Center', c:'cafe', z:'midtown', r:4.0, closed:true, w:'Figura como CERRADO TEMPORALMENTE en Google. Sacalo del plan.'},
 
     // --- NY NOCHE ---
-    {n:'Village Vanguard', c:'noche', z:'westvillage', r:4.6, p:'$10-60', pick:true, w:'El club de jazz más legendario del mundo. Reservar con semanas de anticipación.'},
-    {n:'Smalls Jazz Club', c:'noche', z:'westvillage', r:4.6, w:'Íntimo y hasta la madrugada. Mejor relación precio-calidad.'},
-    {n:'Arthur’s Tavern', c:'noche', z:'westvillage', r:4.3, p:'$10-50', w:'Sin cover muchas noches: la opción más barata.'},
-    {n:'Blue Note Jazz Club', c:'noche', z:'greenwich', r:4.2, w:'El más turístico y caro, pero trae nombres grandes.'},
-    {n:'Dante West Village', c:'noche', z:'westvillage', r:4.4, p:'$50-100', w:'Elegido mejor bar del mundo en 2019. Los negronis.'},
-    {n:'The Carnegie Club', c:'noche', z:'midtown', r:4.6, p:'$50-100', w:'Sillones de cuero y shows de Sinatra los sábados.'},
-    {n:'St Jardim', c:'noche', z:'westvillage', r:4.5, w:'Vinoteca de barrio, tranquila.'},
-    {n:'Bibliotheque', c:'noche', z:'flatiron', r:4.4, p:'$10-40', w:'Vinoteca con paredes de libros.'},
-    {n:'AIR MAIL', c:'compras', z:'westvillage', r:4.6, w:'Tienda de regalos y objetos de diseño.'},
-    {n:'Broadway — TKTS Times Square', c:'noche', z:'timessquare', r:4.5, mine:true, pick:true, w:'No tenés ningún show de Broadway. En la caseta de TKTS venden entradas del día con 30-50% off.'},
-    {n:'Comedy Cellar', c:'noche', z:'greenwich', r:4.6, mine:true, w:'El club de stand-up de Louis CK y Chappelle. Entrada barata, hay que reservar.'},
+    {id:'village-vanguard', n:'Village Vanguard', c:'noche', z:'westvillage', r:4.6, p:'$10-60', pick:true, w:'El club de jazz más legendario del mundo. Reservar con semanas de anticipación.'},
+    {id:'smalls-jazz-club', n:'Smalls Jazz Club', c:'noche', z:'westvillage', r:4.6, w:'Íntimo y hasta la madrugada. Mejor relación precio-calidad.'},
+    {id:'arthurs-tavern', n:'Arthur’s Tavern', c:'noche', z:'westvillage', r:4.3, p:'$10-50', w:'Sin cover muchas noches: la opción más barata.'},
+    {id:'blue-note-jazz-club', n:'Blue Note Jazz Club', c:'noche', z:'greenwich', r:4.2, w:'El más turístico y caro, pero trae nombres grandes.'},
+    {id:'dante-west-village', n:'Dante West Village', c:'noche', z:'westvillage', r:4.4, p:'$50-100', w:'Elegido mejor bar del mundo en 2019. Los negronis.'},
+    {id:'the-carnegie-club', n:'The Carnegie Club', c:'noche', z:'midtown', r:4.6, p:'$50-100', w:'Sillones de cuero y shows de Sinatra los sábados.'},
+    {id:'st-jardim', n:'St Jardim', c:'noche', z:'westvillage', r:4.5, w:'Vinoteca de barrio, tranquila.'},
+    {id:'bibliotheque', n:'Bibliotheque', c:'noche', z:'flatiron', r:4.4, p:'$10-40', w:'Vinoteca con paredes de libros.'},
+    {id:'air-mail', n:'AIR MAIL', c:'compras', z:'westvillage', r:4.6, w:'Tienda de regalos y objetos de diseño.'},
+    {id:'broadway-tkts-times-square', n:'Broadway — TKTS Times Square', c:'noche', z:'timessquare', r:4.5, mine:true, pick:true, w:'No tenés ningún show de Broadway. En la caseta de TKTS venden entradas del día con 30-50% off.'},
+    {id:'comedy-cellar', n:'Comedy Cellar', c:'noche', z:'greenwich', r:4.6, mine:true, w:'El club de stand-up de Louis CK y Chappelle. Entrada barata, hay que reservar.'},
 
     // --- NY COMPRAS ---
-    {n:'Jersey Gardens', c:'compras', z:'outletsny', r:4.7, pick:true, w:'30 min del hotel y Nueva Jersey no cobra impuesto sobre la ropa.'},
-    {n:'Woodbury Common Premium Outlets', c:'compras', z:'outletsny', w:'Más marcas de lujo, pero está a 1h15.'},
-    {n:'Empire Outlets', c:'compras', z:'outletsny', r:4.1, w:'En Staten Island. El ferry es gratis y pasa junto a la Estatua.'},
-    {n:'Harry Potter Shop New York', c:'compras', z:'flatiron', r:4.7, w:'La tienda más grande del mundo, frente al Flatiron.'},
-    {n:'Macy’s Herald Square', c:'compras', z:'koreatown', r:4.4, mine:true, w:'La tienda más grande del mundo, a 3 minutos a pie del hotel.'},
+    {id:'jersey-gardens', n:'Jersey Gardens', c:'compras', z:'outletsny', r:4.7, pick:true, w:'30 min del hotel y Nueva Jersey no cobra impuesto sobre la ropa.'},
+    {id:'woodbury-common-premium-outlets', n:'Woodbury Common Premium Outlets', c:'compras', z:'outletsny', w:'Más marcas de lujo, pero está a 1h15.'},
+    {id:'empire-outlets', n:'Empire Outlets', c:'compras', z:'outletsny', r:4.1, w:'En Staten Island. El ferry es gratis y pasa junto a la Estatua.'},
+    {id:'harry-potter-shop-new-york', n:'Harry Potter Shop New York', c:'compras', z:'flatiron', r:4.7, w:'La tienda más grande del mundo, frente al Flatiron.'},
+    {id:'macys-herald-square', n:'Macy’s Herald Square', c:'compras', z:'koreatown', r:4.4, mine:true, w:'La tienda más grande del mundo, a 3 minutos a pie del hotel.'},
 
     // --- MIAMI ---
-    {n:'Key Biscayne Beach', c:'playa', z:'keybiscayne', r:4.6, pick:true, w:'Agua más clara y mucha menos gente que South Beach.'},
-    {n:'Crandon Beach', c:'playa', z:'keybiscayne', r:4.2, w:'Misma isla, más sombra y parrillas.'},
-    {n:'Jupiter Beach', c:'playa', z:'keybiscayne', r:4.8, w:'Rating altísimo pero a 1h30 al norte. Solo con excursión de día completo.'},
-    {n:'Bill Baggs Cape Florida State Park', c:'playa', z:'keybiscayne', r:4.7, mine:true, w:'La punta de Key Biscayne con faro histórico y la playa más linda del condado.'},
-    {n:'Miami Design District', c:'ver', z:'wynwood', pick:true, w:'Arquitectura, arte público y vidrieras de lujo.'},
-    {n:'Wynwood Walls', c:'ver', z:'wynwood', pick:true, w:'El museo de murales al aire libre. Ir de mañana.'},
-    {n:'Sunset Harbour Dr', c:'ver', z:'southbeach', w:'Donde comen los locales, sin el ruido de Ocean Drive.'},
-    {n:'Vizcaya Museum and Gardens', c:'ver', z:'downtownmia', pick:true, w:'Villa italiana frente a la bahía con jardines enormes.'},
-    {n:'Bayside Marketplace', c:'compras', z:'downtownmia', r:4.5, w:'Mercado frente al mar, salida de los paseos en barco.'},
-    {n:'Brickell City Centre', c:'compras', z:'brickell', r:4.7, pick:true, w:'El shopping más lindo de Miami, climatizado. Ideal si llueve.'},
-    {n:'Sawgrass Mills outlet', c:'compras', z:'outletsmia', r:4.6, w:'El outlet más grande de Florida. 45 min, requiere auto.'},
-    {n:'Dolphin Mall', c:'compras', z:'outletsmia', r:4.6, w:'Más cerca del aeropuerto: buena parada antes del vuelo.'},
-    {n:'Skinny Louie', c:'comer', z:'southbeach', r:4.9, pick:true, w:'4.9 con 25.000 reseñas: la mejor puntuada de todo el viaje.'},
-    {n:'Tacology Brickell - Mexican Taqueria', c:'comer', z:'brickell', r:4.6, p:'$20-70', pick:true, w:'Mexicano moderno dentro de Brickell City Centre.'},
-    {n:'Miami Slice', c:'comer', z:'wynwood', r:4.2, p:'$10-20', w:'Pizza al paso en Wynwood.'},
+    {id:'key-biscayne-beach', n:'Key Biscayne Beach', c:'playa', z:'keybiscayne', r:4.6, pick:true, w:'Agua más clara y mucha menos gente que South Beach.'},
+    {id:'crandon-beach', n:'Crandon Beach', c:'playa', z:'keybiscayne', r:4.2, w:'Misma isla, más sombra y parrillas.'},
+    {id:'jupiter-beach', n:'Jupiter Beach', c:'playa', z:'keybiscayne', r:4.8, w:'Rating altísimo pero a 1h30 al norte. Solo con excursión de día completo.'},
+    {id:'bill-baggs-cape-florida-state-park', n:'Bill Baggs Cape Florida State Park', c:'playa', z:'keybiscayne', r:4.7, mine:true, w:'La punta de Key Biscayne con faro histórico y la playa más linda del condado.'},
+    {id:'miami-design-district', n:'Miami Design District', c:'ver', z:'wynwood', pick:true, w:'Arquitectura, arte público y vidrieras de lujo.'},
+    {id:'wynwood-walls', n:'Wynwood Walls', c:'ver', z:'wynwood', pick:true, w:'El museo de murales al aire libre. Ir de mañana.'},
+    {id:'sunset-harbour-dr', n:'Sunset Harbour Dr', c:'ver', z:'southbeach', w:'Donde comen los locales, sin el ruido de Ocean Drive.'},
+    {id:'vizcaya-museum-and-gardens', n:'Vizcaya Museum and Gardens', c:'ver', z:'downtownmia', pick:true, w:'Villa italiana frente a la bahía con jardines enormes.'},
+    {id:'bayside-marketplace', n:'Bayside Marketplace', c:'compras', z:'downtownmia', r:4.5, w:'Mercado frente al mar, salida de los paseos en barco.'},
+    {id:'brickell-city-centre', n:'Brickell City Centre', c:'compras', z:'brickell', r:4.7, pick:true, w:'El shopping más lindo de Miami, climatizado. Ideal si llueve.'},
+    {id:'sawgrass-mills-outlet', n:'Sawgrass Mills outlet', c:'compras', z:'outletsmia', r:4.6, w:'El outlet más grande de Florida. 45 min, requiere auto.'},
+    {id:'dolphin-mall', n:'Dolphin Mall', c:'compras', z:'outletsmia', r:4.6, w:'Más cerca del aeropuerto: buena parada antes del vuelo.'},
+    {id:'skinny-louie', n:'Skinny Louie', c:'comer', z:'southbeach', r:4.9, pick:true, w:'4.9 con 25.000 reseñas: la mejor puntuada de todo el viaje.'},
+    {id:'tacology-brickell-mexican-taqueria', n:'Tacology Brickell - Mexican Taqueria', c:'comer', z:'brickell', r:4.6, p:'$20-70', pick:true, w:'Mexicano moderno dentro de Brickell City Centre.'},
+    {id:'miami-slice', n:'Miami Slice', c:'comer', z:'wynwood', r:4.2, p:'$10-20', w:'Pizza al paso en Wynwood.'},
     // Miami — mis sugerencias
-    {n:'Little Havana / Calle Ocho', c:'ver', z:'downtownmia', r:4.5, mine:true, pick:true, w:'El barrio cubano: dominó, tabaco y música en vivo. Es LO más característico de Miami y no está en ninguna lista tuya.'},
-    {n:'Ball & Chain', c:'noche', z:'downtownmia', r:4.4, mine:true, w:'Bar histórico de Calle Ocho con salsa en vivo todas las noches.'},
-    {n:'Versailles Restaurant', c:'comer', z:'downtownmia', r:4.4, mine:true, pick:true, w:'El restaurante cubano más famoso del mundo. Ropa vieja y cafecito en la ventanita.'},
-    {n:'South Pointe Park', c:'ver', z:'southbeach', r:4.8, mine:true, pick:true, w:'La punta sur de South Beach: ves entrar los cruceros y el atardecer. Gratis.'},
-    {n:'Lincoln Road Mall', c:'compras', z:'southbeach', r:4.5, mine:true, w:'Peatonal de South Beach con tiendas y bares al aire libre.'},
-    {n:'Ocean Drive Art Deco District', c:'ver', z:'southbeach', r:4.5, mine:true, w:'Las fachadas art déco de neón. Lindo para caminar al atardecer, caro para comer.'},
-    {n:'Pérez Art Museum Miami', c:'ver', z:'downtownmia', r:4.5, mine:true, w:'Museo frente a la bahía con jardines colgantes. Plan B perfecto si llueve.'},
-    {n:'Coconut Grove', c:'ver', z:'downtownmia', r:4.5, mine:true, w:'El barrio más arbolado y tranquilo, con marina y bares. Al lado de Vizcaya.'},
-    {n:'Time Out Market Miami', c:'comer', z:'southbeach', r:4.4, mine:true, w:'Como el de Nueva York pero en South Beach: 18 puestos bajo un techo.'},
-    {n:'Joe’s Stone Crab', c:'comer', z:'southbeach', r:4.4, mine:true, w:'Institución de Miami desde 1913. La temporada de centolla abre justo el 15/10 — llegan un poco antes.'},
-    {n:'La Sandwicherie', c:'comer', z:'southbeach', r:4.5, mine:true, w:'Sándwiches franceses baratos abiertos hasta las 5am.'},
-    {n:'Panther Coffee', c:'cafe', z:'wynwood', r:4.5, mine:true, w:'El café de especialidad de Wynwood, entre los murales.'},
-    {n:'Coyo Taco', c:'comer', z:'wynwood', r:4.5, mine:true, w:'Tacos en Wynwood con un bar escondido atrás.'}
+    {id:'little-havana-calle-ocho', n:'Little Havana / Calle Ocho', c:'ver', z:'downtownmia', r:4.5, mine:true, pick:true, w:'El barrio cubano: dominó, tabaco y música en vivo. Es LO más característico de Miami y no está en ninguna lista tuya.'},
+    {id:'ball-chain', n:'Ball & Chain', c:'noche', z:'downtownmia', r:4.4, mine:true, w:'Bar histórico de Calle Ocho con salsa en vivo todas las noches.'},
+    {id:'versailles-restaurant', n:'Versailles Restaurant', c:'comer', z:'downtownmia', r:4.4, mine:true, pick:true, w:'El restaurante cubano más famoso del mundo. Ropa vieja y cafecito en la ventanita.'},
+    {id:'south-pointe-park', n:'South Pointe Park', c:'ver', z:'southbeach', r:4.8, mine:true, pick:true, w:'La punta sur de South Beach: ves entrar los cruceros y el atardecer. Gratis.'},
+    {id:'lincoln-road-mall', n:'Lincoln Road Mall', c:'compras', z:'southbeach', r:4.5, mine:true, w:'Peatonal de South Beach con tiendas y bares al aire libre.'},
+    {id:'ocean-drive-art-deco-district', n:'Ocean Drive Art Deco District', c:'ver', z:'southbeach', r:4.5, mine:true, w:'Las fachadas art déco de neón. Lindo para caminar al atardecer, caro para comer.'},
+    {id:'perez-art-museum-miami', n:'Pérez Art Museum Miami', c:'ver', z:'downtownmia', r:4.5, mine:true, w:'Museo frente a la bahía con jardines colgantes. Plan B perfecto si llueve.'},
+    {id:'coconut-grove', n:'Coconut Grove', c:'ver', z:'downtownmia', r:4.5, mine:true, w:'El barrio más arbolado y tranquilo, con marina y bares. Al lado de Vizcaya.'},
+    {id:'time-out-market-miami', n:'Time Out Market Miami', c:'comer', z:'southbeach', r:4.4, mine:true, w:'Como el de Nueva York pero en South Beach: 18 puestos bajo un techo.'},
+    {id:'joes-stone-crab', n:'Joe’s Stone Crab', c:'comer', z:'southbeach', r:4.4, mine:true, w:'Institución de Miami desde 1913. La temporada de centolla abre justo el 15/10 — llegan un poco antes.'},
+    {id:'la-sandwicherie', n:'La Sandwicherie', c:'comer', z:'southbeach', r:4.5, mine:true, w:'Sándwiches franceses baratos abiertos hasta las 5am.'},
+    {id:'panther-coffee', n:'Panther Coffee', c:'cafe', z:'wynwood', r:4.5, mine:true, w:'El café de especialidad de Wynwood, entre los murales.'},
+    {id:'coyo-taco', n:'Coyo Taco', c:'comer', z:'wynwood', r:4.5, mine:true, w:'Tacos en Wynwood con un bar escondido atrás.'}
   ];
 
   // ===== ITINERARIO =====
@@ -779,48 +780,87 @@
 
   // ===== Ideas (no están en las listas del usuario) =====
   var ideas = [
-    {n:'Estatua de la Libertad', day:6,  why:'El símbolo de Nueva York y no está en ninguna lista tuya. El ferry sale de Battery Park, a 10 min del 9/11 Memorial. Reservar con anticipación.'},
-    {n:'Staten Island Ferry', day:6, why:'Gratis, sale cada 30 min y pasa al lado de la Estatua. Si no quieren pagar el ferry oficial, esta es la alternativa: ida y vuelta en 1 hora.'},
-    {n:'Empire State Building', day:1, why:'Está a cuatro cuadras del hotel. Es el mirador más icónico y no aparece en tu Excel ni en tus listas.'},
-    {n:'Museo de Arte Moderno (MoMA)', day:7, why:'Van Gogh, Picasso, Dalí y Warhol en Midtown. Los viernes de 16 a 20 la entrada es gratis: cae justo el 2/10.'},
-    {n:'Metropolitan Museum of Art', day:7, why:'Uno de los tres mejores museos del mundo, sobre el borde este de Central Park. Ese día ya están en el parque.'},
-    {n:'Broadway — TKTS Times Square', day:2, why:'No tenés ningún show de Broadway en el viaje. En la caseta de TKTS de Times Square venden entradas del mismo día con 30-50% de descuento.'},
-    {n:'Joe’s Shanghai', day:3, why:'No tenés absolutamente nada de Chinatown y ese día pasan por ahí. Los soup dumplings son la razón de ser del barrio.'},
-    {n:'Russ & Daughters', day:3, why:'Bagel con salmón desde 1914, a cuatro cuadras de Katz’s. Es la otra mitad del Lower East Side judío.'},
-    {n:'New York Public Library', day:2, why:'La sala de lectura Rose es impresionante y entrar es gratis. Está pegada a Bryant Park, que ya está en el plan de ese día.'},
-    {n:'Grand Central Whispering Gallery', day:2, why:'Los arcos frente al Oyster Bar. Ya van a estar en Grand Central: son 5 minutos y es gratis.'},
-    {n:'Bethesda Terrace', day:7, why:'La terraza y la fuente que salen en todas las películas. Está en el medio del recorrido de Central Park.'},
-    {n:'Juliana’s Pizza', day:6, why:'Pizza al horno de carbón bajo el puente de Brooklyn, a metros de Time Out Market. Mejor que la vecina Grimaldi’s.'},
-    {n:'Whitney Museum of American Art', day:4, why:'Está en el arranque sur de la High Line, justo por donde va a pasar la ruta de ese día.'},
-    {n:'Los Tacos No. 1', day:4, why:'Está adentro de Chelsea Market, que ya está en el plan. Para muchos, los mejores tacos de Manhattan.'},
-    {n:'Domino Park', day:9, why:'Si cambian el Bronx por Williamsburg: la mejor vista del skyline de Manhattan desde Brooklyn.'},
-    {n:'Smorgasburg Williamsburg', day:9, why:'Feria gastronómica al aire libre. Solo abre sábados y domingos — el 4/10 es domingo, así que entra justo.'},
-    {n:'Yankee Stadium', day:9, why:'Si hay partido ese domingo, es LA razón para ir al Bronx. Chequeá el calendario de los Yankees antes de decidir.'},
-    {n:'New York Botanical Garden', day:9, why:'En octubre está en pleno color de otoño. La otra razón válida para ir hasta el Bronx.'},
-    {n:'Strand Book Store', day:10, why:'“18 millas de libros” en Union Square, justo donde arranca el recorrido del día libre.'},
-    {n:'Comedy Cellar', day:8, why:'El club de stand-up de Chappelle y Louis CK, en el Village. Entrada barata pero hay que reservar.'},
-    {n:'Little Havana / Calle Ocho', day:12, why:'El barrio cubano con dominó, tabaco y salsa en vivo. Es lo más característico de Miami y no está en ninguna lista tuya.'},
-    {n:'Versailles Restaurant', day:12, why:'El restaurante cubano más famoso del mundo. Queda camino de vuelta desde Vizcaya.'},
-    {n:'South Pointe Park', day:11, why:'La punta sur de South Beach: se ven entrar los cruceros y el atardecer es espectacular. Gratis.'},
-    {n:'Coconut Grove', day:12, why:'El barrio más arbolado y tranquilo de Miami, al lado de Vizcaya. Marina, bares y sombra.'},
-    {n:'Pérez Art Museum Miami', day:15, why:'Museo frente a la bahía con jardines colgantes. El mejor plan B si llueve el último día completo.'},
-    {n:'Time Out Market Miami', day:14, why:'Como el de Nueva York pero en South Beach: 18 puestos bajo un techo, cada uno come lo que quiere.'},
-    {n:'Panther Coffee', day:13, why:'El café de especialidad de Wynwood, entre los murales. Parada obligada de ese día.'},
-    {n:'Bill Baggs Cape Florida State Park', day:12, why:'La punta de Key Biscayne con faro histórico y, para muchos, la playa más linda del condado.'}
+    {id:'estatua-de-la-libertad', day:'2026-10-01',  why:'El símbolo de Nueva York y no está en ninguna lista tuya. El ferry sale de Battery Park, a 10 min del 9/11 Memorial. Reservar con anticipación.'},
+    {id:'staten-island-ferry', day:'2026-10-01', why:'Gratis, sale cada 30 min y pasa al lado de la Estatua. Si no quieren pagar el ferry oficial, esta es la alternativa: ida y vuelta en 1 hora.'},
+    {id:'empire-state-building', day:'2026-09-26', why:'Está a cuatro cuadras del hotel. Es el mirador más icónico y no aparece en tu Excel ni en tus listas.'},
+    {id:'museo-de-arte-moderno-moma', day:'2026-10-02', why:'Van Gogh, Picasso, Dalí y Warhol en Midtown. Los viernes de 16 a 20 la entrada es gratis: cae justo el 2/10.'},
+    {id:'metropolitan-museum-of-art', day:'2026-10-02', why:'Uno de los tres mejores museos del mundo, sobre el borde este de Central Park. Ese día ya están en el parque.'},
+    {id:'broadway-tkts-times-square', day:'2026-09-27', why:'No tenés ningún show de Broadway en el viaje. En la caseta de TKTS de Times Square venden entradas del mismo día con 30-50% de descuento.'},
+    {id:'joes-shanghai', day:'2026-09-28', why:'No tenés absolutamente nada de Chinatown y ese día pasan por ahí. Los soup dumplings son la razón de ser del barrio.'},
+    {id:'russ-daughters', day:'2026-09-28', why:'Bagel con salmón desde 1914, a cuatro cuadras de Katz’s. Es la otra mitad del Lower East Side judío.'},
+    {id:'new-york-public-library', day:'2026-09-27', why:'La sala de lectura Rose es impresionante y entrar es gratis. Está pegada a Bryant Park, que ya está en el plan de ese día.'},
+    {id:'grand-central-whispering-gallery', day:'2026-09-27', why:'Los arcos frente al Oyster Bar. Ya van a estar en Grand Central: son 5 minutos y es gratis.'},
+    {id:'bethesda-terrace', day:'2026-10-02', why:'La terraza y la fuente que salen en todas las películas. Está en el medio del recorrido de Central Park.'},
+    {id:'julianas-pizza', day:'2026-10-01', why:'Pizza al horno de carbón bajo el puente de Brooklyn, a metros de Time Out Market. Mejor que la vecina Grimaldi’s.'},
+    {id:'whitney-museum-of-american-art', day:'2026-09-29', why:'Está en el arranque sur de la High Line, justo por donde va a pasar la ruta de ese día.'},
+    {id:'los-tacos-no-1', day:'2026-09-29', why:'Está adentro de Chelsea Market, que ya está en el plan. Para muchos, los mejores tacos de Manhattan.'},
+    {id:'domino-park', day:'2026-10-04', why:'Si cambian el Bronx por Williamsburg: la mejor vista del skyline de Manhattan desde Brooklyn.'},
+    {id:'smorgasburg-williamsburg', day:'2026-10-04', why:'Feria gastronómica al aire libre. Solo abre sábados y domingos — el 4/10 es domingo, así que entra justo.'},
+    {id:'yankee-stadium', day:'2026-10-04', why:'Si hay partido ese domingo, es LA razón para ir al Bronx. Chequeá el calendario de los Yankees antes de decidir.'},
+    {id:'new-york-botanical-garden', day:'2026-10-04', why:'En octubre está en pleno color de otoño. La otra razón válida para ir hasta el Bronx.'},
+    {id:'strand-book-store', day:'2026-10-05', why:'“18 millas de libros” en Union Square, justo donde arranca el recorrido del día libre.'},
+    {id:'comedy-cellar', day:'2026-10-03', why:'El club de stand-up de Chappelle y Louis CK, en el Village. Entrada barata pero hay que reservar.'},
+    {id:'little-havana-calle-ocho', day:'2026-10-07', why:'El barrio cubano con dominó, tabaco y salsa en vivo. Es lo más característico de Miami y no está en ninguna lista tuya.'},
+    {id:'versailles-restaurant', day:'2026-10-07', why:'El restaurante cubano más famoso del mundo. Queda camino de vuelta desde Vizcaya.'},
+    {id:'south-pointe-park', day:'2026-10-06', why:'La punta sur de South Beach: se ven entrar los cruceros y el atardecer es espectacular. Gratis.'},
+    {id:'coconut-grove', day:'2026-10-07', why:'El barrio más arbolado y tranquilo de Miami, al lado de Vizcaya. Marina, bares y sombra.'},
+    {id:'perez-art-museum-miami', day:'2026-10-10', why:'Museo frente a la bahía con jardines colgantes. El mejor plan B si llueve el último día completo.'},
+    {id:'time-out-market-miami', day:'2026-10-09', why:'Como el de Nueva York pero en South Beach: 18 puestos bajo un techo, cada uno come lo que quiere.'},
+    {id:'panther-coffee', day:'2026-10-08', why:'El café de especialidad de Wynwood, entre los murales. Parada obligada de ese día.'},
+    {id:'bill-baggs-cape-florida-state-park', day:'2026-10-07', why:'La punta de Key Biscayne con faro histórico y, para muchos, la playa más linda del condado.'}
   ];
 
   // ===== estado: lugares agregados por el usuario =====
-  var added = {};
-  try{ added = JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}; }catch(e){ added = {}; }
-  function saveAdded(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(added)); }catch(e){} }
-  function addedFor(i){ return added[i] || []; }
-  function isAdded(i, name){ return addedFor(i).indexOf(name) !== -1; }
-  function toggleAdd(i, name){
+  // ===== Estado guardado =====
+  // Se guarda por FECHA del dia y por ID del lugar, nunca por posicion en el
+  // array ni por nombre. Asi se pueden corregir textos, agregar lugares o
+  // reordenar dias sin que nadie pierda lo que ya habia marcado.
+  var PLACE_BY_ID = {}, ID_BY_NAME = {}, DAY_BY_DATE = {};
+  places.forEach(function(p){ PLACE_BY_ID[p.id] = p; ID_BY_NAME[p.n] = p.id; });
+  trip.forEach(function(d, i){ DAY_BY_DATE[d.date] = i; });
+
+  function placeById(id){ return PLACE_BY_ID[id] || null; }
+  function dayIndexOf(date){ var i = DAY_BY_DATE[date]; return i === undefined ? -1 : i; }
+
+  function migrateState(){
+    // Pasa el formato viejo (indice de dia + nombre) al nuevo (fecha + id).
+    // La clave vieja se deja intacta a proposito, como red de seguridad.
+    var st = {v:3, added:{}}, old = null;
+    try{ old = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); }catch(e){}
+    if(old){
+      Object.keys(old).forEach(function(k){
+        var day = trip[parseInt(k, 10)];
+        if(!day) return;
+        var ids = (old[k] || []).map(function(n){ return ID_BY_NAME[n]; }).filter(Boolean);
+        if(ids.length) st.added[day.date] = ids;
+      });
+    }
+    return st;
+  }
+
+  var state = null;
+  try{ state = JSON.parse(localStorage.getItem(STATE_KEY) || 'null'); }catch(e){}
+  if(!state || !state.added){ state = migrateState(); }
+
+  function saveState(){ try{ localStorage.setItem(STATE_KEY, JSON.stringify(state)); }catch(e){} }
+  saveState();
+
+  function addedFor(i){                       // ids guardados para ese dia
+    var d = trip[i];
+    return (d && state.added[d.date]) ? state.added[d.date] : [];
+  }
+  function addedPlaces(i){                    // los mismos, ya resueltos a lugares
+    return addedFor(i).map(placeById).filter(Boolean);
+  }
+  function isAdded(i, id){ return addedFor(i).indexOf(id) !== -1; }
+  function toggleAdd(i, id){
+    var d = trip[i];
+    if(!d) return false;
     var list = addedFor(i).slice();
-    var k = list.indexOf(name);
-    if(k === -1){ list.push(name); } else { list.splice(k,1); }
-    if(list.length){ added[i] = list; } else { delete added[i]; }
-    saveAdded();
+    var k = list.indexOf(id);
+    if(k === -1){ list.push(id); } else { list.splice(k, 1); }
+    if(list.length){ state.added[d.date] = list; } else { delete state.added[d.date]; }
+    saveState();
     return k === -1;
   }
 
@@ -843,12 +883,12 @@
   }
   function routesFor(day, idx){
     var rs = (day.routes || []).map(function(r){ return {label:r.label, mode:r.mode, pts:r.pts.slice()}; });
-    var extras = addedFor(idx);
+    var extras = addedPlaces(idx);
     if(extras.length && rs.length){
       var target = null;
       for(var i=0;i<rs.length;i++){ if(rs[i].mode === 'walking' || rs[i].mode === 'driving'){ target = rs[i]; break; } }
       if(!target) target = rs[rs.length-1];
-      extras.forEach(function(n){ target.pts.push(n + (cityGeo(day.city) ? ', ' + cityGeo(day.city) : '')); });
+      extras.forEach(function(p){ target.pts.push(p.n + (cityGeo(day.city) ? ', ' + cityGeo(day.city) : '')); });
     }
     return rs;
   }
@@ -865,10 +905,6 @@
       var a = s.toLowerCase(), b = place.n.toLowerCase();
       return a.indexOf(b.slice(0,12)) !== -1 || b.indexOf(a.slice(0,12)) !== -1;
     });
-  }
-  function findPlace(name){
-    for(var i=0;i<places.length;i++){ if(places[i].n === name) return places[i]; }
-    return null;
   }
 
   var ICONS = {
@@ -902,7 +938,7 @@
     opts = opts || {};
     var d = fmtDate(day.date);
     var pool = placesForDay(day);
-    var extras = addedFor(idx);
+    var extras = addedPlaces(idx);
     var rs = routesFor(day, idx);
 
     var html = '<div class="day-card">';
@@ -925,8 +961,8 @@
       (day.stops||[]).forEach(function(s){
         html += '<a class="stop-chip" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(s, day.city))+'">'+esc(s)+'</a>';
       });
-      extras.forEach(function(s){
-        html += '<a class="stop-chip added" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(s, day.city))+'">+ '+esc(s)+'</a>';
+      extras.forEach(function(p){
+        html += '<a class="stop-chip added" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(p.n, day.city))+'">+ '+esc(p.n)+'</a>';
       });
       html += '</div>';
     }
@@ -954,7 +990,7 @@
   // ===== place row =====
   function placeRow(p, day, idx){
     var planned = inPlan(p, day);
-    var isAdd = isAdded(idx, p.n);
+    var isAdd = isAdded(idx, p.id);
     var cls = 'place' + (p.mine ? ' is-mine' : (p.pick ? ' is-pick' : '')) + ((planned||isAdd) ? ' in-plan' : '');
     var h = '<div class="'+cls+'">';
     h += '<a class="plink" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(p.n, day.city))+'">';
@@ -973,7 +1009,7 @@
     else if(p.pick) h += '<span class="badge b-pick">Top</span>';
     h += '</a>';
     if(!planned && !p.closed){
-      h += '<button class="addbtn'+(isAdd?' remove':'')+'" data-add="'+esc(p.n)+'" data-idx="'+idx+'" title="'+(isAdd?'Quitar del día':'Sumar al día')+'">'+(isAdd?'−':'+')+'</button>';
+      h += '<button class="addbtn'+(isAdd?' remove':'')+'" data-add="'+esc(p.id)+'" data-idx="'+idx+'" title="'+(isAdd?'Quitar del día':'Sumar al día')+'">'+(isAdd?'−':'+')+'</button>';
     }
     h += '</div>';
     return h;
@@ -985,7 +1021,7 @@
     var d = fmtDate(day.date);
     var pool = placesForDay(day);
     var rs = routesFor(day, idx);
-    var extras = addedFor(idx);
+    var extras = addedPlaces(idx);
     var el = document.getElementById('detailContent');
 
     var h = '<div class="detail-head city-'+day.city+'">';
@@ -1010,8 +1046,8 @@
       (day.stops||[]).forEach(function(s){
         h += '<a class="stop-chip" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(s, day.city))+'">'+esc(s)+'</a>';
       });
-      extras.forEach(function(s){
-        h += '<a class="stop-chip added" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(s, day.city))+'">+ '+esc(s)+'</a>';
+      extras.forEach(function(p){
+        h += '<a class="stop-chip added" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(p.n, day.city))+'">+ '+esc(p.n)+'</a>';
       });
       h += '</div>';
     }
@@ -1060,17 +1096,19 @@
   }
   function renderIdeas(){
     document.getElementById('ideasList').innerHTML = ideas.map(function(it){
-      var day = trip[it.day];
+      var idx = dayIndexOf(it.day);          // it.day es la fecha, no la posicion
+      var p = placeById(it.id);
+      if(idx === -1 || !p) return '';        // la idea apunta a algo que ya no existe
+      var day = trip[idx];
       var d = fmtDate(day.date);
-      var p = findPlace(it.n);
-      var isAdd = isAdded(it.day, it.n);
+      var isAdd = isAdded(idx, it.id);
       var h = '<div class="idea-card">';
-      h += '<div class="iname">'+esc(it.n)+'</div>';
-      h += '<div class="imeta">'+(p && p.r ? '★ '+p.r.toFixed(1)+' · ' : '')+'Sugerido para el '+d.num+' '+d.mon+' · '+esc(day.title)+'</div>';
+      h += '<div class="iname">'+esc(p.n)+'</div>';
+      h += '<div class="imeta">'+(p.r ? '★ '+p.r.toFixed(1)+' · ' : '')+'Sugerido para el '+d.num+' '+d.mon+' · '+esc(day.title)+'</div>';
       h += '<div class="iwhy">'+esc(it.why)+'</div>';
       h += '<div class="idea-foot">';
-      h += '<button class="route-btn'+(isAdd?' ghost':'')+'" data-add="'+esc(it.n)+'" data-idx="'+it.day+'" data-src="ideas">'+(isAdd ? '− Quitar del '+d.num+'/'+(parseInt(day.date.split('-')[1],10)) : '+ Sumar al '+d.num+'/'+(parseInt(day.date.split('-')[1],10)))+'</button>';
-      h += '<a class="route-btn ghost" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(it.n, day.city))+'">Ver en Maps</a>';
+      h += '<button class="route-btn'+(isAdd?' ghost':'')+'" data-add="'+esc(it.id)+'" data-idx="'+idx+'" data-src="ideas">'+(isAdd ? '− Quitar del '+d.num+'/'+(parseInt(day.date.split('-')[1],10)) : '+ Sumar al '+d.num+'/'+(parseInt(day.date.split('-')[1],10)))+'</button>';
+      h += '<a class="route-btn ghost" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(p.n, day.city))+'">Ver en Maps</a>';
       h += '</div></div>';
       return h;
     }).join('');
@@ -1150,11 +1188,13 @@
     var addBtn = e.target.closest('[data-add]');
     if(addBtn){
       e.preventDefault();
-      var name = addBtn.getAttribute('data-add');
+      var id = addBtn.getAttribute('data-add');
       var i = parseInt(addBtn.getAttribute('data-idx'),10);
-      var nowAdded = toggleAdd(i, name);
+      var pl = placeById(id);
+      if(!pl || !trip[i]) return;
+      var nowAdded = toggleAdd(i, id);
       var d = fmtDate(trip[i].date);
-      toast(nowAdded ? '“'+name+'” sumado al '+d.num+' '+d.mon : '“'+name+'” quitado del '+d.num+' '+d.mon);
+      toast(nowAdded ? '“'+pl.n+'” sumado al '+d.num+' '+d.mon : '“'+pl.n+'” quitado del '+d.num+' '+d.mon);
       if(addBtn.getAttribute('data-src') === 'ideas'){ renderIdeas(); }
       else { renderDetail(i); }
       renderItin(); renderHoy();
@@ -1389,7 +1429,11 @@
       }
       reg.addEventListener('updatefound', function(){ watch(reg.installing); });
       document.addEventListener('visibilitychange', function(){
-        if(!document.hidden && navigator.onLine) reg.update();
+        // navigator.onLine miente con el wifi de hoteles y aeropuertos (portal
+        // cautivo: hay red pero no internet), asi que la promesa puede fallar.
+        if(!document.hidden && navigator.onLine){
+          try{ var u = reg.update(); if(u && u.catch) u.catch(function(){}); }catch(err){}
+        }
       });
     }).catch(function(){});
 

@@ -44,6 +44,23 @@ categoría y el texto de la recomendación, ignorando tildes y mayúsculas ("caf
 Cada resultado muestra en qué días del viaje cae esa zona: tocando el día se abre el detalle,
 y el botón Volver regresa a la búsqueda sin perder lo que escribiste. Escape la cierra.
 
+## IDs estables
+
+Cada lugar tiene un `id` escrito en el archivo (`{id:'katzs-delicatessen', n:'Katz’s Delicatessen', …}`)
+y cada día se referencia por su fecha ISO. El estado guardado en el celular usa esas dos claves:
+
+```json
+{ "v": 3, "added": { "2026-09-28": ["katzs-delicatessen", "joes-shanghai"] } }
+```
+
+Consecuencia práctica: se pueden **corregir nombres, reescribir textos, agregar lugares o reordenar
+días** sin que nadie pierda lo que ya había marcado. Lo único que no hay que tocar es el `id` y la
+`date` de cada día.
+
+La versión anterior guardaba `{posicionDelDia: [nombre]}`. La app migra sola ese formato la primera
+vez que abre, descartando lo que ya no exista, y **deja intacta la clave vieja** (`viajeUsa2026.added.v2`)
+como red de seguridad.
+
 ## Al editar los datos
 
 Subí `VERSION` en `sw.js` (`'v1'` → `'v2'`) y volvé a publicar. La próxima vez que alguien abra la app con internet le aparece "Hay una versión nueva" con un botón para actualizar.
