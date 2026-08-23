@@ -294,6 +294,61 @@
   }
   .sug:hover{ border-color:var(--accent); }
 
+  /* ===== Recorrido paso a paso ===== */
+  .tl-leg{ border:1px solid var(--line); background:var(--surface); border-radius:12px; padding:11px 12px 10px; margin-bottom:9px; }
+  .tl-leg.is-fixed{ border-style:dashed; }
+  .tl-head{ display:flex; align-items:center; gap:7px; margin-bottom:9px;
+    font-family:var(--font-mono); font-size:10.5px; font-weight:600; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--muted); }
+  .tl-head svg{ width:14px; height:14px; flex:none; }
+  .tl-head span{ flex:1; min-width:0; }
+  .tl-step{ display:flex; align-items:flex-start; gap:9px; padding:4px 0; }
+  .tl-dot{ position:relative; width:16px; flex:none; display:flex; justify-content:center; padding-top:5px; }
+  .tl-dot i{ width:9px; height:9px; border-radius:50%; background:var(--accent); display:block; z-index:1; }
+  .tl-step.is-extra .tl-dot i{ background:var(--mine); }
+  .tl-step:not(:last-of-type) .tl-dot::after{
+    content:''; position:absolute; top:12px; bottom:-14px; left:50%; margin-left:-1px; width:2px; background:var(--line);
+  }
+  .tl-body{ flex:1; min-width:0; padding-top:1px; }
+  .tl-name{ font-size:13px; line-height:1.3; font-weight:600; }
+  .tl-sub{ font-family:var(--font-mono); font-size:10.5px; color:var(--muted); margin-top:2px; }
+  .tl-acts{ display:flex; gap:5px; flex:none; }
+  .tl-btn{
+    width:34px; height:34px; display:inline-flex; align-items:center; justify-content:center;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--muted);
+    border-radius:8px; cursor:pointer; padding:0; font-size:13px; line-height:1;
+  }
+  .tl-btn:hover:not(:disabled){ color:var(--ink); border-color:var(--accent); }
+  .tl-btn:disabled{ opacity:.3; cursor:default; }
+  .tl-btn.danger:hover{ color:var(--miami); border-color:var(--miami); }
+  .tl-empty{ font-size:12.5px; color:var(--muted); padding:6px 0 8px; }
+  .tl-foot{ display:flex; flex-wrap:wrap; gap:7px; margin:2px 0 4px; }
+  .tl-foot .route-btn{ flex:1; min-width:150px; }
+  .tl-edited{
+    font-family:var(--font-mono); font-size:10.5px; color:var(--gold);
+    display:flex; align-items:center; gap:7px; margin:0 2px 9px;
+  }
+  .tl-edited button{
+    font-family:var(--font-mono); font-size:10.5px; cursor:pointer; color:var(--muted);
+    background:none; border:1px solid var(--line); border-radius:999px; padding:3px 9px;
+  }
+  .tl-edited button:hover{ color:var(--ink); border-color:var(--accent); }
+
+  /* alta de un lugar propio */
+  .addown{ border:1px dashed var(--line); border-radius:12px; padding:11px 12px; margin-bottom:12px; background:var(--surface-2); }
+  .addown > summary{ cursor:pointer; font-size:12.5px; font-weight:600; color:var(--accent); list-style:none; }
+  .addown > summary::-webkit-details-marker{ display:none; }
+  .addown > summary::before{ content:'+ '; font-weight:700; }
+  .addown[open] > summary{ margin-bottom:10px; }
+  .addown label{ display:block; font-family:var(--font-mono); font-size:10.5px; color:var(--muted); margin:0 0 4px; }
+  .addown input{
+    width:100%; box-sizing:border-box; border:1px solid var(--line); background:var(--surface);
+    color:var(--ink); border-radius:9px; padding:9px 10px; font-family:var(--font-body); font-size:14px;
+    outline:none; margin-bottom:9px;
+  }
+  .addown input:focus{ border-color:var(--accent); }
+  .addown .hint{ font-size:11.5px; color:var(--muted); line-height:1.4; margin:0 0 10px; }
+
 </style>
 
 <div class="backdrop">
@@ -362,29 +417,19 @@
         <div class="kv"><span class="k">Dirección</span><span class="v">38 W 31st St</span></div>
         <div class="kv"><span class="k">Zona</span><span class="v">Koreatown / Herald Sq</span></div>
         <div class="kv"><span class="k">Rating</span><span class="v">3.6★ · hotel 4★</span></div>
-        <div class="kv"><span class="k">Noches</span><span class="v">10</span></div>
-        <div class="kv"><span class="k">Por noche</span><span class="v">USD 517,78</span></div>
-        <div class="kv"><span class="k">Total</span><span class="v">USD 5.177,75</span></div>
-        <div class="kv"><span class="k">Por persona</span><span class="v">USD 1.294,44</span></div>
-        <div class="kv"><span class="k">Reserva</span><span class="v"><span class="badge-good">Pagado</span></span></div>
+        <div class="kv"><span class="k">Noches</span><span class="v">10 · 25 sep a 6 oct</span></div>
+        <div class="kv"><span class="k">Reserva</span><span class="v"><span class="badge-good">Confirmada</span></span></div>
         <a class="route-btn wide" style="margin-top:11px" target="_blank" rel="noopener"
            href="https://www.google.com/maps/search/?api=1&query=Hotel%20and%20the%20City%2C%2038%20W%2031st%20St%2C%20New%20York">Ver en Maps</a>
       </div>
       <div class="info-card">
         <h4>Miami — Roami at The Carmela</h4>
+        <div class="kv"><span class="k">Zona</span><span class="v">Miami, FL</span></div>
         <div class="kv"><span class="k">Rating</span><span class="v">2.5★ (8 reseñas)</span></div>
-        <div class="kv"><span class="k">Noches</span><span class="v">5</span></div>
-        <div class="kv"><span class="k">Por noche</span><span class="v">USD 150,66</span></div>
-        <div class="kv"><span class="k">Total</span><span class="v">USD 753,31</span></div>
-        <div class="kv"><span class="k">Por persona</span><span class="v">USD 188,33</span></div>
-        <div class="kv"><span class="k">Reserva</span><span class="v"><span class="badge-good">Pagado</span></span></div>
+        <div class="kv"><span class="k">Noches</span><span class="v">5 · 6 a 11 oct</span></div>
+        <div class="kv"><span class="k">Reserva</span><span class="v"><span class="badge-good">Confirmada</span></span></div>
         <a class="route-btn wide" style="margin-top:11px" target="_blank" rel="noopener"
            href="https://www.google.com/maps/search/?api=1&query=Roami%20at%20The%20Carmela%2C%20Miami%2C%20FL">Ver en Maps</a>
-      </div>
-      <div class="info-card">
-        <h4>Total hospedaje</h4>
-        <div class="kv"><span class="k">15 noches</span><span class="v">USD 5.931,06</span></div>
-        <div class="kv"><span class="k">Por persona</span><span class="v">USD 1.482,77</span></div>
       </div>
       <h3 class="sub-title">Tips y huecos</h3>
       <div id="tipsList"></div>
@@ -634,13 +679,13 @@
       note:'Vuelo nocturno. Llegan con el día 26 entero por delante.'},
 
     {date:'2026-09-26', dow:'SÁB', city:'ny', title:'Llegada + compras', zones:['koreatown','midtown','timessquare'],
-      stops:['Aeropuerto JFK','Macy’s Herald Square','Uniqlo 5th Avenue','Marshalls Herald Square','Times Square'],
+      stops:['Aeropuerto JFK','Marshalls 6th Ave','Macy’s Herald Square','Times Square','Uniqlo 5th Avenue'],
       routes:[
-        {label:'Ruta a pie desde el hotel', mode:'walking', pts:['@hotel','Macy’s Herald Square, New York','Uniqlo 5th Avenue, New York','Marshalls, 620 6th Ave, New York','Times Square, New York']},
+        {label:'Ruta a pie desde el hotel', mode:'walking', pts:['@hotel','Marshalls, 620 6th Ave, New York','Macy’s Herald Square, New York','Times Square, New York','Uniqlo 5th Avenue, New York']},
         {label:'JFK → hotel en subte', mode:'transit', pts:['John F. Kennedy International Airport','@hotel']}
       ],
       best:{do:'Empire State Building — está a cuatro cuadras del hotel y no figura en ninguna de tus listas. Si van al atardecer del primer día, arrancan fuerte.', eat:'Liberty Bagels 7 Ave (4.5★) para el primer desayuno; Shake Shack Herald Square si llegan fundidos.'},
-      tip:'Con el vuelo llegando 7am van a tener sueño a la tarde. Dejen las compras pesadas para el 5/10 y hoy caminen liviano: todo lo de este día está a menos de 15 cuadras del hotel.'},
+      tip:'Reordenado para no zigzaguear: bajan 13 cuadras hasta Marshalls (620 6th Ave está en la 18) y de ahí suben derecho — Macy’s en la 34, Times Square en la 45 y Uniqlo en la 53. Antes iban 34 → 53 → 18 → 45, casi el doble de cuadras. Con el vuelo llegando 7am van a tener sueño a la tarde: si aflojan, corten en Times Square y dejen Uniqlo para el 5/10.'},
 
     {date:'2026-09-27', dow:'DOM', city:'ny', title:'Midtown clásico', zones:['midtown','timessquare','midtowneast'],
       stops:['Bryant Park','Grand Central Terminal','SUMMIT One Vanderbilt','Tudor City Bridge','St. Patrick’s Cathedral','Top of the Rock','Radio City Music Hall'],
@@ -710,14 +755,14 @@
       tip:'Es el único día sin ningún lugar de tus listas. El Jardín Botánico del Bronx en octubre está en pleno color de otoño — esa sí es una razón para ir hasta allá.'},
 
     {date:'2026-10-05', dow:'LUN', city:'ny', title:'Día libre / compras + museo 9/11', zones:['flatiron','unionsquare','midtowneast','greenwich','fidi'],
-      stops:['Union Square','Strand Book Store','Eataly','Harry Potter Shop','Flatiron District','9/11 Memorial & Museum (17:30, gratis)'],
+      stops:['Flatiron District','Eataly','Harry Potter Shop','Union Square','Strand Book Store','9/11 Memorial & Museum (17:30, gratis)'],
       routes:[
-        {label:'Ruta a pie desde el hotel', mode:'walking', pts:['@hotel','Union Square, New York','Strand Book Store, New York','Eataly NYC Flatiron, New York','Harry Potter New York, New York','Flatiron Building, New York']},
+        {label:'Ruta a pie desde el hotel', mode:'walking', pts:['@hotel','Flatiron Building, New York','Eataly NYC Flatiron, New York','Harry Potter New York, New York','Union Square, New York','Strand Book Store, New York']},
         {label:'A la tarde: al museo del 9/11 en subte', mode:'transit', fixed:true, pts:['Union Square, New York','9/11 Memorial & Museum, New York']},
         {label:'Extra: teleférico a Roosevelt Island', mode:'transit', pts:['@hotel','Roosevelt Island Tramway, New York']}
       ],
       best:{do:'Museo del 9/11 a las 17:30: los lunes la entrada es gratis y hoy es el único lunes libre que les queda. Son USD 36 por cabeza que no gastan — USD 144 los cuatro.', eat:'Eataly (4.2★) frente al Flatiron a la tarde; después del museo, cualquier cosa en Brookfield Place o el Oculus.'},
-      tip:'OJO CON EL HORARIO: las entradas gratis de los lunes se reservan online a las 7am de ESE MISMO día y se agotan en minutos. Pongan la alarma. Si no consiguen, el museo igual se puede pagar, o lo dejan pasar: las piletas del Memorial ya las vieron el 1/10 y esas son gratis siempre. Desde Union Square al museo son 15 min en subte (línea 4/5 hasta Fulton St).'},
+      tip:'La caminata baja derecho sin volver sobre los pasos — hotel en la 31, Flatiron y Eataly en la 23, Harry Potter en la 22, Union Square en la 14 y Strand en la 12 — y termina justo donde sale el subte al museo. OJO CON EL HORARIO: las entradas gratis de los lunes se reservan online a las 7am de ESE MISMO día y se agotan en minutos. Pongan la alarma. Si no consiguen, el museo igual se puede pagar, o lo dejan pasar: las piletas del Memorial ya las vieron el 1/10 y esas son gratis siempre. Desde Union Square al museo son 15 min en subte (línea 4/5 hasta Fulton St).'},
 
     {date:'2026-10-06', dow:'MAR', city:'miami', title:'Nueva York → Miami', zones:['southbeach'],
       flight:{route:'NYC → MIA', dep:'09:24', arr:'12:33', dur:'3h 09m', airline:'American Airlines'},
@@ -772,7 +817,7 @@
   var tips = [
     {cat:'hueco', label:'Falta una lista', text:'Sigo sin <b>Compras NY</b> (19 lugares). Los tres links que me pasaste de nuevo eran Comida Miami, Hotel NY y Hotel Miami — esos ya los tenía. Mandame el de Compras NY y lo cruzo.'},
     {cat:'aviso', label:'Lugar cerrado', text:'<b>Glace Rockefeller Center</b> figura como CERRADO TEMPORALMENTE en Google Maps.'},
-    {cat:'aviso', label:'Hotel Miami', text:'<b>Roami at The Carmela</b> tiene 2.5★ con solo 8 reseñas. Ya está pagado, pero revisá fotos y comentarios recientes antes de viajar.'},
+    {cat:'aviso', label:'Hotel Miami', text:'<b>Roami at The Carmela</b> tiene 2.5★ con solo 8 reseñas. La reserva ya está confirmada, pero revisá fotos y comentarios recientes antes de viajar.'},
     {cat:'hueco', label:'Faltan clásicos', text:'Tus listas no tienen <b>Estatua de la Libertad, Empire State, MoMA, el Met ni un show de Broadway</b>. Están todos en la pestaña Ideas con el día sugerido.'},
     {cat:'hueco', label:'Falta Little Havana', text:'En Miami no tenés <b>Calle Ocho</b>, que es lo más característico de la ciudad. Está en Ideas, sugerido para el 7 o el 9/10.'},
     {cat:'ahorro', label:'Outlets repetidos', text:'Tres outlets en NY y dos en Miami para un solo día de compras. <b>Jersey Gardens</b> gana en NY (30 min, sin impuesto a la ropa) y <b>Dolphin Mall</b> en Miami (camino al aeropuerto el último día).'},
@@ -823,7 +868,10 @@
   places.forEach(function(p){ PLACE_BY_ID[p.id] = p; ID_BY_NAME[p.n] = p.id; });
   trip.forEach(function(d, i){ DAY_BY_DATE[d.date] = i; });
 
-  function placeById(id){ return PLACE_BY_ID[id] || null; }
+  function placeById(id){
+    if(PLACE_BY_ID[id]) return PLACE_BY_ID[id];
+    return (state.custom && state.custom[id]) || null;   // lugares que carga el usuario
+  }
   function dayIndexOf(date){ var i = DAY_BY_DATE[date]; return i === undefined ? -1 : i; }
 
   function migrateState(){
@@ -845,6 +893,10 @@
   var state = null;
   try{ state = JSON.parse(localStorage.getItem(STATE_KEY) || 'null'); }catch(e){}
   if(!state || !state.added){ state = migrateState(); }
+
+  state.custom = state.custom || {};   // lugares propios: {id:{id,n,q,custom:true}}
+  state.legs   = state.legs   || {};   // recorridos editados: {fecha:[{order:[],removed:[]}]}
+  state.v = 4;
 
   function saveState(){ try{ localStorage.setItem(STATE_KEY, JSON.stringify(state)); }catch(e){} }
   saveState();
@@ -894,10 +946,97 @@
       // pueden colgar paradas sueltas sin arruinar el recorrido
       for(var i=0;i<rs.length;i++){ if(!rs[i].fixed && (rs[i].mode === 'walking' || rs[i].mode === 'driving')){ target = rs[i]; break; } }
       if(!target) target = rs[rs.length-1];
-      extras.forEach(function(p){ target.pts.push(p.n + (cityGeo(day.city) ? ', ' + cityGeo(day.city) : '')); });
+      // p.q existe cuando el usuario pegó un link de Maps con coordenadas: es
+      // más preciso que el nombre, sobre todo para lugares chicos.
+      extras.forEach(function(p){
+        target.pts.push(p.q || (p.n + (cityGeo(day.city) ? ', ' + cityGeo(day.city) : '')));
+      });
     }
+    applyLegEdits(day.date, rs);
     return rs;
   }
+
+  // El usuario puede reordenar y sacar paradas. Se guarda como una capa encima
+  // del recorrido original, no como una copia: así, si después se corrige un dato
+  // o se suma un lugar nuevo, sigue apareciendo en vez de quedar congelado.
+  function applyLegEdits(date, rs){
+    var edits = state.legs[date];
+    if(!edits) return;
+    rs.forEach(function(r, i){
+      var e = edits[i];
+      if(!e) return;
+      var quedan = r.pts.filter(function(pt){ return (e.removed || []).indexOf(pt) === -1; });
+      var orden = (e.order || []).filter(function(pt){ return quedan.indexOf(pt) !== -1; });
+      var nuevos = quedan.filter(function(pt){ return orden.indexOf(pt) === -1; });
+      r.pts = orden.concat(nuevos);      // lo que no estaba cuando editó va al final
+    });
+  }
+
+  function legEditsFor(date, rs){
+    if(!state.legs[date]){
+      state.legs[date] = rs.map(function(r){ return {order:r.pts.slice(), removed:[]}; });
+    }
+    return state.legs[date];
+  }
+  function dayIsEdited(date){ return !!state.legs[date]; }
+  function resetLegs(date){ delete state.legs[date]; saveState(); }
+
+  function moveStop(idx, legI, pt, dir){
+    var day = trip[idx];
+    var rs = routesFor(day, idx);
+    var e = legEditsFor(day.date, rs);
+    var list = rs[legI].pts.slice();
+    var at = list.indexOf(pt), to = at + dir;
+    if(at === -1 || to < 0 || to >= list.length) return false;
+    list.splice(to, 0, list.splice(at, 1)[0]);
+    e[legI].order = list;
+    saveState();
+    return true;
+  }
+
+  function removeStop(idx, legI, pt){
+    var day = trip[idx];
+    var rs = routesFor(day, idx);
+    var e = legEditsFor(day.date, rs);
+    if(e[legI].removed.indexOf(pt) === -1) e[legI].removed.push(pt);
+    e[legI].order = e[legI].order.filter(function(x){ return x !== pt; });
+    saveState();
+    return true;
+  }
+  // Acepta el link largo de Google Maps y saca de ahí nombre y coordenadas.
+  // !3d/!4d son las del lugar; @lat,lng es apenas el centro del mapa, sirve de
+  // reserva. Los links cortos (maps.app.goo.gl) no traen nada: queda el nombre.
+  function parseMapsLink(url){
+    var out = {n:'', q:''};
+    if(!url) return out;
+    try{
+      var m = url.match(/\/place\/([^\/@?]+)/);
+      if(m) out.n = decodeURIComponent(m[1].replace(/\+/g, ' ')).trim();
+      var c = url.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/) ||
+              url.match(/[?&]q=(-?\d+\.\d+),\s*(-?\d+\.\d+)/) ||
+              url.match(/@(-?\d+\.\d{4,}),(-?\d+\.\d{4,})/);
+      if(c) out.q = c[1] + ',' + c[2];
+    }catch(e){}
+    return out;
+  }
+
+  function addCustomPlace(idx, nombre, link){
+    var day = trip[idx];
+    if(!day) return null;
+    var parsed = parseMapsLink(link);
+    var n = (nombre || parsed.n || '').trim();
+    if(!n) return null;
+    var id = 'c-' + Date.now().toString(36) + '-' + Math.floor(Math.random() * 1000);
+    state.custom[id] = {
+      id: id, n: n, custom: true,
+      q: parsed.q || (n + (cityGeo(day.city) ? ', ' + cityGeo(day.city) : '')),
+      link: (link || '').trim()
+    };
+    saveState();
+    toggleAdd(idx, id);          // queda sumado al día y entra en la ruta
+    return state.custom[id];
+  }
+
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function fmtDate(iso){ var p = iso.split('-'); return {num:parseInt(p[2],10), mon:MESES[parseInt(p[1],10)-1]}; }
   function cityLabel(c){ return c==='ny' ? 'NUEVA YORK' : (c==='miami' ? 'MIAMI' : 'EN VUELO'); }
@@ -1022,6 +1161,76 @@
   }
 
   // ===== detail =====
+  // Nombre corto de una parada: el string lleva la ciudad pegada para que Maps
+  // no se confunda, pero en pantalla sobra.
+  function stopLabel(pt, city, nombres){
+    if(pt === '@hotel') return city === 'miami' ? 'Hotel (Roami at The Carmela)' : 'Hotel (Hotel and the City)';
+    if(nombres && nombres[pt]) return nombres[pt];
+    if(/^-?\d+\.\d+,\s*-?\d+\.\d+$/.test(pt)) return 'Ubicación del mapa';
+    return pt.replace(/,\s*(New York|NY|Brooklyn|Miami Beach|Miami|FL|Elizabeth|NJ)([,\s].*)?$/i, '')
+             .replace(/,\s*(Estados Unidos|USA)$/i, '');
+  }
+
+  function renderTimeline(day, idx, rs){
+    var h = '<div class="mini-label">Recorrido paso a paso</div>';
+
+    // los lugares sumados entran a la ruta como texto de búsqueda o como
+    // coordenada: guardamos con qué nombre mostrarlos
+    var nombres = {};
+    addedPlaces(idx).forEach(function(p){
+      nombres[p.q || (p.n + (cityGeo(day.city) ? ', ' + cityGeo(day.city) : ''))] = p.n;
+    });
+
+    if(dayIsEdited(day.date)){
+      h += '<div class="tl-edited"><span>Recorrido modificado por vos</span>' +
+           '<button type="button" data-resetlegs="'+idx+'">Volver al original</button></div>';
+    }
+
+    if(!rs.length){
+      h += '<div class="tl-empty">Este día no tiene un recorrido armado. Sumá lugares desde la lista de abajo o cargá uno tuyo.</div>';
+    }
+
+    rs.forEach(function(r, legI){
+      h += '<div class="tl-leg'+(r.fixed ? ' is-fixed' : '')+'">';
+      h += '<div class="tl-head">'+modeIcon(r.mode)+'<span>'+esc(r.label)+'</span>'+
+           (r.fixed ? '<span style="color:var(--gold)">traslado</span>' : '')+'</div>';
+
+      if(!r.pts.length){
+        h += '<div class="tl-empty">Sacaste todas las paradas de este tramo.</div>';
+      }
+      r.pts.forEach(function(pt, i){
+        var esExtra = (day.routes || [])[legI] ? (day.routes[legI].pts || []).indexOf(pt) === -1 : true;
+        h += '<div class="tl-step'+(esExtra ? ' is-extra' : '')+'">';
+        h += '<div class="tl-dot"><i></i></div>';
+        h += '<div class="tl-body"><div class="tl-name">'+esc(stopLabel(pt, day.city, nombres))+'</div>';
+        h += '<div class="tl-sub">'+(i === 0 ? 'Salida' : (i === r.pts.length - 1 ? 'Llegada' : 'Parada ' + i))+
+             (esExtra ? ' · sumada por vos' : '')+'</div></div>';
+        h += '<div class="tl-acts">';
+        h += '<button type="button" class="tl-btn" data-mv="up" data-leg="'+legI+'" data-day="'+idx+'" data-pt="'+esc(pt)+'" title="Subir"'+(i === 0 ? ' disabled' : '')+'>↑</button>';
+        h += '<button type="button" class="tl-btn" data-mv="down" data-leg="'+legI+'" data-day="'+idx+'" data-pt="'+esc(pt)+'" title="Bajar"'+(i === r.pts.length - 1 ? ' disabled' : '')+'>↓</button>';
+        h += '<button type="button" class="tl-btn danger" data-rmstop="'+esc(pt)+'" data-leg="'+legI+'" data-day="'+idx+'" title="Sacar del recorrido">✕</button>';
+        h += '</div></div>';
+      });
+
+      if(r.pts.length){
+        h += '<a class="route-btn wide" style="margin-top:9px" target="_blank" rel="noopener" href="'+
+             esc(buildDirUrl(r.pts, r.mode, day.city))+'">Abrir este tramo en Maps</a>';
+      }
+      h += '</div>';
+    });
+
+    h += '<details class="addown"><summary>Agregar un lugar mío</summary>' +
+         '<label for="ownName">Nombre del lugar</label>' +
+         '<input type="text" id="ownName" placeholder="Ej: Bemelmans Bar" autocomplete="off" />' +
+         '<label for="ownLink">Link de Google Maps (opcional)</label>' +
+         '<input type="url" id="ownLink" placeholder="Pegá el link acá" autocomplete="off" inputmode="url" />' +
+         '<p class="hint">Si pegás el link <b>largo</b> (el de la barra de direcciones en la compu) tomo la ubicación exacta y el nombre solo. ' +
+         'Con el link corto del celular (maps.app.goo.gl) alcanza con que escribas el nombre.</p>' +
+         '<button type="button" class="route-btn wide" data-addown="'+idx+'">Sumar al '+fmtDate(day.date).num+' '+fmtDate(day.date).mon+'</button>' +
+         '</details>';
+    return h;
+  }
+
   function renderDetail(idx){
     var day = trip[idx];
     var d = fmtDate(day.date);
@@ -1058,12 +1267,7 @@
       h += '</div>';
     }
 
-    if(rs.length){
-      h += '<div class="mini-label">Rutas (arrancan en el hotel)</div>';
-      rs.forEach(function(r, i){
-        h += '<a class="route-btn wide'+(i?' ghost':'')+'" style="margin-bottom:7px" target="_blank" rel="noopener" href="'+esc(buildDirUrl(r.pts, r.mode, day.city))+'">'+modeIcon(r.mode)+' '+esc(r.label)+'</a>';
-      });
-    }
+    h += renderTimeline(day, idx, rs);
 
     if(day.tip){ h += '<div class="tip-box">'+ICONS.bulb+'<span>'+esc(day.tip)+'</span></div>'; }
     h += '</div>';
@@ -1204,6 +1408,40 @@
       if(addBtn.getAttribute('data-src') === 'ideas'){ renderIdeas(); }
       else { renderDetail(i); }
       renderItin(); renderHoy();
+      return;
+    }
+    var mv = e.target.closest('[data-mv]');
+    if(mv){
+      var mi = parseInt(mv.getAttribute('data-day'), 10);
+      moveStop(mi, parseInt(mv.getAttribute('data-leg'), 10), mv.getAttribute('data-pt'),
+               mv.getAttribute('data-mv') === 'up' ? -1 : 1);
+      renderDetail(mi); renderItin();
+      return;
+    }
+    var rm = e.target.closest('[data-rmstop]');
+    if(rm){
+      var ri = parseInt(rm.getAttribute('data-day'), 10);
+      removeStop(ri, parseInt(rm.getAttribute('data-leg'), 10), rm.getAttribute('data-rmstop'));
+      toast('Parada sacada del recorrido');
+      renderDetail(ri); renderItin();
+      return;
+    }
+    var rl = e.target.closest('[data-resetlegs]');
+    if(rl){
+      var li = parseInt(rl.getAttribute('data-resetlegs'), 10);
+      resetLegs(trip[li].date);
+      toast('Recorrido restablecido');
+      renderDetail(li); renderItin();
+      return;
+    }
+    var ao = e.target.closest('[data-addown]');
+    if(ao){
+      var ai = parseInt(ao.getAttribute('data-addown'), 10);
+      var nm = document.getElementById('ownName'), lk = document.getElementById('ownLink');
+      var creado = addCustomPlace(ai, nm ? nm.value : '', lk ? lk.value : '');
+      if(!creado){ toast('Escribí el nombre del lugar'); return; }
+      toast('“' + creado.n + '” sumado al recorrido');
+      renderDetail(ai); renderItin(); renderHoy();
       return;
     }
     var det = e.target.closest('.detail-btn[data-day]');

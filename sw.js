@@ -1,7 +1,7 @@
 /* Service worker del viaje BUE → NYC → MIA.
    Objetivo: que la app abra completa sin datos ni wifi.
    Subí VERSION cada vez que cambie index.html o los íconos. */
-var VERSION   = 'v4';
+var VERSION   = 'v5';
 var APP_CACHE = 'viaje2026-app-' + VERSION;
 var FONT_CACHE= 'viaje2026-fonts-v1';
 

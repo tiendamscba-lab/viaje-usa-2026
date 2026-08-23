@@ -75,6 +75,30 @@ Una ruta puede llevar `fixed:true` (traslados al aeropuerto, ida a un horario fi
 el usuario suma a ese día **no** se cuelgan de esas rutas, para no arruinar un recorrido que tiene
 que ser directo.
 
+## Recorrido paso a paso (editable)
+
+El detalle de cada día muestra el recorrido como una lista vertical de paradas, un tramo por ruta.
+Cada parada se puede subir, bajar o sacar; el botón "Abrir este tramo en Maps" se rearma con el orden
+que quedó. Un cartel avisa cuando el día está modificado y ofrece volver al plan original.
+
+Las ediciones se guardan como una **capa encima** del recorrido original, no como una copia:
+
+```json
+{ "legs": { "2026-09-28": [ { "order": ["…"], "removed": ["…"] } ] } }
+```
+
+Así, si después se corrige un dato del itinerario o se suma un lugar nuevo, sigue apareciendo en vez de
+quedar congelado en la versión que había cuando se editó.
+
+## Lugares propios desde Google Maps
+
+Dentro del detalle del día, "Agregar un lugar mío" acepta un nombre y, opcionalmente, un link de Maps.
+Del link **largo** (el de la barra de direcciones en la computadora) saca el nombre y las coordenadas
+exactas de `!3d…!4d…`, que es más preciso que buscar por nombre. Del link **corto** del celular
+(`maps.app.goo.gl`) no se puede sacar nada sin conexión: ahí hace falta escribir el nombre.
+
+Los lugares propios se guardan en `state.custom` y entran a la ruta como cualquier otro.
+
 ## Al editar los datos
 
 Subí `VERSION` en `sw.js` (`'v1'` → `'v2'`) y volvé a publicar. La próxima vez que alguien abra la app con internet le aparece "Hay una versión nueva" con un botón para actualizar.
