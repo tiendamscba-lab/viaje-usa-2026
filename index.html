@@ -349,6 +349,44 @@
   .addown input:focus{ border-color:var(--accent); }
   .addown .hint{ font-size:11.5px; color:var(--muted); line-height:1.4; margin:0 0 10px; }
 
+  /* ===== Mapa y conexion con Google ===== */
+  .gmaps-actions{ display:flex; flex-wrap:wrap; gap:7px; margin:0 0 12px; }
+  .gmaps-actions .route-btn{ flex:1; min-width:145px; }
+  .gmaps-off{ font-size:12px; color:var(--muted); line-height:1.45; margin:0 2px 12px; }
+  .gmaps-off b{ color:var(--ink); }
+
+  #panel-map .map-shell{ display:flex; flex-direction:column; gap:10px; }
+  .map-search{ position:relative; z-index:3; }
+  .map-search gmp-place-autocomplete,
+  .map-search input{
+    width:100%; box-sizing:border-box; border:1px solid var(--line); background:var(--surface);
+    color:var(--ink); border-radius:11px; font-family:var(--font-body); font-size:15px;
+  }
+  .map-search input{ padding:11px 12px; outline:none; }
+  .map-canvas{
+    width:100%; height:340px; border-radius:13px; border:1px solid var(--line);
+    background:var(--surface-2); overflow:hidden;
+  }
+  .map-pick{
+    border:1px solid var(--line); background:var(--surface); border-radius:12px;
+    padding:11px 12px; box-shadow:var(--shadow);
+  }
+  .map-pick .pname{ font-size:14px; font-weight:700; }
+  .map-pick .pmeta{ font-family:var(--font-mono); font-size:11px; color:var(--muted); margin-top:3px; }
+  .map-pick .route-btn{ margin-top:10px; }
+  .map-status{ font-family:var(--font-mono); font-size:11.5px; color:var(--muted); padding:2px 2px 0; }
+  .map-status.err{ color:var(--miami); }
+
+  .keybox input{
+    width:100%; box-sizing:border-box; border:1px solid var(--line); background:var(--surface);
+    color:var(--ink); border-radius:9px; padding:9px 10px; font-family:var(--font-mono);
+    font-size:12.5px; outline:none; margin:6px 0 9px;
+  }
+  .keybox input:focus{ border-color:var(--accent); }
+  .keybox .ok{ color:var(--good); font-family:var(--font-mono); font-size:11.5px; }
+  .keybox ol{ margin:8px 0 10px; padding-left:18px; font-size:12.5px; color:var(--muted); line-height:1.6; }
+  .keybox ol b{ color:var(--ink); }
+
 </style>
 
 <div class="backdrop">
@@ -385,6 +423,15 @@
       </div>
       <div class="search-count" id="searchCount"></div>
       <div id="searchResults"></div>
+    </section>
+
+    <section class="panel" id="panel-map">
+      <div class="map-shell">
+        <div class="map-search" id="mapSearch"></div>
+        <div class="map-canvas" id="mapCanvas"></div>
+        <div class="map-status" id="mapStatus"></div>
+        <div id="mapPick"></div>
+      </div>
     </section>
 
     <section class="panel" id="panel-detail"><div id="detailContent"></div></section>
@@ -430,6 +477,29 @@
         <div class="kv"><span class="k">Reserva</span><span class="v"><span class="badge-good">Confirmada</span></span></div>
         <a class="route-btn wide" style="margin-top:11px" target="_blank" rel="noopener"
            href="https://www.google.com/maps/search/?api=1&query=Roami%20at%20The%20Carmela%2C%20Miami%2C%20FL">Ver en Maps</a>
+      </div>
+      <h3 class="sub-title">Conexión con Google Maps</h3>
+      <div class="info-card keybox">
+        <h4>Clave de Google Maps</h4>
+        <p class="note" style="margin:2px 0 0">Con una clave propia se habilita el <b>mapa dentro de la app</b>, la búsqueda de
+        lugares y la <b>optimización automática del recorrido</b>. Sin clave la app funciona igual, solo que
+        esas tres cosas no aparecen.</p>
+        <p class="note" style="margin:8px 0 0"><b>La clave se guarda solo en este teléfono.</b> No viaja al repositorio
+        ni al sitio publicado: cada uno la carga en su celular.</p>
+        <ol>
+          <li>En <b>console.cloud.google.com</b>, creá un proyecto.</li>
+          <li>Habilitá <b>Maps JavaScript API</b>, <b>Places API (New)</b> y <b>Directions API</b>.</li>
+          <li>Creá una clave en <b>Credenciales</b>.</li>
+          <li>Restringila: sitios web → <b>tiendamscba-lab.github.io/*</b>, y limitala a esas tres APIs.</li>
+          <li>Ponéle un <b>tope de cuota</b> para que no se pueda gastar de más.</li>
+        </ol>
+        <label for="gmapsKey" style="font-family:var(--font-mono);font-size:10.5px;color:var(--muted)">Pegá tu clave</label>
+        <input type="text" id="gmapsKey" placeholder="AIza…" autocomplete="off" spellcheck="false" />
+        <div style="display:flex;gap:7px;align-items:center">
+          <button type="button" class="route-btn" id="gmapsKeySave">Guardar</button>
+          <button type="button" class="route-btn ghost" id="gmapsKeyClear">Borrar</button>
+          <span class="ok" id="gmapsKeyState"></span>
+        </div>
       </div>
       <h3 class="sub-title">Tips y huecos</h3>
       <div id="tipsList"></div>
@@ -1171,6 +1241,290 @@
              .replace(/,\s*(Estados Unidos|USA)$/i, '');
   }
 
+  // ===== Google Maps: mapa embebido, busqueda y optimizacion =====
+  // La clave vive solo en este dispositivo. Todo lo que se elige en el mapa se
+  // guarda con nombre y coordenadas, asi que despues funciona sin conexion.
+  var GKEY = 'viajeUsa2026.gmapsKey';
+
+  function apiKey(){ try{ return localStorage.getItem(GKEY) || ''; }catch(e){ return ''; } }
+  function setApiKey(k){
+    try{ if(k){ localStorage.setItem(GKEY, k); } else { localStorage.removeItem(GKEY); } }catch(e){}
+  }
+  function hasKey(){ return !!apiKey(); }
+
+  var mapsLoading = null;
+  function loadMaps(){
+    if(window.google && window.google.maps && window.google.maps.importLibrary){
+      return Promise.resolve();
+    }
+    if(mapsLoading) return mapsLoading;
+    if(!hasKey()) return Promise.reject(new Error('Falta la clave de Google Maps'));
+    if(!navigator.onLine) return Promise.reject(new Error('El mapa necesita conexi\u00f3n'));
+    mapsLoading = new Promise(function(resolve, reject){
+      // Google avisa por esta global cuando rechaza la clave
+      window.gm_authFailure = function(){
+        mapStatus('Google rechazó la clave. Revisá que sea correcta, que tenga habilitadas las tres APIs y que el sitio esté permitido en las restricciones.', true);
+      };
+      var sc = document.createElement('script');
+      sc.async = true;
+      sc.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(apiKey()) +
+               '&v=weekly&language=es&region=US&loading=async';
+      sc.onload = function(){ resolve(); };
+      sc.onerror = function(){ mapsLoading = null; reject(new Error('No se pudo cargar Google Maps')); };
+      document.head.appendChild(sc);
+    }).then(function(){
+      // con loading=async nada existe hasta que se importa cada libreria
+      if(!(window.google && google.maps && google.maps.importLibrary)){
+        throw new Error('Google Maps no se inicializó. Suele ser la clave: revisala en Info.');
+      }
+      return Promise.all(['maps', 'marker', 'places', 'geocoding', 'routes'].map(function(lib){
+        return google.maps.importLibrary(lib);
+      }));
+    }).catch(function(err){
+      mapsLoading = null;                       // que el proximo intento vuelva a probar
+      throw err;
+    });
+    return mapsLoading;
+  }
+
+  function resolvePt(pt, city){ return pt === '@hotel' ? hotelFor(city) : pt; }
+
+  // ---- centro aproximado por ciudad, solo para abrir el mapa en algun lado ----
+  var CITY_CENTER = {
+    ny:    {lat: 40.7484, lng: -73.9857},
+    miami: {lat: 25.7907, lng: -80.1300}
+  };
+
+  var mapState = {map:null, markers:[], dayIdx:-1, pick:null};
+
+  function mapStatus(msg, err){
+    var el = document.getElementById('mapStatus');
+    if(!el) return;
+    el.textContent = msg || '';
+    el.classList.toggle('err', !!err);
+  }
+
+  function encuadrar(b){
+    mapState.map.fitBounds(b, 40);
+    google.maps.event.addListenerOnce(mapState.map, 'idle', function(){
+      if(mapState.map.getZoom() > 16) mapState.map.setZoom(16);   // una sola parada
+    });
+  }
+
+  function clearMarkers(){
+    mapState.markers.forEach(function(m){
+      try{ if(m.setMap) m.setMap(null); else m.map = null; }catch(e){}
+    });
+    mapState.markers = [];
+  }
+
+  function addMarker(pos, title){
+    try{
+      if(google.maps.marker && google.maps.marker.AdvancedMarkerElement){
+        var am = new google.maps.marker.AdvancedMarkerElement({map: mapState.map, position: pos, title: title});
+        mapState.markers.push(am);
+        return am;
+      }
+    }catch(e){}
+    try{
+      var m = new google.maps.Marker({map: mapState.map, position: pos, title: title});
+      mapState.markers.push(m);
+      return m;
+    }catch(e){ return null; }
+  }
+
+  function openMapPicker(idx){
+    var day = trip[idx];
+    if(!day) return;
+    mapState.dayIdx = idx;
+    mapState.pick = null;
+    document.getElementById('mapPick').innerHTML = '';
+    document.getElementById('mapSearch').innerHTML = '';
+    setTab('map', true);
+    document.getElementById('subline').innerHTML =
+      '<button class="back-btn" id="backBtn">' + ICONS.back + ' Volver al ' +
+      fmtDate(day.date).num + ' ' + fmtDate(day.date).mon + '</button>';
+    var bb = document.getElementById('backBtn');
+    if(bb) bb.addEventListener('click', function(){ renderDetail(idx); });
+
+    mapStatus('Cargando el mapa\u2026');
+    loadMaps().then(function(){
+      return buildMap(day, idx);
+    }).catch(function(err){
+      mapStatus(err.message || 'No se pudo abrir el mapa', true);
+    });
+  }
+
+  function buildMap(day, idx){
+    var center = CITY_CENTER[day.city] || CITY_CENTER.ny;
+    mapState.map = new google.maps.Map(document.getElementById('mapCanvas'), {
+      center: center, zoom: 13, mapId: 'DEMO_MAP_ID',
+      mapTypeControl: false, streetViewControl: false, fullscreenControl: false
+    });
+    clearMarkers();
+
+    // paradas del dia, para ubicarse
+    var rs = routesFor(day, idx);
+    var geo = new google.maps.Geocoder();
+    var b = new google.maps.LatLngBounds();
+    var pend = [];
+    rs.forEach(function(r){
+      r.pts.forEach(function(pt){ pend.push(resolvePt(pt, day.city)); });
+    });
+    pend = pend.filter(function(x, i){ return pend.indexOf(x) === i; }).slice(0, 12);
+    var listos = 0;
+    pend.forEach(function(q){
+      var m = q.match(/^(-?\d+\.\d+),\s*(-?\d+\.\d+)$/);
+      if(m){
+        var pos = {lat: parseFloat(m[1]), lng: parseFloat(m[2])};
+        addMarker(pos, q); b.extend(pos); listos++;
+        if(listos === pend.length) encuadrar(b);
+        return;
+      }
+      geo.geocode({address: q}, function(res, st){
+        listos++;
+        if(st === 'OK' && res && res[0]){
+          var loc = res[0].geometry.location;
+          addMarker(loc, q); b.extend(loc);
+        }
+        if(listos === pend.length && !b.isEmpty()) encuadrar(b);
+      });
+    });
+
+    // tocar un lugar del mapa lo propone para sumar
+    mapState.map.addListener('click', function(ev){
+      if(ev.placeId){
+        ev.stop();
+        fetchPlaceById(ev.placeId);
+      }
+    });
+
+    return buildSearch(day);
+  }
+
+  function buildSearch(day){
+    var cont = document.getElementById('mapSearch');
+    return google.maps.importLibrary('places').then(function(places){
+      if(!places.PlaceAutocompleteElement){
+        mapStatus('Tu clave no tiene habilitada Places API (New). Igual pod\u00e9s tocar lugares en el mapa.', true);
+        return;
+      }
+      var ac = new places.PlaceAutocompleteElement({});
+      cont.appendChild(ac);
+      var onSel = function(ev){
+        var p = ev.place || (ev.placePrediction && ev.placePrediction.toPlace && ev.placePrediction.toPlace());
+        if(!p) return;
+        p.fetchFields({fields:['displayName','location','formattedAddress','rating']}).then(function(){
+          showPick({
+            n: p.displayName || 'Lugar',
+            addr: p.formattedAddress || '',
+            rating: p.rating || null,
+            lat: p.location && p.location.lat(),
+            lng: p.location && p.location.lng()
+          });
+        }).catch(function(e){ mapStatus('No se pudo leer el lugar: ' + e.message, true); });
+      };
+      ac.addEventListener('gmp-select', onSel);
+      ac.addEventListener('gmp-placeselect', onSel);
+      mapStatus('Busc\u00e1 un lugar o toc\u00e1 cualquier punto del mapa.');
+    }).catch(function(e){
+      mapStatus('No se pudo cargar el buscador: ' + e.message, true);
+    });
+  }
+
+  function fetchPlaceById(placeId){
+    google.maps.importLibrary('places').then(function(places){
+      var p = new places.Place({id: placeId});
+      return p.fetchFields({fields:['displayName','location','formattedAddress','rating']}).then(function(){
+        showPick({
+          n: p.displayName || 'Lugar',
+          addr: p.formattedAddress || '',
+          rating: p.rating || null,
+          lat: p.location && p.location.lat(),
+          lng: p.location && p.location.lng()
+        });
+      });
+    }).catch(function(e){ mapStatus('No se pudo leer ese lugar: ' + e.message, true); });
+  }
+
+  function showPick(info){
+    mapState.pick = info;
+    var d = trip[mapState.dayIdx];
+    var fd = fmtDate(d.date);
+    var h = '<div class="map-pick"><div class="pname">' + esc(info.n) + '</div>';
+    var meta = [];
+    if(info.rating) meta.push('\u2605 ' + info.rating);
+    if(info.addr) meta.push(esc(info.addr));
+    if(meta.length) h += '<div class="pmeta">' + meta.join(' \u00b7 ') + '</div>';
+    h += '<button type="button" class="route-btn wide" id="mapAdd">Sumar al ' + fd.num + ' ' + fd.mon + '</button></div>';
+    document.getElementById('mapPick').innerHTML = h;
+    if(info.lat && info.lng){
+      clearMarkers();
+      var pos = {lat: info.lat, lng: info.lng};
+      addMarker(pos, info.n);
+      mapState.map.setCenter(pos);
+      mapState.map.setZoom(16);
+    }
+    document.getElementById('mapAdd').addEventListener('click', function(){
+      var id = 'c-' + Date.now().toString(36) + '-' + Math.floor(Math.random() * 1000);
+      state.custom[id] = {
+        id: id, n: info.n, custom: true,
+        q: (info.lat && info.lng) ? (info.lat + ',' + info.lng) : (info.n + ', ' + cityGeo(d.city)),
+        addr: info.addr || ''
+      };
+      saveState();
+      toggleAdd(mapState.dayIdx, id);
+      toast('\u201c' + info.n + '\u201d sumado al ' + fd.num + ' ' + fd.mon);
+      renderDetail(mapState.dayIdx); renderItin(); renderHoy();
+    });
+  }
+
+  // ---- optimizacion real del orden de paradas ----
+  var MODE_MAP = {walking:'WALKING', driving:'DRIVING', transit:'TRANSIT'};
+
+  function optimizeLeg(idx, legI){
+    var day = trip[idx];
+    var rs = routesFor(day, idx);
+    var r = rs[legI];
+    if(!r || r.pts.length < 4){
+      toast('Hacen falta al menos 2 paradas intermedias');
+      return;
+    }
+    if(r.mode === 'transit'){ toast('Maps no optimiza paradas en transporte p\u00fablico'); return; }
+    toast('Consultando a Google\u2026');
+    loadMaps().then(function(){
+      var svc = new google.maps.DirectionsService();
+      var pts = r.pts.map(function(p){ return resolvePt(p, day.city); });
+      svc.route({
+        origin: pts[0],
+        destination: pts[pts.length - 1],
+        waypoints: pts.slice(1, -1).map(function(q){ return {location: q, stopover: true}; }),
+        optimizeWaypoints: true,
+        travelMode: MODE_MAP[r.mode] || 'WALKING'
+      }, function(res, status){
+        if(status !== 'OK' || !res.routes || !res.routes[0]){
+          toast('Google no pudo calcular la ruta (' + status + ')');
+          return;
+        }
+        var orden = res.routes[0].waypoint_order;
+        if(!orden || !orden.length){ toast('Google dice que ya est\u00e1 en el mejor orden'); return; }
+        var medios = r.pts.slice(1, -1);
+        var nuevo = [r.pts[0]].concat(orden.map(function(i){ return medios[i]; })).concat([r.pts[r.pts.length - 1]]);
+        var e = legEditsFor(day.date, rs);
+        e[legI].order = nuevo;
+        saveState();
+        var legs = res.routes[0].legs || [];
+        var metros = 0, seg = 0;
+        legs.forEach(function(l){
+          metros += (l.distance && l.distance.value) || 0;
+          seg += (l.duration && l.duration.value) || 0;
+        });
+        toast('Optimizado: ' + (metros / 1000).toFixed(1) + ' km \u00b7 ' + Math.round(seg / 60) + ' min');
+        renderDetail(idx); renderItin();
+      });
+    }).catch(function(err){ toast(err.message || 'No se pudo optimizar'); });
+  }
+
   function renderTimeline(day, idx, rs){
     var h = '<div class="mini-label">Recorrido paso a paso</div>';
 
@@ -1218,6 +1572,21 @@
       }
       h += '</div>';
     });
+
+    // acciones que dependen de la clave de Google
+    if(hasKey()){
+      h += '<div class="gmaps-actions">';
+      h += '<button type="button" class="route-btn" data-openmap="'+idx+'">Buscar en el mapa</button>';
+      var optimizable = -1;
+      rs.forEach(function(r, i){ if(optimizable === -1 && !r.fixed && r.mode !== 'transit' && r.pts.length >= 4) optimizable = i; });
+      if(optimizable !== -1){
+        h += '<button type="button" class="route-btn ghost" data-optleg="'+optimizable+'" data-day="'+idx+'">Optimizar con Google</button>';
+      }
+      h += '</div>';
+    } else {
+      h += '<p class="gmaps-off">Si cargás una <b>clave de Google Maps</b> en la pestaña Info, acá aparecen ' +
+           'el <b>mapa para buscar y sumar lugares</b> y el botón para que Google <b>optimice el orden</b> de las paradas.</p>';
+    }
 
     h += '<details class="addown"><summary>Agregar un lugar mío</summary>' +
          '<label for="ownName">Nombre del lugar</label>' +
@@ -1444,6 +1813,15 @@
       renderDetail(ai); renderItin(); renderHoy();
       return;
     }
+    var om = e.target.closest('[data-openmap]');
+    if(om){ openMapPicker(parseInt(om.getAttribute('data-openmap'), 10)); return; }
+
+    var ol = e.target.closest('[data-optleg]');
+    if(ol){
+      optimizeLeg(parseInt(ol.getAttribute('data-day'), 10), parseInt(ol.getAttribute('data-optleg'), 10));
+      return;
+    }
+
     var det = e.target.closest('.detail-btn[data-day]');
     if(det){ renderDetail(parseInt(det.getAttribute('data-day'),10)); }
   });
@@ -1603,6 +1981,30 @@
     if(go){ detailOrigin = 'search'; renderDetail(parseInt(go.getAttribute('data-goday'), 10)); }
   });
 
+
+  // ---- clave de Google, en la pestana Info ----
+  (function(){
+    var inp = document.getElementById('gmapsKey');
+    var st  = document.getElementById('gmapsKeyState');
+    if(!inp) return;
+    function paint(){
+      var k = apiKey();
+      st.textContent = k ? 'Guardada en este dispositivo' : '';
+      inp.value = k ? k.slice(0, 6) + '\u2026' + k.slice(-4) : '';
+    }
+    paint();
+    document.getElementById('gmapsKeySave').addEventListener('click', function(){
+      var v = inp.value.trim();
+      if(!v || v.indexOf('\u2026') !== -1){ toast('Peg\u00e1 la clave completa'); return; }
+      setApiKey(v); paint();
+      toast('Clave guardada solo en este dispositivo');
+      renderItin(); renderHoy();
+    });
+    document.getElementById('gmapsKeyClear').addEventListener('click', function(){
+      setApiKey(''); paint(); toast('Clave borrada');
+      renderItin(); renderHoy();
+    });
+  })();
 
   renderItin(); renderIdeas(); renderStatic(); renderHoy();
 

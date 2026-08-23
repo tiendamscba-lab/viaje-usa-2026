@@ -99,6 +99,31 @@ exactas de `!3d…!4d…`, que es más preciso que buscar por nombre. Del link *
 
 Los lugares propios se guardan en `state.custom` y entran a la ruta como cualquier otro.
 
+## Conexión opcional con Google Maps
+
+La app funciona entera sin conexión y sin clave. Si se carga una **clave propia de Google Maps** en
+la pestaña Info, se habilitan tres cosas que necesitan internet:
+
+- **mapa embebido** dentro del detalle del día, con las paradas ubicadas;
+- **búsqueda de lugares** (Places Autocomplete) y toque directo sobre cualquier punto del mapa;
+- **optimización real del recorrido** con `DirectionsService` + `optimizeWaypoints`, que devuelve el
+  orden más eficiente según Google, con distancia y tiempo.
+
+Todo lo que se elige en el mapa se guarda con **nombre y coordenadas** en el dispositivo, así que
+después funciona sin conexión. Lo mismo el orden optimizado: se guarda como una edición del recorrido.
+
+### La clave nunca entra al repositorio
+
+Se guarda en `localStorage` (`viajeUsa2026.gmapsKey`), en el dispositivo de cada uno. No está en el
+código, no se publica y no se sincroniza. Al mostrarla en pantalla queda enmascarada.
+
+Para crearla: proyecto en Google Cloud → habilitar **Maps JavaScript API**, **Places API (New)** y
+**Directions API** → crear credencial → restringirla por sitio web y por API → ponerle tope de cuota.
+
+Nota: `google.maps.places.Autocomplete` (el buscador viejo) **no está disponible para cuentas nuevas**
+desde marzo de 2025. La app usa `PlaceAutocompleteElement`, el componente actual. El script se carga con
+`loading=async`, así que cada librería se pide con `importLibrary` antes de usarla.
+
 ## Al editar los datos
 
 Subí `VERSION` en `sw.js` (`'v1'` → `'v2'`) y volvé a publicar. La próxima vez que alguien abra la app con internet le aparece "Hay una versión nueva" con un botón para actualizar.
