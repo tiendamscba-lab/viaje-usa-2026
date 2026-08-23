@@ -1,0 +1,1184 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>BUE→NYC→MIA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<meta name="description" content="Itinerario, lugares, rutas y tickets del viaje Buenos Aires → Nueva York → Miami, 25 sep – 11 oct 2026. Funciona sin conexión." />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#16213A" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="apple-mobile-web-app-title" content="BUE→NYC→MIA" />
+
+<style>
+  :root{
+    --font-display:'Big Shoulders Display','Arial Narrow',sans-serif;
+    --font-body:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --font-mono:'IBM Plex Mono','SFMono-Regular',Menlo,Consolas,monospace;
+
+    --chrome-bg:#16213A; --chrome-ink:#F3F5FA;
+    --chrome-muted:rgba(243,245,250,.66); --chrome-line:rgba(255,255,255,.14);
+
+    --paper:#EEF1F6; --surface:#FFFFFF; --surface-2:#F5F7FB;
+    --ink:#11151F; --muted:#5B6578; --line:#DEE3EC;
+    --accent:#1E2E4E; --accent-ink:#FFFFFF;
+    --ny:#2F6690; --miami:#C85A34; --gold:#9C7209;
+    --good:#1F7A52; --good-bg:#E4F3EC;
+    --mine:#6B4E9E; --mine-bg:rgba(107,78,158,.12);
+    --shadow:0 1px 2px rgba(20,26,40,.06), 0 8px 24px -12px rgba(20,26,40,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#0B0F16; --surface:#141B27; --surface-2:#1A2231;
+      --ink:#ECEFF5; --muted:#97A1B5; --line:#283245;
+      --accent:#729FDB; --accent-ink:#0E1626;
+      --ny:#72AADC; --miami:#F0895F; --gold:#E3BC55;
+      --good:#57C094; --good-bg:rgba(87,192,148,.14);
+      --mine:#B79BE8; --mine-bg:rgba(183,155,232,.14);
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0B0F16; --surface:#141B27; --surface-2:#1A2231;
+    --ink:#ECEFF5; --muted:#97A1B5; --line:#283245;
+    --accent:#729FDB; --accent-ink:#0E1626;
+    --ny:#72AADC; --miami:#F0895F; --gold:#E3BC55;
+    --good:#57C094; --good-bg:rgba(87,192,148,.14);
+    --mine:#B79BE8; --mine-bg:rgba(183,155,232,.14);
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background:var(--paper); color:var(--ink); font-family:var(--font-body); -webkit-font-smoothing:antialiased; min-height:100vh; }
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:.001ms !important; transition-duration:.001ms !important;} }
+
+  .backdrop{
+    min-height:100vh; display:flex; justify-content:center;
+    background: radial-gradient(circle at 1px 1px, var(--line) 1px, transparent 0) 0 0/28px 28px, var(--paper);
+  }
+  @media (max-width:560px){ .backdrop{ background:var(--paper); } }
+  .app{ width:100%; max-width:480px; min-height:100vh; background:var(--paper); display:flex; flex-direction:column; position:relative; box-shadow:var(--shadow); }
+  @media (min-width:561px){ .app{ min-height:calc(100vh - 48px); margin:24px 0; border-radius:22px; overflow:hidden; } .backdrop{ align-items:flex-start; } }
+
+  header.top{ background:var(--chrome-bg); color:var(--chrome-ink); padding:18px 20px 16px; position:sticky; top:0; z-index:20; }
+  .brand{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+  .brand h1{ font-family:var(--font-display); font-weight:800; font-size:26px; letter-spacing:.02em; margin:0; text-wrap:balance; display:flex; align-items:center; gap:8px; }
+  .brand h1 .arrow{ color:var(--chrome-muted); font-weight:600; font-size:18px; }
+  .status-pill{ font-family:var(--font-mono); font-size:11.5px; font-weight:500; background:rgba(255,255,255,.1); border:1px solid var(--chrome-line); color:var(--chrome-ink); padding:5px 10px; border-radius:999px; white-space:nowrap; }
+  .subline{ margin-top:8px; font-family:var(--font-mono); font-size:12px; color:var(--chrome-muted); }
+  .back-btn{ display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.1); border:1px solid var(--chrome-line); color:var(--chrome-ink); font-family:var(--font-body); font-weight:600; font-size:12.5px; padding:6px 12px 6px 9px; border-radius:999px; cursor:pointer; }
+  .back-btn svg{ width:14px; height:14px; }
+
+  main{ flex:1; padding:16px 16px 96px; }
+  .panel{ display:none; }
+  .panel.active{ display:block; }
+
+  h2.section-title{ font-family:var(--font-display); font-size:20px; font-weight:700; margin:4px 0 12px; color:var(--ink); }
+  h3.sub-title{ font-family:var(--font-display); font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:22px 0 10px; }
+
+  .day-card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-bottom:12px; box-shadow:var(--shadow); display:flex; }
+  .day-card .stripe{ width:5px; flex:0 0 5px; }
+  .stripe.city-ny{ background:var(--ny); } .stripe.city-miami{ background:var(--miami); } .stripe.city-transit{ background:var(--accent); }
+  .day-card .datecol{ flex:0 0 64px; padding:14px 10px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; border-right:2px dashed var(--line); }
+  .datecol .num{ font-family:var(--font-mono); font-size:24px; font-weight:600; line-height:1; }
+  .datecol .mon{ font-family:var(--font-mono); font-size:9.5px; color:var(--muted); text-transform:uppercase; margin-top:2px; }
+  .datecol .dow{ margin-top:6px; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+  .day-card .content{ flex:1; padding:14px 14px 14px 12px; min-width:0; }
+  .content .city-tag{ font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; }
+  .city-tag.city-ny{ color:var(--ny); } .city-tag.city-miami{ color:var(--miami); } .city-tag.city-transit{ color:var(--accent); }
+  .content h4{ font-family:var(--font-display); font-size:18px; font-weight:700; margin:2px 0 8px; line-height:1.15; }
+
+  .stops{ display:flex; flex-wrap:wrap; gap:6px; }
+  .stop-chip{ font-size:12.5px; font-weight:600; color:var(--ink); background:var(--surface-2); border:1px solid var(--line); padding:5px 10px; border-radius:999px; line-height:1.2; text-decoration:none; display:inline-block; }
+  .stop-chip:hover{ border-color:var(--accent); }
+  .stop-chip.added{ border-color:var(--mine); color:var(--mine); background:var(--mine-bg); }
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .day-actions{ display:flex; gap:7px; margin-top:11px; }
+  .route-btn{ display:inline-flex; align-items:center; justify-content:center; gap:6px; font-family:var(--font-body); font-weight:700; font-size:12.5px; color:var(--accent-ink); background:var(--accent); border:none; padding:9px 13px; border-radius:9px; text-decoration:none; cursor:pointer; flex:1; text-align:center; line-height:1.2; }
+  .route-btn svg{ width:13px; height:13px; flex:0 0 auto; }
+  .route-btn.ghost{ background:transparent; color:var(--accent); border:1.5px solid var(--accent); }
+  .route-btn.wide{ width:100%; flex:none; }
+  .detail-btn{ flex:0 0 auto; display:inline-flex; align-items:center; gap:4px; font-weight:700; font-size:12.5px; color:var(--accent); background:transparent; border:1.5px solid var(--line); border-radius:9px; padding:9px 11px; cursor:pointer; font-family:var(--font-body); }
+  .detail-btn svg{ width:12px; height:12px; }
+
+  .count-hint{ font-size:11.5px; color:var(--muted); font-weight:600; margin-top:9px; }
+  .note{ margin-top:8px; font-size:12.5px; color:var(--muted); }
+
+  .flight-block{ background:var(--surface-2); border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:10px; }
+  .flight-route{ display:flex; align-items:center; gap:8px; font-family:var(--font-mono); font-weight:600; font-size:15px; margin-bottom:8px; }
+  .flight-route .dashline{ flex:1; height:1px; background-image:linear-gradient(to right, var(--muted) 50%, transparent 0%); background-size:6px 1px; background-repeat:repeat-x; position:relative; }
+  .flight-route .dashline svg{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:14px; height:14px; color:var(--muted); }
+  .flight-meta{ display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:12px; color:var(--muted); }
+  .flight-meta b{ color:var(--ink); font-weight:600; }
+
+  .detail-head{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:16px 18px; margin-bottom:14px; box-shadow:var(--shadow); border-top:4px solid var(--accent); }
+  .detail-head.city-ny{ border-top-color:var(--ny); } .detail-head.city-miami{ border-top-color:var(--miami); }
+  .detail-head .eyebrow{ font-family:var(--font-mono); font-size:11.5px; color:var(--muted); }
+  .detail-head h2{ font-family:var(--font-display); font-size:27px; font-weight:800; margin:4px 0 10px; line-height:1.05; text-wrap:balance; }
+  .zone-tags{ display:flex; flex-wrap:wrap; gap:5px; margin-bottom:12px; }
+  .zone-tag{ font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; background:var(--surface-2); border:1px solid var(--line); color:var(--muted); padding:3px 8px; border-radius:5px; }
+
+  .best-box{ background:var(--good-bg); border-radius:10px; padding:12px 13px; margin-bottom:12px; }
+  .best-box .best-title{ font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--good); margin-bottom:7px; }
+  .best-row{ display:flex; gap:8px; font-size:13px; line-height:1.45; margin-top:5px; color:var(--ink); }
+  .best-row .lbl{ flex:0 0 auto; font-weight:800; color:var(--good); }
+
+  .mini-label{ font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:12px 0 6px; }
+
+  .tip-box{ display:flex; gap:8px; margin-top:11px; background:var(--surface-2); border:1px solid var(--line); border-left:3px solid var(--gold); border-radius:0 8px 8px 0; padding:9px 11px; font-size:12.5px; line-height:1.45; color:var(--ink); }
+  .tip-box svg{ flex:0 0 auto; width:15px; height:15px; margin-top:1.5px; color:var(--gold); }
+
+  .cat-block{ margin-bottom:18px; }
+  .cat-head{ display:flex; align-items:center; gap:7px; margin:0 0 9px; font-family:var(--font-display); font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+  .cat-head svg{ width:15px; height:15px; }
+  .cat-head .n{ font-family:var(--font-mono); font-size:11px; font-weight:500; letter-spacing:0; }
+
+  .place{ display:flex; align-items:stretch; gap:0; background:var(--surface); border:1px solid var(--line); border-radius:11px; margin-bottom:7px; overflow:hidden; }
+  .place.is-pick{ border-left:3px solid var(--gold); }
+  .place.is-mine{ border-left:3px solid var(--mine); }
+  .place.in-plan{ background:var(--surface-2); }
+  .place .plink{ flex:1; min-width:0; display:flex; align-items:center; gap:10px; padding:11px 4px 11px 13px; text-decoration:none; color:inherit; }
+  .place .plink:hover .pname{ text-decoration:underline; }
+  .place .pinfo{ flex:1; min-width:0; }
+  .place .pname{ font-size:13.5px; font-weight:700; line-height:1.25; }
+  .place .pmeta{ font-family:var(--font-mono); font-size:11px; color:var(--muted); margin-top:3px; display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+  .place .pmeta .star{ color:var(--gold); }
+  .place .pwhy{ font-size:12px; color:var(--muted); margin-top:5px; line-height:1.4; }
+  .badge{ flex:0 0 auto; font-size:9.5px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; padding:3px 7px; border-radius:5px; align-self:flex-start; margin-top:1px; }
+  .badge.b-plan{ background:var(--accent); color:var(--accent-ink); }
+  .badge.b-pick{ background:rgba(156,114,9,.16); color:var(--gold); }
+  .badge.b-mine{ background:var(--mine-bg); color:var(--mine); }
+  .badge.b-closed{ background:rgba(200,90,52,.16); color:var(--miami); }
+
+  .addbtn{
+    flex:0 0 46px; border:none; border-left:1px solid var(--line);
+    background:var(--surface-2); color:var(--accent);
+    font-size:22px; font-weight:400; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-family:var(--font-body);
+  }
+  .addbtn:hover{ background:var(--accent); color:var(--accent-ink); }
+  .addbtn.remove{ color:var(--miami); }
+  .addbtn.remove:hover{ background:var(--miami); color:#fff; }
+
+  .empty-note{ background:var(--surface-2); border:1px dashed var(--line); border-radius:11px; padding:14px; font-size:13px; color:var(--muted); line-height:1.5; }
+
+  .info-card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin-bottom:12px; box-shadow:var(--shadow); }
+  .info-card h4{ font-family:var(--font-display); font-size:17px; font-weight:700; margin:0 0 10px; }
+  .kv{ display:flex; justify-content:space-between; gap:10px; padding:6px 0; font-size:13.5px; border-top:1px solid var(--line); }
+  .kv:first-of-type{ border-top:none; }
+  .kv .k{ color:var(--muted); }
+  .kv .v{ font-family:var(--font-mono); font-weight:600; text-align:right; }
+  .badge-good{ display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; background:var(--good-bg); color:var(--good); padding:3px 8px; border-radius:999px; }
+
+  .activity-card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin-bottom:10px; box-shadow:var(--shadow); display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+  .activity-card .name{ font-weight:700; font-size:14.5px; }
+  .activity-card .price{ font-family:var(--font-mono); font-weight:700; color:var(--gold); font-size:16px; white-space:nowrap; }
+  .activity-card .buy{ display:block; margin-top:8px; font-size:12px; font-weight:700; color:var(--accent); text-decoration:none; }
+
+  .compare-wrap{ display:flex; gap:10px; margin-top:6px; }
+  .compare-card{ flex:1; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px; text-align:center; }
+  .compare-card.best{ border-color:var(--good); background:var(--good-bg); }
+  .compare-card .label{ font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700; }
+  .compare-card.best .label{ color:var(--good); }
+  .compare-card .amount{ font-family:var(--font-mono); font-size:20px; font-weight:700; margin-top:4px; }
+
+  .hero-count{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:22px 18px; text-align:center; margin-bottom:16px; box-shadow:var(--shadow); }
+  .hero-count .big{ font-family:var(--font-display); font-weight:800; font-size:52px; line-height:1; color:var(--accent); }
+  .hero-count .label{ font-size:13px; color:var(--muted); margin-top:6px; }
+
+  .tip-card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:13px 15px; margin-bottom:10px; box-shadow:var(--shadow); }
+  .tip-cat{ display:inline-block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; padding:3px 8px; border-radius:999px; margin-bottom:7px; }
+  .tip-cat.cat-hueco{ background:var(--good-bg); color:var(--good); }
+  .tip-cat.cat-aviso{ background:rgba(200,90,52,.14); color:var(--miami); }
+  .tip-cat.cat-ahorro{ background:rgba(156,114,9,.14); color:var(--gold); }
+  .tip-cat.cat-tip{ background:rgba(47,102,144,.14); color:var(--ny); }
+  .tip-card p{ margin:0; font-size:13px; line-height:1.5; color:var(--ink); }
+
+  .idea-card{ background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--mine); border-radius:12px; padding:13px 15px; margin-bottom:9px; box-shadow:var(--shadow); }
+  .idea-card .iname{ font-size:14.5px; font-weight:700; }
+  .idea-card .imeta{ font-family:var(--font-mono); font-size:11px; color:var(--muted); margin-top:3px; }
+  .idea-card .iwhy{ font-size:12.5px; color:var(--muted); line-height:1.45; margin-top:6px; }
+  .idea-foot{ display:flex; gap:7px; margin-top:10px; }
+  .idea-foot .route-btn{ font-size:12px; padding:8px 11px; }
+
+  nav.tabbar{ position:sticky; bottom:0; left:0; right:0; display:flex; background:var(--chrome-bg); border-top:1px solid var(--chrome-line); padding:6px 4px calc(6px + env(safe-area-inset-bottom)); z-index:20; }
+  .navbtn{ flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; color:var(--chrome-muted); font-family:var(--font-body); font-size:10px; font-weight:600; padding:8px 1px 6px; cursor:pointer; border-radius:10px; }
+  .navbtn svg{ width:20px; height:20px; }
+  .navbtn.active{ color:var(--chrome-ink); background:rgba(255,255,255,.08); }
+
+  .toast{
+    position:fixed; left:50%; bottom:78px; transform:translateX(-50%);
+    background:var(--chrome-bg); color:var(--chrome-ink); border:1px solid var(--chrome-line);
+    padding:10px 16px; border-radius:999px; font-size:13px; font-weight:600;
+    z-index:60; opacity:0; pointer-events:none; transition:opacity .18s;
+    box-shadow:0 8px 24px rgba(0,0,0,.35); max-width:90vw; text-align:center;
+  }
+  .toast.show{ opacity:1; }
+  ::selection{ background:var(--accent); color:var(--accent-ink); }
+  /* ===== PWA: conexión, instalación y actualización ===== */
+  .net-chip{ display:none; align-items:center; gap:6px; margin-top:8px; padding:4px 9px; border-radius:999px;
+    font-family:var(--font-mono); font-size:11px; color:var(--chrome-ink);
+    background:rgba(255,255,255,.09); border:1px solid var(--chrome-line); }
+  .net-chip.show{ display:inline-flex; }
+  .net-chip .dot{ width:7px; height:7px; border-radius:50%; background:var(--gold); flex:none; }
+  .pwa-bar{
+    position:fixed; left:50%; transform:translateX(-50%); bottom:78px; z-index:40;
+    width:calc(100% - 32px); max-width:440px; display:none; align-items:center; gap:10px;
+    background:var(--surface); color:var(--ink); border:1px solid var(--line);
+    border-radius:14px; box-shadow:var(--shadow); padding:10px 10px 10px 14px; font-size:13px;
+  }
+  .pwa-bar.show{ display:flex; }
+  .pwa-bar p{ margin:0; flex:1; line-height:1.35; }
+  .pwa-bar button{
+    font-family:var(--font-body); font-size:12px; font-weight:700; cursor:pointer;
+    border-radius:9px; padding:7px 11px; border:1px solid transparent;
+    background:var(--accent); color:var(--accent-ink);
+  }
+  .pwa-bar button.ghost{ background:none; color:var(--muted); border-color:var(--line); padding:7px 9px; }
+
+</style>
+
+<div class="backdrop">
+<div class="app">
+
+  <header class="top">
+    <div class="brand">
+      <h1>BUE <span class="arrow">→</span> NYC <span class="arrow">→</span> MIA</h1>
+      <span class="status-pill" id="statusPill">—</span>
+    </div>
+    <div class="subline" id="subline">25 sep – 11 oct 2026 · 17 días · 4 viajeros</div>
+    <div class="net-chip" id="netChip"><span class="dot"></span> Sin conexión · itinerario disponible igual</div>
+  </header>
+
+  <main>
+    <section class="panel" id="panel-hoy"><div id="hoyContent"></div></section>
+
+    <section class="panel" id="panel-itin">
+      <h2 class="section-title">Itinerario</h2>
+      <p class="note" style="margin:-6px 0 14px;">Cada ruta arranca en el hotel y va ordenada para no volver sobre los pasos. Tocá “Ver detalle” para todo lo que hay en la zona.</p>
+      <div id="itinList"></div>
+    </section>
+
+    <section class="panel" id="panel-detail"><div id="detailContent"></div></section>
+
+    <section class="panel" id="panel-ideas">
+      <h2 class="section-title">Ideas que te faltan</h2>
+      <p class="note" style="margin:-6px 0 14px;">Lugares que <b>no están en tus listas de Google Maps</b> ni en el Excel, pero que creo que valen la pena. Tocá “Sumar” y quedan guardados en el día que corresponda.</p>
+      <div id="ideasList"></div>
+    </section>
+
+    <section class="panel" id="panel-act">
+      <h2 class="section-title">Actividades y entradas</h2>
+      <div id="activityList"></div>
+      <h3 class="sub-title">Pase vs. entradas sueltas</h3>
+      <p class="note" style="margin-top:-4px;">Las 6 actividades por separado dan <b style="color:var(--ink)">USD 250</b> por persona.</p>
+      <div class="compare-wrap">
+        <div class="compare-card"><div class="label">CityPASS 3</div><div class="amount">$116</div></div>
+        <div class="compare-card"><div class="label">Go City</div><div class="amount">$119</div></div>
+        <div class="compare-card best"><div class="label">Ahorro</div><div class="amount">~$130</div></div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-info">
+      <h2 class="section-title">Info del viaje</h2>
+      <h3 class="sub-title">Vuelos</h3>
+      <div id="flightList"></div>
+      <h3 class="sub-title">Hospedaje</h3>
+      <div class="info-card">
+        <h4>Nueva York — Hotel and the City</h4>
+        <div class="kv"><span class="k">Dirección</span><span class="v">38 W 31st St</span></div>
+        <div class="kv"><span class="k">Zona</span><span class="v">Koreatown / Herald Sq</span></div>
+        <div class="kv"><span class="k">Rating</span><span class="v">3.6★ · hotel 4★</span></div>
+        <div class="kv"><span class="k">Noches</span><span class="v">10</span></div>
+        <div class="kv"><span class="k">Por noche</span><span class="v">USD 517,78</span></div>
+        <div class="kv"><span class="k">Total</span><span class="v">USD 5.177,75</span></div>
+        <div class="kv"><span class="k">Por persona</span><span class="v">USD 1.294,44</span></div>
+        <div class="kv"><span class="k">Reserva</span><span class="v"><span class="badge-good">Pagado</span></span></div>
+        <a class="route-btn wide" style="margin-top:11px" target="_blank" rel="noopener"
+           href="https://www.google.com/maps/search/?api=1&query=Hotel%20and%20the%20City%2C%2038%20W%2031st%20St%2C%20New%20York">Ver en Maps</a>
+      </div>
+      <div class="info-card">
+        <h4>Miami — Roami at The Carmela</h4>
+        <div class="kv"><span class="k">Rating</span><span class="v">2.5★ (8 reseñas)</span></div>
+        <div class="kv"><span class="k">Noches</span><span class="v">5</span></div>
+        <div class="kv"><span class="k">Por noche</span><span class="v">USD 150,66</span></div>
+        <div class="kv"><span class="k">Total</span><span class="v">USD 753,31</span></div>
+        <div class="kv"><span class="k">Por persona</span><span class="v">USD 188,33</span></div>
+        <div class="kv"><span class="k">Reserva</span><span class="v"><span class="badge-good">Pagado</span></span></div>
+        <a class="route-btn wide" style="margin-top:11px" target="_blank" rel="noopener"
+           href="https://www.google.com/maps/search/?api=1&query=Roami%20at%20The%20Carmela%2C%20Miami%2C%20FL">Ver en Maps</a>
+      </div>
+      <div class="info-card">
+        <h4>Total hospedaje</h4>
+        <div class="kv"><span class="k">15 noches</span><span class="v">USD 5.931,06</span></div>
+        <div class="kv"><span class="k">Por persona</span><span class="v">USD 1.482,77</span></div>
+      </div>
+      <h3 class="sub-title">Tips y huecos</h3>
+      <div id="tipsList"></div>
+    </section>
+  </main>
+
+  <nav class="tabbar" id="tabbar">
+    <button class="navbtn active" data-tab="hoy">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>
+      Hoy
+    </button>
+    <button class="navbtn" data-tab="itin">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      Itinerario
+    </button>
+    <button class="navbtn" data-tab="ideas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.55 1 1.32 1 2.2v.3h6v-.3c0-.88.4-1.65 1-2.2A6 6 0 0 0 12 3z"/></svg>
+      Ideas
+    </button>
+    <button class="navbtn" data-tab="act">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V8z"/><line x1="9" y1="6" x2="9" y2="18" stroke-dasharray="2 3"/></svg>
+      Tickets
+    </button>
+    <button class="navbtn" data-tab="info">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="8" r="1" fill="currentColor" stroke="none"/></svg>
+      Info
+    </button>
+  </nav>
+
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="pwa-bar" id="pwaBar"><p id="pwaMsg"></p><button type="button" id="pwaAct"></button><button type="button" class="ghost" id="pwaDismiss" aria-label="Cerrar">✕</button></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var MESES = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+  var HOTEL_NY  = 'Hotel and the City, 38 W 31st St, New York, NY 10001';
+  var HOTEL_MIA = 'Roami at The Carmela, Miami, FL';
+  var STORE_KEY = 'viajeUsa2026.added.v2';
+
+  var ZONE_NAMES = {
+    koreatown:'Koreatown / Herald Sq', midtown:'Midtown', timessquare:'Times Square',
+    midtowneast:'Midtown East', hellskitchen:"Hell's Kitchen",
+    soho:'SoHo', littleitaly:'Little Italy / Nolita', chinatown:'Chinatown',
+    eastvillage:'East Village', les:'Lower East Side', tribeca:'Tribeca',
+    fidi:'Financial District', seaport:'Seaport',
+    westvillage:'West Village', greenwich:'Greenwich Village', chelsea:'Chelsea',
+    meatpacking:'Meatpacking', hudsonyards:'Hudson Yards',
+    flatiron:'Flatiron', unionsquare:'Union Square',
+    uws:'Upper West Side', centralpark:'Central Park', ues:'Upper East Side',
+    dumbo:'DUMBO / Brooklyn', williamsburg:'Williamsburg', bronx:'El Bronx',
+    outletsny:'Outlets (NJ / NY)', playasny:'Playas de NY',
+    southbeach:'South Beach', brickell:'Brickell', wynwood:'Wynwood / Design District',
+    keybiscayne:'Key Biscayne', downtownmia:'Downtown / Little Havana', outletsmia:'Outlets Miami'
+  };
+
+  // ===== LUGARES =====
+  // c: categoría · z: zona · r: rating · mine: sugerencia mía (no está en tus listas)
+  var places = [
+    // --- NY VER (tus listas) ---
+    {n:'SUMMIT One Vanderbilt', c:'ver', z:'midtowneast', r:4.7, pick:true, w:'El mirador más impactante de los tres que guardaste: espejos, vidrio y ascensor exterior. Pegado a Grand Central.'},
+    {n:'Edge Observatory', c:'ver', z:'hudsonyards', r:4.6, w:'Balcón al aire libre con piso de vidrio.'},
+    {n:'Vessel', c:'ver', z:'hudsonyards', r:4.6, w:'Se ve gratis desde afuera; subir es opcional.'},
+    {n:'Radio City Music Hall', c:'ver', z:'midtown', r:4.8, w:'Vale la foto de la marquesina aunque no entren al tour.'},
+    {n:'Tudor City Bridge', c:'ver', z:'midtowneast', r:4.8, pick:true, w:'El punto exacto para la foto del Chrysler enmarcado por la calle. Gratis y casi sin gente.'},
+    {n:'Teleférico Isla Roosevelt', c:'ver', z:'midtowneast', r:4.7, pick:true, w:'Cuesta lo mismo que el subte con la misma tarjeta y da la mejor vista barata del East River.'},
+    {n:'Tiffany & Co.', c:'ver', z:'midtown', r:4.1, w:'La 5ta Avenida clásica, aunque sea para mirar vidrieras.'},
+    {n:'M&M’S World New York', c:'ver', z:'timessquare', r:4.4, w:'Tres pisos de caramelos en pleno Times Square.'},
+    {n:'4 World Trade Center', c:'ver', z:'fidi', r:4.7, w:'Mirador menos concurrido, con vista directa al memorial.'},
+    {n:'Oculus Center', c:'ver', z:'fidi', r:4.7, pick:true, w:'La estructura blanca de Calatrava, cruzando la calle del memorial. Entrar es gratis.'},
+    {n:'Pier 17', c:'ver', z:'seaport', r:4.7, w:'Terraza con vista al puente de Brooklyn.'},
+    {n:'Pier 35', c:'ver', z:'les', r:4.6, w:'Parque sobre el río con hamacas mirando al Manhattan Bridge.'},
+    {n:'DUMBO Manhattan Bridge View', c:'ver', z:'dumbo', r:4.8, pick:true, w:'La foto icónica del puente entre los edificios. Ir antes de las 10 o hay fila.'},
+    {n:'Empire Stores', c:'ver', z:'dumbo', r:4.5, w:'Galpones reciclados con terraza y vista al skyline.'},
+    {n:'Pier 1', c:'ver', z:'dumbo', w:'Brooklyn Bridge Park: el mejor lugar para el atardecer sobre Manhattan.'},
+    {n:'Pier 57', c:'ver', z:'chelsea', r:4.7, w:'Azotea pública gratis con césped y vista al Hudson.'},
+    {n:'Little Island, Pier 55 at Hudson River Park', c:'ver', z:'chelsea', pick:true, w:'Parque flotante gratis. Se recorre en 30 min y engancha con la High Line.'},
+    {n:'Chelsea Market', c:'ver', z:'chelsea', r:4.6, w:'Mercado techado: comer y recorrer en el mismo lugar.'},
+    {n:'Círculo de Colón', c:'ver', z:'centralpark', r:4.5, w:'La entrada sur de Central Park.'},
+    {n:'90 Bedford St', c:'ver', z:'westvillage', w:'El edificio de Friends. Solo fachada, pero está a metros de todo.'},
+    {n:'Perry St', c:'ver', z:'westvillage', r:4.7, w:'La escalera de Carrie en Sex and the City (66 Perry St).'},
+    {n:'20 N Moore St', c:'ver', z:'tribeca', w:'El cuartel de los Cazafantasmas.'},
+    {n:'Bookmarc', c:'ver', z:'westvillage', r:4.0, w:'Librería chica de Marc Jacobs.'},
+    {n:'Williamsburg', c:'ver', z:'williamsburg', w:'Brooklyn hipster: murales, vintage y la mejor vista del skyline.'},
+    {n:'Greenwich Village', c:'ver', z:'greenwich', w:'Washington Square Park y el arco.'},
+    {n:'Flatiron District', c:'ver', z:'flatiron', w:'El edificio triangular y Madison Square Park.'},
+    {n:'Union Square', c:'ver', z:'unionsquare', w:'Feria de productores lun/mié/vie/sáb.'},
+    {n:'Meatpacking District', c:'ver', z:'meatpacking', w:'Adoquines, el Whitney y el arranque sur de la High Line.'},
+    {n:'Chelsea', c:'ver', z:'chelsea', w:'Galerías de arte gratuitas entre la 10ma y 11ma.'},
+    {n:'West Village', c:'ver', z:'westvillage', w:'El barrio más lindo para caminar sin rumbo.'},
+    {n:'Coney Island Beach', c:'ver', z:'playasny', r:4.5, w:'Parque de diversiones y boardwalk. 1h en subte.'},
+    {n:'Rockaway Beach', c:'ver', z:'playasny', r:4.6, w:'La playa surfer de Queens, ~1h15 en subte.'},
+    {n:'Long Beach', c:'ver', z:'playasny', w:'Playa de Long Island, en tren LIRR (~1h).'},
+
+    // --- NY VER (mis sugerencias) ---
+    {n:'Empire State Building', c:'ver', z:'koreatown', r:4.7, mine:true, pick:true, w:'Está a CUATRO cuadras de tu hotel y no figura en ninguna lista. Es el mirador más icónico de la ciudad.'},
+    {n:'Estatua de la Libertad', c:'ver', z:'fidi', r:4.7, mine:true, pick:true, w:'El símbolo de Nueva York y no lo tenés en ningún lado. El ferry sale de Battery Park; reservar con anticipación.'},
+    {n:'Staten Island Ferry', c:'ver', z:'fidi', r:4.7, mine:true, pick:true, w:'Es gratis y pasa al lado de la Estatua de la Libertad. La mejor vista sin gastar un peso.'},
+    {n:'Museo de Arte Moderno (MoMA)', c:'ver', z:'midtown', r:4.6, mine:true, pick:true, w:'Van Gogh, Picasso, Dalí, Warhol. Viernes de 16 a 20 la entrada es gratis.'},
+    {n:'Metropolitan Museum of Art', c:'ver', z:'centralpark', r:4.8, mine:true, pick:true, w:'Uno de los tres mejores museos del mundo, sobre el borde este de Central Park.'},
+    {n:'New York Public Library', c:'ver', z:'midtown', r:4.7, mine:true, w:'La sala de lectura Rose es impresionante y entrar es gratis. Justo al lado de Bryant Park.'},
+    {n:'Grand Central Whispering Gallery', c:'ver', z:'midtowneast', r:4.6, mine:true, w:'Los arcos frente al Oyster Bar: si hablás bajito contra una esquina, te escuchan del otro lado.'},
+    {n:'Bethesda Terrace', c:'ver', z:'centralpark', r:4.8, mine:true, w:'La terraza y la fuente que salen en todas las películas.'},
+    {n:'Washington Square Park', c:'ver', z:'greenwich', r:4.7, mine:true, w:'Músicos, ajedrez y el arco. El corazón del Village.'},
+    {n:'Jane’s Carousel', c:'ver', z:'dumbo', r:4.7, mine:true, w:'Calesita de 1922 dentro de una caja de vidrio, con el puente atrás. Muy fotogénica.'},
+    {n:'Domino Park', c:'ver', z:'williamsburg', r:4.7, mine:true, w:'La mejor vista del skyline de Manhattan desde Brooklyn.'},
+    {n:'Tenement Museum', c:'ver', z:'les', r:4.7, mine:true, w:'La historia de los inmigrantes en un conventillo real. Muy fuerte si tenés abuelos inmigrantes.'},
+    {n:'Yankee Stadium', c:'ver', z:'bronx', r:4.7, mine:true, pick:true, w:'Si el domingo 4/10 hay partido, es LA razón para ir al Bronx. Chequeá el calendario.'},
+    {n:'Bronx Zoo', c:'ver', z:'bronx', r:4.6, mine:true, w:'El zoológico urbano más grande de EE.UU. Los miércoles la entrada es a voluntad.'},
+    {n:'New York Botanical Garden', c:'ver', z:'bronx', r:4.7, mine:true, w:'En octubre está en pleno color de otoño. La otra razón válida para ir al Bronx.'},
+    {n:'Whitney Museum of American Art', c:'ver', z:'meatpacking', r:4.7, mine:true, w:'Arte americano y terrazas con vista al Hudson, en el arranque de la High Line.'},
+    {n:'Strand Book Store', c:'compras', z:'unionsquare', r:4.7, mine:true, w:'“18 millas de libros”. Un clásico de Union Square.'},
+    {n:'Economy Candy', c:'compras', z:'les', r:4.6, mine:true, w:'Kiosco de 1937 con caramelos de todas las décadas. A 5 min de Katz’s.'},
+
+    // --- NY COMER (tus listas) ---
+    {n:'Katz’s Delicatessen', c:'comer', z:'les', r:4.5, p:'$30-40', pick:true, w:'El pastrami más famoso del mundo. Caro, pero es LA comida de Nueva York.'},
+    {n:'L’industrie Pizzeria - Little Italy', c:'comer', z:'littleitaly', r:4.7, p:'$10-20', pick:true, w:'Considerada la mejor porción de pizza de NY hoy.'},
+    {n:'L’industrie Pizzeria - West Village', c:'comer', z:'westvillage', r:4.7, p:'$10-20', w:'La misma pizza, sucursal del Village.'},
+    {n:'Via Carota', c:'comer', z:'westvillage', r:4.4, p:'$40-100', pick:true, w:'El italiano de culto del Village. No toma reservas: ir temprano.'},
+    {n:'Carmine’s - 44th Street', c:'comer', z:'timessquare', r:4.5, p:'$30-90', pick:true, w:'Porciones familiares para compartir. Reservar sí o sí.'},
+    {n:'Joe’s Pizza Broadway', c:'comer', z:'greenwich', r:4.4, p:'$10-20', pick:true, w:'La porción clásica al paso, 26.000 reseñas.'},
+    {n:'Pasta de Pasta', c:'comer', z:'hellskitchen', r:4.8, p:'$10-20', pick:true, w:'4.8: el mejor puntaje de toda tu lista de comida.'},
+    {n:'Levain Bakery', c:'comer', z:'uws', r:4.7, p:'$1-10', pick:true, w:'Las cookies gigantes. A 10 min del Museo Natural.'},
+    {n:'Shake Shack Herald Square', c:'comer', z:'koreatown', r:4.4, p:'$10-20', pick:true, w:'A dos cuadras del hotel: la salvada de la primera noche.'},
+    {n:'Eileen’s Special Cheesecake', c:'comer', z:'littleitaly', r:4.6, p:'$1-10', w:'Cheesecake de porción individual.'},
+    {n:'Bleecker Street Pizza', c:'comer', z:'westvillage', r:4.5, p:'$1-10', w:'Otra candidata a mejor porción, abierta hasta tarde.'},
+    {n:'7th Street Burger West Village', c:'comer', z:'westvillage', r:4.7, p:'$10-20', w:'Smash burger simple y muy bien puntuada.'},
+    {n:'7th Street Burger', c:'comer', z:'eastvillage', r:4.6, p:'$10-20', w:'La sucursal original.'},
+    {n:'Corner Bistro', c:'comer', z:'westvillage', r:4.3, p:'$20-30', w:'Bar de barrio con una hamburguesa histórica.'},
+    {n:'Emily', c:'comer', z:'westvillage', r:4.5, p:'$20-60', w:'Famosa por la Emmy Burger.'},
+    {n:'Magnolia Bakery', c:'comer', z:'westvillage', r:4.3, p:'$10-20', w:'El banana pudding, más que los cupcakes.'},
+    {n:'Ichiran', c:'comer', z:'timessquare', r:4.5, p:'$20-30', w:'Ramen en cabinas individuales.'},
+    {n:'All’antico Vinaio', c:'comer', z:'timessquare', r:4.5, p:'$20-30', w:'Los paninos florentinos gigantes.'},
+    {n:'Gnocchi on 9th', c:'comer', z:'hellskitchen', r:4.7, p:'$10-20', w:'Ñoquis caseros baratos.'},
+    {n:'Eataly', c:'comer', z:'flatiron', r:4.2, pick:true, w:'Mercado italiano enorme frente al Flatiron.'},
+    {n:'Daily Provisions - Union Square', c:'comer', z:'unionsquare', r:4.6, p:'$10-20', w:'Los crullers y sándwiches de desayuno.'},
+    {n:'Westville Chelsea', c:'comer', z:'chelsea', r:4.6, p:'$20-30', w:'Comida americana con muchas verduras.'},
+    {n:'Los Tacos Hermanos', c:'comer', z:'westvillage', r:4.0, p:'$10-20', w:'Tacos rápidos y baratos.'},
+    {n:'Adel’s Famous Halal Food', c:'comer', z:'midtown', r:4.3, p:'$10-20', w:'El carrito halal clásico: plato enorme por poca plata.'},
+    {n:'Liberty Bagels 7 Ave', c:'comer', z:'koreatown', r:4.5, p:'$10-20', pick:true, w:'A metros del hotel. El desayuno neoyorquino por excelencia.'},
+    {n:'Leon’s Bagels', c:'comer', z:'chelsea', r:4.5, p:'$10-20', w:'Bagels artesanales, sucursal de Chelsea.'},
+    {n:'Leon’s Bagels (Hell’s Kitchen)', c:'comer', z:'hellskitchen', r:4.3, p:'$10-20', w:'La otra sucursal, cerca del Circle Line.'},
+    {n:'Sunday Morning', c:'comer', z:'eastvillage', r:4.7, p:'$10-20', w:'Panadería de barrio muy bien puntuada.'},
+    {n:'Panna II Garden Indian Restaurant', c:'comer', z:'eastvillage', r:3.5, p:'$20-30', w:'Curry con miles de luces de navidad: se va por el ambiente.'},
+    {n:'Yard House', c:'comer', z:'timessquare', r:4.5, p:'$20-60', w:'Carta larga, útil si no se ponen de acuerdo.'},
+    {n:'IHOP', c:'comer', z:'timessquare', r:4.1, p:'$20-30', w:'Panqueques a cualquier hora.'},
+    {n:'Wasabi Sushi & Bento Penn Station', c:'comer', z:'koreatown', r:3.5, p:'$10-20', w:'Sushi rápido cerca del hotel. Solo para salir del paso.'},
+    {n:'Chipotle Mexican Grill', c:'comer', z:'midtown', r:3.9, w:'Burrito bowl rápido y barato.'},
+    {n:'Cinnabon', c:'comer', z:'timessquare', r:5.0, w:'Los rolls de canela, para llevar.'},
+    {n:'Whole Foods Market', c:'comer', z:'midtown', r:4.4, w:'Barra de ensaladas al peso: la opción sana y barata.'},
+    {n:'Target', c:'compras', z:'koreatown', r:3.9, w:'A metros del hotel: agua, snacks y lo que se olvidaron.'},
+
+    // --- NY COMER (mis sugerencias) ---
+    {n:'Joe’s Shanghai', c:'comer', z:'chinatown', r:4.3, mine:true, pick:true, w:'Los soup dumplings que hicieron famoso a Chinatown. No tenés NADA de Chinatown en tus listas.'},
+    {n:'Xi’an Famous Foods', c:'comer', z:'chinatown', r:4.4, mine:true, w:'Fideos hechos a mano picantes, baratísimos. Cadena local de culto.'},
+    {n:'Ferrara Bakery & Cafe', c:'comer', z:'littleitaly', r:4.3, mine:true, w:'La pastelería italiana de 1892: cannoli y espresso en Little Italy.'},
+    {n:'Juliana’s Pizza', c:'comer', z:'dumbo', r:4.6, mine:true, pick:true, w:'Pizza al horno de carbón bajo el puente de Brooklyn. Mejor que la vecina Grimaldi’s.'},
+    {n:'Peter Luger Steak House', c:'comer', z:'williamsburg', r:4.4, mine:true, w:'El steakhouse más famoso de NY, desde 1887. Caro y solo efectivo o débito.'},
+    {n:'Smorgasburg Williamsburg', c:'comer', z:'williamsburg', r:4.5, mine:true, w:'Feria gastronómica al aire libre, solo sábados. Cae justo el 3/10 y el 10/10.'},
+    {n:'Los Tacos No. 1', c:'comer', z:'chelsea', r:4.7, mine:true, pick:true, w:'Dentro de Chelsea Market. Para muchos, los mejores tacos de Manhattan.'},
+    {n:'Russ & Daughters', c:'comer', z:'les', r:4.6, mine:true, w:'Bagel con salmón desde 1914, a 4 cuadras de Katz’s. La otra mitad del Lower East Side judío.'},
+
+    // --- NY CAFÉ ---
+    {n:'787 Coffee', c:'cafe', z:'eastvillage', r:4.9, pick:true, w:'4.9 con casi 5.000 reseñas: el café mejor puntuado de toda tu lista.'},
+    {n:'The Green Room by Blank Street', c:'cafe', z:'westvillage', r:4.8, pick:true, w:'4.8: el segundo mejor puntuado.'},
+    {n:'Copper Mug Coffee', c:'cafe', z:'midtowneast', r:4.8, w:'4.8, cerca de Grand Central.'},
+    {n:'Devoción', c:'cafe', z:'flatiron', r:4.6, w:'Café colombiano con techo de vidrio.'},
+    {n:'Culture Espresso', c:'cafe', z:'midtown', r:4.6, w:'Además del café, una cookie muy buscada.'},
+    {n:'Fellini Coffee Chelsea', c:'cafe', z:'chelsea', r:4.6, w:'Parada natural antes o después de la High Line.'},
+    {n:'Remi43 Flower & Coffee', c:'cafe', z:'midtown', r:4.5, w:'Cafetería-florería, muy fotogénica.'},
+    {n:'Bedford Studio', c:'cafe', z:'williamsburg', r:4.5, w:'En plena Bedford Ave.'},
+    {n:'La Cabra', c:'cafe', z:'eastvillage', r:4.5, w:'Café danés y bollería de nivel.'},
+    {n:'Café Lyria', c:'cafe', z:'westvillage', r:4.5, w:'Chiquito y bien puntuado.'},
+    {n:'Birch Coffee', c:'cafe', z:'midtowneast', r:4.5, w:'Cadena local, buena para descansar.'},
+    {n:'Partners Coffee - West Village', c:'cafe', z:'westvillage', r:4.4, w:'Tostadores de Brooklyn.'},
+    {n:'Caffe Paradiso', c:'cafe', z:'littleitaly', r:4.4, w:'El café italiano de Little Italy de toda la vida.'},
+    {n:'Stumptown Coffee Roasters', c:'cafe', z:'koreatown', r:4.4, w:'En el lobby del Ace Hotel, a 3 cuadras del hospedaje.'},
+    {n:'Conwell Coffee & Cocktail Hall', c:'cafe', z:'fidi', r:4.4, w:'Café de día, cocktails de noche.'},
+    {n:'Black Press Coffee', c:'cafe', z:'uws', r:4.4, w:'Parada del Upper West Side.'},
+    {n:'La Colombe Coffee Workshop', c:'cafe', z:'chelsea', r:4.3, w:'Local grande para sentarse.'},
+    {n:'maman', c:'cafe', z:'midtown', r:4.2, w:'Estética francesa y la cookie de chocolate blanco.'},
+    {n:'Think Coffee', c:'cafe', z:'greenwich', r:4.1, w:'Cerca de Washington Square Park.'},
+    {n:'Café Leon Dore', c:'cafe', z:'littleitaly', r:4.0, w:'Dentro de la tienda de Aimé Leon Dore.'},
+    {n:'Glace Rockefeller Center', c:'cafe', z:'midtown', r:4.0, closed:true, w:'Figura como CERRADO TEMPORALMENTE en Google. Sacalo del plan.'},
+
+    // --- NY NOCHE ---
+    {n:'Village Vanguard', c:'noche', z:'westvillage', r:4.6, p:'$10-60', pick:true, w:'El club de jazz más legendario del mundo. Reservar con semanas de anticipación.'},
+    {n:'Smalls Jazz Club', c:'noche', z:'westvillage', r:4.6, w:'Íntimo y hasta la madrugada. Mejor relación precio-calidad.'},
+    {n:'Arthur’s Tavern', c:'noche', z:'westvillage', r:4.3, p:'$10-50', w:'Sin cover muchas noches: la opción más barata.'},
+    {n:'Blue Note Jazz Club', c:'noche', z:'greenwich', r:4.2, w:'El más turístico y caro, pero trae nombres grandes.'},
+    {n:'Dante West Village', c:'noche', z:'westvillage', r:4.4, p:'$50-100', w:'Elegido mejor bar del mundo en 2019. Los negronis.'},
+    {n:'The Carnegie Club', c:'noche', z:'midtown', r:4.6, p:'$50-100', w:'Sillones de cuero y shows de Sinatra los sábados.'},
+    {n:'St Jardim', c:'noche', z:'westvillage', r:4.5, w:'Vinoteca de barrio, tranquila.'},
+    {n:'Bibliotheque', c:'noche', z:'flatiron', r:4.4, p:'$10-40', w:'Vinoteca con paredes de libros.'},
+    {n:'AIR MAIL', c:'compras', z:'westvillage', r:4.6, w:'Tienda de regalos y objetos de diseño.'},
+    {n:'Broadway — TKTS Times Square', c:'noche', z:'timessquare', r:4.5, mine:true, pick:true, w:'No tenés ningún show de Broadway. En la caseta de TKTS venden entradas del día con 30-50% off.'},
+    {n:'Comedy Cellar', c:'noche', z:'greenwich', r:4.6, mine:true, w:'El club de stand-up de Louis CK y Chappelle. Entrada barata, hay que reservar.'},
+
+    // --- NY COMPRAS ---
+    {n:'Jersey Gardens', c:'compras', z:'outletsny', r:4.7, pick:true, w:'30 min del hotel y Nueva Jersey no cobra impuesto sobre la ropa.'},
+    {n:'Woodbury Common Premium Outlets', c:'compras', z:'outletsny', w:'Más marcas de lujo, pero está a 1h15.'},
+    {n:'Empire Outlets', c:'compras', z:'outletsny', r:4.1, w:'En Staten Island. El ferry es gratis y pasa junto a la Estatua.'},
+    {n:'Harry Potter Shop New York', c:'compras', z:'flatiron', r:4.7, w:'La tienda más grande del mundo, frente al Flatiron.'},
+    {n:'Macy’s Herald Square', c:'compras', z:'koreatown', r:4.4, mine:true, w:'La tienda más grande del mundo, a 3 minutos a pie del hotel.'},
+
+    // --- MIAMI ---
+    {n:'Key Biscayne Beach', c:'playa', z:'keybiscayne', r:4.6, pick:true, w:'Agua más clara y mucha menos gente que South Beach.'},
+    {n:'Crandon Beach', c:'playa', z:'keybiscayne', r:4.2, w:'Misma isla, más sombra y parrillas.'},
+    {n:'Jupiter Beach', c:'playa', z:'keybiscayne', r:4.8, w:'Rating altísimo pero a 1h30 al norte. Solo con excursión de día completo.'},
+    {n:'Bill Baggs Cape Florida State Park', c:'playa', z:'keybiscayne', r:4.7, mine:true, w:'La punta de Key Biscayne con faro histórico y la playa más linda del condado.'},
+    {n:'Miami Design District', c:'ver', z:'wynwood', pick:true, w:'Arquitectura, arte público y vidrieras de lujo.'},
+    {n:'Wynwood Walls', c:'ver', z:'wynwood', pick:true, w:'El museo de murales al aire libre. Ir de mañana.'},
+    {n:'Sunset Harbour Dr', c:'ver', z:'southbeach', w:'Donde comen los locales, sin el ruido de Ocean Drive.'},
+    {n:'Vizcaya Museum and Gardens', c:'ver', z:'downtownmia', pick:true, w:'Villa italiana frente a la bahía con jardines enormes.'},
+    {n:'Bayside Marketplace', c:'compras', z:'downtownmia', r:4.5, w:'Mercado frente al mar, salida de los paseos en barco.'},
+    {n:'Brickell City Centre', c:'compras', z:'brickell', r:4.7, pick:true, w:'El shopping más lindo de Miami, climatizado. Ideal si llueve.'},
+    {n:'Sawgrass Mills outlet', c:'compras', z:'outletsmia', r:4.6, w:'El outlet más grande de Florida. 45 min, requiere auto.'},
+    {n:'Dolphin Mall', c:'compras', z:'outletsmia', r:4.6, w:'Más cerca del aeropuerto: buena parada antes del vuelo.'},
+    {n:'Skinny Louie', c:'comer', z:'southbeach', r:4.9, pick:true, w:'4.9 con 25.000 reseñas: la mejor puntuada de todo el viaje.'},
+    {n:'Tacology Brickell - Mexican Taqueria', c:'comer', z:'brickell', r:4.6, p:'$20-70', pick:true, w:'Mexicano moderno dentro de Brickell City Centre.'},
+    {n:'Miami Slice', c:'comer', z:'wynwood', r:4.2, p:'$10-20', w:'Pizza al paso en Wynwood.'},
+    // Miami — mis sugerencias
+    {n:'Little Havana / Calle Ocho', c:'ver', z:'downtownmia', r:4.5, mine:true, pick:true, w:'El barrio cubano: dominó, tabaco y música en vivo. Es LO más característico de Miami y no está en ninguna lista tuya.'},
+    {n:'Ball & Chain', c:'noche', z:'downtownmia', r:4.4, mine:true, w:'Bar histórico de Calle Ocho con salsa en vivo todas las noches.'},
+    {n:'Versailles Restaurant', c:'comer', z:'downtownmia', r:4.4, mine:true, pick:true, w:'El restaurante cubano más famoso del mundo. Ropa vieja y cafecito en la ventanita.'},
+    {n:'South Pointe Park', c:'ver', z:'southbeach', r:4.8, mine:true, pick:true, w:'La punta sur de South Beach: ves entrar los cruceros y el atardecer. Gratis.'},
+    {n:'Lincoln Road Mall', c:'compras', z:'southbeach', r:4.5, mine:true, w:'Peatonal de South Beach con tiendas y bares al aire libre.'},
+    {n:'Ocean Drive Art Deco District', c:'ver', z:'southbeach', r:4.5, mine:true, w:'Las fachadas art déco de neón. Lindo para caminar al atardecer, caro para comer.'},
+    {n:'Pérez Art Museum Miami', c:'ver', z:'downtownmia', r:4.5, mine:true, w:'Museo frente a la bahía con jardines colgantes. Plan B perfecto si llueve.'},
+    {n:'Coconut Grove', c:'ver', z:'downtownmia', r:4.5, mine:true, w:'El barrio más arbolado y tranquilo, con marina y bares. Al lado de Vizcaya.'},
+    {n:'Time Out Market Miami', c:'comer', z:'southbeach', r:4.4, mine:true, w:'Como el de Nueva York pero en South Beach: 18 puestos bajo un techo.'},
+    {n:'Joe’s Stone Crab', c:'comer', z:'southbeach', r:4.4, mine:true, w:'Institución de Miami desde 1913. La temporada de centolla abre justo el 15/10 — llegan un poco antes.'},
+    {n:'La Sandwicherie', c:'comer', z:'southbeach', r:4.5, mine:true, w:'Sándwiches franceses baratos abiertos hasta las 5am.'},
+    {n:'Panther Coffee', c:'cafe', z:'wynwood', r:4.5, mine:true, w:'El café de especialidad de Wynwood, entre los murales.'},
+    {n:'Coyo Taco', c:'comer', z:'wynwood', r:4.5, mine:true, w:'Tacos en Wynwood con un bar escondido atrás.'}
+  ];
+
+  // ===== ITINERARIO =====
+  // routes: [{label, mode:'walking'|'transit', pts:[...]}] — '@hotel' se reemplaza por el hotel de la ciudad
+  var trip = [
+    {date:'2026-09-25', dow:'VIE', city:'transit', title:'Buenos Aires → Nueva York', zones:[],
+      flight:{route:'BUE → NYC', dep:'21:15', arr:'06:59 +1', dur:'14h 16m', airline:'American Airlines'},
+      note:'Vuelo nocturno. Llegan con el día 26 entero por delante.'},
+
+    {date:'2026-09-26', dow:'SÁB', city:'ny', title:'Llegada + compras', zones:['koreatown','midtown','timessquare'],
+      stops:['Aeropuerto JFK','Macy’s Herald Square','Uniqlo 5th Avenue','Marshalls Herald Square','Times Square'],
+      routes:[
+        {label:'Ruta a pie desde el hotel', mode:'walking', pts:['@hotel','Macy’s Herald Square, New York','Uniqlo 5th Avenue, New York','Marshalls, 620 6th Ave, New York','Times Square, New York']},
+        {label:'JFK → hotel en subte', mode:'transit', pts:['John F. Kennedy International Airport','@hotel']}
+      ],
+      best:{do:'Empire State Building — está a cuatro cuadras del hotel y no figura en ninguna de tus listas. Si van al atardecer del primer día, arrancan fuerte.', eat:'Liberty Bagels 7 Ave (4.5★) para el primer desayuno; Shake Shack Herald Square si llegan fundidos.'},
+      tip:'Con el vuelo llegando 7am van a tener sueño a la tarde. Dejen las compras pesadas para el 5/10 y hoy caminen liviano: todo lo de este día está a menos de 15 cuadras del hotel.'},
+
+    {date:'2026-09-27', dow:'DOM', city:'ny', title:'Midtown clásico', zones:['midtown','timessquare','midtowneast'],
+      stops:['Bryant Park','Grand Central Terminal','SUMMIT One Vanderbilt','Tudor City Bridge','St. Patrick’s Cathedral','Top of the Rock','Radio City Music Hall'],
+      routes:[{label:'Ruta a pie desde el hotel', mode:'walking', pts:['@hotel','Bryant Park, New York','Grand Central Terminal, New York','SUMMIT One Vanderbilt, New York','Tudor City Bridge, New York','St. Patrick\'s Cathedral, New York','Top of the Rock, New York','Radio City Music Hall, New York']}],
+      best:{do:'SUMMIT One Vanderbilt (4.7★) — está pegado a Grand Central y no estaba en tu Excel. El mirador más impresionante de los tres que guardaste.', eat:'Carmine’s 44th St (4.5★) para cenar en familia, con reserva.'},
+      tip:'La ruta va de sur a norte sin volver sobre los pasos: Bryant Park → Grand Central → SUMMIT → Tudor City → St. Patrick’s → Rockefeller. Son ~25 cuadras en total, todo caminable.'},
+
+    {date:'2026-09-28', dow:'LUN', city:'ny', title:'Downtown histórico', zones:['soho','littleitaly','chinatown','eastvillage','les','tribeca'],
+      stops:['SoHo','Little Italy','Chinatown','Katz’s Delicatessen','East Village','Pier 35'],
+      routes:[
+        {label:'Hotel → SoHo en subte', mode:'transit', pts:['@hotel','SoHo, New York, NY']},
+        {label:'Recorrido a pie de la zona', mode:'walking', pts:['SoHo, New York','Little Italy, New York','Chinatown, New York','Katz\'s Delicatessen, New York','East Village, New York','Pier 35, New York']}
+      ],
+      best:{do:'Joe’s Shanghai — no tenés NADA de Chinatown guardado y los soup dumplings son la razón de ser del barrio.', eat:'Katz’s ya está en el plan. Si querés algo más barato, L’industrie Pizzeria Little Italy (4.7★).'},
+      tip:'Hoy es lunes: el 9/11 Memorial tiene entrada gratis a las 17:30 y las reservas salen a las 7am de este mismo día. Si conseguís cupo, movés el memorial acá y te liberás el jueves.'},
+
+    {date:'2026-09-29', dow:'MAR', city:'ny', title:'West Side moderno', zones:['chelsea','meatpacking','hudsonyards'],
+      stops:['Chelsea Market','Little Island','Pier 57','The High Line','Vessel','The Edge'],
+      routes:[
+        {label:'Hotel → Chelsea Market en subte', mode:'transit', pts:['@hotel','Chelsea Market, New York']},
+        {label:'Recorrido a pie de la zona', mode:'walking', pts:['Chelsea Market, New York','Little Island, New York','Pier 57, New York','The High Line, New York','Vessel, Hudson Yards, New York','Edge NYC, New York']}
+      ],
+      best:{do:'Little Island (Pier 55) — parque flotante gratis que engancha con la High Line y casi nadie lo tiene en el plan.', eat:'Los Tacos No. 1 dentro de Chelsea Market: para muchos los mejores tacos de Manhattan.'},
+      tip:'La High Line completa son 40 min sin parar. La ruta va de sur a norte: arrancan en Chelsea Market, bajan a Little Island y Pier 57, y suben por la High Line hasta terminar justo en Vessel y The Edge.'},
+
+    {date:'2026-09-30', dow:'MIÉ', city:'ny', title:'Outlets', zones:['outletsny'],
+      stops:['Jersey Gardens'],
+      routes:[{label:'Hotel → Jersey Gardens', mode:'transit', pts:['@hotel','The Mills at Jersey Gardens, Elizabeth, NJ']}],
+      best:{do:'Jersey Gardens — Nueva Jersey no cobra impuesto sobre la ropa: todo sale ~9% más barato que en Manhattan.', eat:'Food court del outlet. Es día de compras, no de gastronomía.'},
+      tip:'Se llega en el bus 111 desde Port Authority (~35 min) o en NJ Transit. Tenés tres outlets guardados y un solo día: elegí este y sacá los otros dos de la lista.'},
+
+    {date:'2026-10-01', dow:'JUE', city:'ny', title:'Memorial + Brooklyn', zones:['fidi','seaport','dumbo'],
+      stops:['9/11 Memorial','Oculus Center','Pier 17','Brooklyn Bridge','DUMBO Manhattan Bridge View','Time Out Market','Empire Stores','Pier 1'],
+      routes:[
+        {label:'Hotel → 9/11 Memorial en subte', mode:'transit', pts:['@hotel','9/11 Memorial & Museum, New York']},
+        {label:'Recorrido a pie hasta DUMBO', mode:'walking', pts:['9/11 Memorial & Museum, New York','Oculus, New York','Pier 17, New York','Brooklyn Bridge, New York','DUMBO Manhattan Bridge View, Brooklyn','Time Out Market New York, Brooklyn','Empire Stores, Brooklyn','Pier 1, Brooklyn Bridge Park, Brooklyn']}
+      ],
+      best:{do:'DUMBO Manhattan Bridge View (4.8★) — la foto icónica del puente entre los edificios. Ir antes de las 10 o hay fila.', eat:'Time Out Market ya está en el plan y es la mejor decisión: 20 puestos, cada uno come lo que quiere.'},
+      tip:'El día con más lugares tuyos sin usar. La ruta cruza el puente a pie al mediodía y cae en DUMBO, donde tenés Time Out, Empire Stores, el mirador y Pier 1 para el atardecer.'},
+
+    {date:'2026-10-02', dow:'VIE', city:'ny', title:'Central Park', zones:['centralpark','uws'],
+      stops:['Columbus Circle','Central Park','Museo de Historia Natural','Levain Bakery'],
+      routes:[
+        {label:'Hotel → Columbus Circle en subte', mode:'transit', pts:['@hotel','Columbus Circle, New York']},
+        {label:'Recorrido a pie del parque', mode:'walking', pts:['Columbus Circle, New York','Bethesda Terrace, Central Park, New York','American Museum of Natural History, New York','Levain Bakery, 351 Amsterdam Ave, New York']}
+      ],
+      best:{do:'Central Park sin apurarse. Entren por Columbus Circle, pasen por Bethesda Terrace y salgan por la 79 hacia el museo.', eat:'Levain Bakery (4.7★) — las cookies gigantes, a 10 min del museo por Amsterdam Ave.'},
+      tip:'Octubre en Central Park es el mejor momento del año por el color de las hojas. Y el Met queda del otro lado del parque: si tienen energía, es el mejor museo de la ciudad.'},
+
+    {date:'2026-10-03', dow:'SÁB', city:'ny', title:'Crucero + Village', zones:['westvillage','greenwich','hellskitchen'],
+      stops:['Circle Line Pier 83','West Village','Joe’s Pizza','90 Bedford St','Perry St','Village Vanguard'],
+      routes:[
+        {label:'Hotel → Circle Line (Pier 83)', mode:'transit', pts:['@hotel','Circle Line Sightseeing Cruises, Pier 83, New York']},
+        {label:'Circle Line → West Village', mode:'transit', pts:['Circle Line Sightseeing Cruises, Pier 83, New York','West Village, New York']},
+        {label:'Recorrido a pie del Village', mode:'walking', pts:['Washington Square Park, New York','Joe\'s Pizza, 7 Carmine St, New York','90 Bedford St, New York','66 Perry St, New York','Village Vanguard, New York']}
+      ],
+      best:{do:'Village Vanguard (4.6★) — el club de jazz más legendario del mundo. Reservar con semanas de anticipación: es sótano y entra poquísima gente.', eat:'Via Carota (4.4★) para cenar antes del jazz, o Joe’s Pizza si quieren algo rápido.'},
+      tip:'El día con más lugares tuyos sin asignar (28). Los 4 clubes de Musiquita NY están todos acá. El Circle Line sale del Pier 83, terminan a la tarde y bajan al Village.'},
+
+    {date:'2026-10-04', dow:'DOM', city:'ny', title:'El Bronx', zones:['bronx','williamsburg'],
+      stops:['El Bronx'],
+      routes:[
+        {label:'Hotel → Yankee Stadium', mode:'transit', pts:['@hotel','Yankee Stadium, Bronx, NY']},
+        {label:'Alternativa: hotel → Williamsburg', mode:'transit', pts:['@hotel','Bedford Av, Williamsburg, Brooklyn, NY']}
+      ],
+      best:{do:'Si hay partido de los Yankees ese domingo, ir al estadio. Si no, cambiá el día por Williamsburg: Domino Park tiene la mejor vista del skyline y los sábados/domingos hay Smorgasburg.', eat:'En Williamsburg: Peter Luger (el steakhouse más famoso de NY) o los food trucks de Domino Park.'},
+      tip:'Es el único día sin ningún lugar de tus listas. El Jardín Botánico del Bronx en octubre está en pleno color de otoño — esa sí es una razón para ir hasta allá.'},
+
+    {date:'2026-10-05', dow:'LUN', city:'ny', title:'Día libre / compras', zones:['flatiron','unionsquare','midtowneast','greenwich'],
+      stops:['Union Square','Strand Book Store','Eataly','Harry Potter Shop','Flatiron District'],
+      routes:[
+        {label:'Ruta a pie desde el hotel', mode:'walking', pts:['@hotel','Union Square, New York','Strand Book Store, New York','Eataly NYC Flatiron, New York','Harry Potter New York, New York','Flatiron Building, New York']},
+        {label:'Extra: teleférico a Roosevelt Island', mode:'transit', pts:['@hotel','Roosevelt Island Tramway, New York']}
+      ],
+      best:{do:'Teleférico a Roosevelt Island — cuesta lo mismo que el subte con la misma tarjeta y da la mejor vista barata del East River.', eat:'Eataly (4.2★) frente al Flatiron: comen, compran y recorren en el mismo lugar.'},
+      tip:'Día ideal para los pendientes. Union Square, Strand, Eataly, Harry Potter y el Flatiron están todos en 8 cuadras, y el hotel está a 12 cuadras de Union Square: se hace todo caminando.'},
+
+    {date:'2026-10-06', dow:'MAR', city:'miami', title:'Nueva York → Miami', zones:['southbeach'],
+      flight:{route:'NYC → MIA', dep:'09:24', arr:'12:33', dur:'3h 09m', airline:'American Airlines'},
+      stops:['South Beach'],
+      routes:[{label:'Hotel → South Beach', mode:'driving', pts:['@hotel','South Beach, Miami Beach, FL']}],
+      best:{do:'Llegan 12:33: alcanza para dejar valijas y meterse a la playa la misma tarde. South Pointe Park al atardecer para ver entrar los cruceros.', eat:'Skinny Louie (4.9★) — la mejor puntuada de todo el viaje.'},
+      tip:'Vuelo 9:24 significa salir del hotel ~6:30. Preparen todo la noche anterior. En Miami van a necesitar auto o Uber: nada es caminable entre zonas.'},
+
+    {date:'2026-10-07', dow:'MIÉ', city:'miami', title:'Playa + Vizcaya', zones:['keybiscayne','downtownmia'],
+      stops:['Vizcaya Museum and Gardens','Key Biscayne Beach'],
+      routes:[{label:'Ruta del día desde el hotel', mode:'driving', pts:['@hotel','Vizcaya Museum and Gardens, Miami','Key Biscayne Beach, FL']}],
+      best:{do:'Vizcaya (villa italiana con jardines frente a la bahía) es lo más lindo de Miami fuera de la playa. Reserven online.', eat:'Versailles Restaurant en Little Havana, camino de vuelta: el restaurante cubano más famoso del mundo.'},
+      tip:'Key Biscayne está a 10 min de Vizcaya y tiene agua mucho más clara que South Beach. Y Coconut Grove queda entre medio si quieren un café tranquilo.'},
+
+    {date:'2026-10-08', dow:'JUE', city:'miami', title:'Playa + Wynwood', zones:['wynwood'],
+      stops:['Wynwood Walls','Miami Design District'],
+      routes:[{label:'Ruta del día desde el hotel', mode:'driving', pts:['@hotel','Wynwood Walls, Miami','Miami Design District, Miami']}],
+      best:{do:'Wynwood Walls antes de las 11 — después el calor y la gente arruinan las fotos. Después caminan al Design District.', eat:'Coyo Taco en Wynwood, con un bar escondido atrás. O Miami Slice si quieren algo rápido.'},
+      tip:'El Design District está pegado a Wynwood y se camina entre los dos. Panther Coffee es la parada obligada entre murales.'},
+
+    {date:'2026-10-09', dow:'VIE', city:'miami', title:'Playa', zones:['southbeach','downtownmia'],
+      stops:['South Beach','Sunset Harbour Dr'],
+      routes:[{label:'Ruta del día desde el hotel', mode:'driving', pts:['@hotel','South Pointe Park, Miami Beach','Ocean Drive, Miami Beach','Sunset Harbour Dr, Miami Beach']}],
+      best:{do:'South Pointe Park a la mañana, Ocean Drive al mediodía y Sunset Harbour a la tarde: todo South Beach en un día sin manejar de más.', eat:'La Sandwicherie o Time Out Market Miami. Ocean Drive es lindo para caminar pero caro para comer.'},
+      tip:'Buen día para meter Little Havana si el 7/10 no llegaron: Calle Ocho con dominó, tabaco y salsa en vivo es lo más característico de Miami.'},
+
+    {date:'2026-10-10', dow:'SÁB', city:'miami', title:'Playa', zones:['southbeach','brickell','downtownmia'],
+      stops:['Playa','Brickell City Centre'],
+      routes:[{label:'Ruta del día desde el hotel', mode:'driving', pts:['@hotel','South Beach, Miami Beach','Brickell City Centre, Miami','Bayside Marketplace, Miami']}],
+      best:{do:'Último día completo: playa a la mañana y Brickell City Centre a la tarde para las compras finales.', eat:'Tacology Brickell (4.6★), dentro del mismo shopping.'},
+      tip:'Si el clima falla, Brickell City Centre, el Pérez Art Museum y Bayside son los planes B techados.'},
+
+    {date:'2026-10-11', dow:'DOM', city:'transit', title:'Miami → Buenos Aires', zones:['outletsmia'],
+      flight:{route:'MIA → BUE', dep:'22:55', arr:'08:50 +1', dur:'14h 05m', airline:'American Airlines'},
+      routes:[{label:'Hotel → Dolphin Mall → aeropuerto', mode:'driving', pts:['@hotel','Dolphin Mall, Miami','Miami International Airport']}],
+      best:{do:'El vuelo sale 22:55: tienen todo el día. Dolphin Mall está camino al aeropuerto — última compra y de ahí directo a MIA.', eat:'Última comida en Dolphin Mall o cerca del aeropuerto.'},
+      note:'Pedir late check-out o dejar las valijas en el hotel para aprovechar el día.'}
+  ];
+
+  var activities = [
+    {name:'Paseo en barco por NY (Circle Line)', price:47, url:'https://www.circleline.com/sightseeing-cruises/best-of-nyc', note:'Sale del Pier 83, Hell’s Kitchen. Sábado 3/10.'},
+    {name:'9/11 Memorial & Museum', price:36, url:'https://www.911memorial.org/visit/visit-museum-1', note:'Lunes 17:30 gratis — las reservas salen a las 7am de ese día.'},
+    {name:'Top of the Rock', price:52, url:'https://www.rockefellercenter.com/buy-tickets/timed-admission/choose-quantity', note:'La única vista que incluye el Empire State en la foto.'},
+    {name:'The Edge', price:34, url:'https://www.edgenyc.com/get-tickets/', note:'Balcón al aire libre con piso de vidrio.'},
+    {name:'Summit One Vanderbilt', price:44, url:'https://summitov.com/es/tickets/', note:'El más impactante de los tres. Pegado a Grand Central.'},
+    {name:'Museo de Historia Natural', price:37, url:'https://tickets.amnh.org/select', note:'Turistas pagan tarifa fija.'}
+  ];
+
+  var tips = [
+    {cat:'hueco', label:'Falta una lista', text:'Sigo sin <b>Compras NY</b> (19 lugares). Los tres links que me pasaste de nuevo eran Comida Miami, Hotel NY y Hotel Miami — esos ya los tenía. Mandame el de Compras NY y lo cruzo.'},
+    {cat:'aviso', label:'Lugar cerrado', text:'<b>Glace Rockefeller Center</b> figura como CERRADO TEMPORALMENTE en Google Maps.'},
+    {cat:'aviso', label:'Hotel Miami', text:'<b>Roami at The Carmela</b> tiene 2.5★ con solo 8 reseñas. Ya está pagado, pero revisá fotos y comentarios recientes antes de viajar.'},
+    {cat:'hueco', label:'Faltan clásicos', text:'Tus listas no tienen <b>Estatua de la Libertad, Empire State, MoMA, el Met ni un show de Broadway</b>. Están todos en la pestaña Ideas con el día sugerido.'},
+    {cat:'hueco', label:'Falta Little Havana', text:'En Miami no tenés <b>Calle Ocho</b>, que es lo más característico de la ciudad. Está en Ideas, sugerido para el 7 o el 9/10.'},
+    {cat:'ahorro', label:'Outlets repetidos', text:'Tres outlets en NY y dos en Miami para un solo día de compras. <b>Jersey Gardens</b> gana en NY (30 min, sin impuesto a la ropa) y <b>Dolphin Mall</b> en Miami (camino al aeropuerto el último día).'},
+    {cat:'ahorro', label:'Entradas gratis', text:'<b>9/11 Memorial</b>: lunes 17:30 gratis (reservas 7am). <b>MoMA</b>: viernes 16 a 20 gratis. <b>Staten Island Ferry</b>: siempre gratis y pasa junto a la Estatua. Entre los tres se ahorran más de USD 250.'},
+    {cat:'tip', label:'Reservar ya', text:'<b>Village Vanguard</b> y <b>Smalls</b> se llenan semanas antes. <b>Via Carota</b> no toma reservas (ir 17:30). <b>Carmine’s</b> necesita reserva para 4. <b>Vizcaya</b> conviene sacarla online.'},
+    {cat:'tip', label:'Transporte', text:'En NY todo se hace en subte con OMNY (se paga con el celular, tope semanal de USD 34) y las rutas de la app están armadas para caminar poco. En Miami vas a necesitar auto o Uber sí o sí.'},
+    {cat:'tip', label:'Demasiado café', text:'Tenés <b>21 cafeterías</b> guardadas para 10 días. Están repartidas por zona en cada día: elegí la que te queda de paso. Las mejores: 787 Coffee (4.9★) y The Green Room (4.8★).'}
+  ];
+
+  // ===== Ideas (no están en las listas del usuario) =====
+  var ideas = [
+    {n:'Estatua de la Libertad', day:6,  why:'El símbolo de Nueva York y no está en ninguna lista tuya. El ferry sale de Battery Park, a 10 min del 9/11 Memorial. Reservar con anticipación.'},
+    {n:'Staten Island Ferry', day:6, why:'Gratis, sale cada 30 min y pasa al lado de la Estatua. Si no quieren pagar el ferry oficial, esta es la alternativa: ida y vuelta en 1 hora.'},
+    {n:'Empire State Building', day:1, why:'Está a cuatro cuadras del hotel. Es el mirador más icónico y no aparece en tu Excel ni en tus listas.'},
+    {n:'Museo de Arte Moderno (MoMA)', day:7, why:'Van Gogh, Picasso, Dalí y Warhol en Midtown. Los viernes de 16 a 20 la entrada es gratis: cae justo el 2/10.'},
+    {n:'Metropolitan Museum of Art', day:7, why:'Uno de los tres mejores museos del mundo, sobre el borde este de Central Park. Ese día ya están en el parque.'},
+    {n:'Broadway — TKTS Times Square', day:2, why:'No tenés ningún show de Broadway en el viaje. En la caseta de TKTS de Times Square venden entradas del mismo día con 30-50% de descuento.'},
+    {n:'Joe’s Shanghai', day:3, why:'No tenés absolutamente nada de Chinatown y ese día pasan por ahí. Los soup dumplings son la razón de ser del barrio.'},
+    {n:'Russ & Daughters', day:3, why:'Bagel con salmón desde 1914, a cuatro cuadras de Katz’s. Es la otra mitad del Lower East Side judío.'},
+    {n:'New York Public Library', day:2, why:'La sala de lectura Rose es impresionante y entrar es gratis. Está pegada a Bryant Park, que ya está en el plan de ese día.'},
+    {n:'Grand Central Whispering Gallery', day:2, why:'Los arcos frente al Oyster Bar. Ya van a estar en Grand Central: son 5 minutos y es gratis.'},
+    {n:'Bethesda Terrace', day:7, why:'La terraza y la fuente que salen en todas las películas. Está en el medio del recorrido de Central Park.'},
+    {n:'Juliana’s Pizza', day:6, why:'Pizza al horno de carbón bajo el puente de Brooklyn, a metros de Time Out Market. Mejor que la vecina Grimaldi’s.'},
+    {n:'Whitney Museum of American Art', day:4, why:'Está en el arranque sur de la High Line, justo por donde va a pasar la ruta de ese día.'},
+    {n:'Los Tacos No. 1', day:4, why:'Está adentro de Chelsea Market, que ya está en el plan. Para muchos, los mejores tacos de Manhattan.'},
+    {n:'Domino Park', day:9, why:'Si cambian el Bronx por Williamsburg: la mejor vista del skyline de Manhattan desde Brooklyn.'},
+    {n:'Smorgasburg Williamsburg', day:9, why:'Feria gastronómica al aire libre. Solo abre sábados y domingos — el 4/10 es domingo, así que entra justo.'},
+    {n:'Yankee Stadium', day:9, why:'Si hay partido ese domingo, es LA razón para ir al Bronx. Chequeá el calendario de los Yankees antes de decidir.'},
+    {n:'New York Botanical Garden', day:9, why:'En octubre está en pleno color de otoño. La otra razón válida para ir hasta el Bronx.'},
+    {n:'Strand Book Store', day:10, why:'“18 millas de libros” en Union Square, justo donde arranca el recorrido del día libre.'},
+    {n:'Comedy Cellar', day:8, why:'El club de stand-up de Chappelle y Louis CK, en el Village. Entrada barata pero hay que reservar.'},
+    {n:'Little Havana / Calle Ocho', day:12, why:'El barrio cubano con dominó, tabaco y salsa en vivo. Es lo más característico de Miami y no está en ninguna lista tuya.'},
+    {n:'Versailles Restaurant', day:12, why:'El restaurante cubano más famoso del mundo. Queda camino de vuelta desde Vizcaya.'},
+    {n:'South Pointe Park', day:11, why:'La punta sur de South Beach: se ven entrar los cruceros y el atardecer es espectacular. Gratis.'},
+    {n:'Coconut Grove', day:12, why:'El barrio más arbolado y tranquilo de Miami, al lado de Vizcaya. Marina, bares y sombra.'},
+    {n:'Pérez Art Museum Miami', day:15, why:'Museo frente a la bahía con jardines colgantes. El mejor plan B si llueve el último día completo.'},
+    {n:'Time Out Market Miami', day:14, why:'Como el de Nueva York pero en South Beach: 18 puestos bajo un techo, cada uno come lo que quiere.'},
+    {n:'Panther Coffee', day:13, why:'El café de especialidad de Wynwood, entre los murales. Parada obligada de ese día.'},
+    {n:'Bill Baggs Cape Florida State Park', day:12, why:'La punta de Key Biscayne con faro histórico y, para muchos, la playa más linda del condado.'}
+  ];
+
+  // ===== estado: lugares agregados por el usuario =====
+  var added = {};
+  try{ added = JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}; }catch(e){ added = {}; }
+  function saveAdded(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(added)); }catch(e){} }
+  function addedFor(i){ return added[i] || []; }
+  function isAdded(i, name){ return addedFor(i).indexOf(name) !== -1; }
+  function toggleAdd(i, name){
+    var list = addedFor(i).slice();
+    var k = list.indexOf(name);
+    if(k === -1){ list.push(name); } else { list.splice(k,1); }
+    if(list.length){ added[i] = list; } else { delete added[i]; }
+    saveAdded();
+    return k === -1;
+  }
+
+  // ===== helpers =====
+  function cityGeo(city){ return city==='miami' ? 'Miami, FL' : (city==='ny' ? 'New York, NY' : ''); }
+  function hotelFor(city){ return city==='miami' ? HOTEL_MIA : HOTEL_NY; }
+  function mapsSearchUrl(place, city){
+    return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(place + (cityGeo(city) ? ', ' + cityGeo(city) : ''));
+  }
+  function buildDirUrl(pts, mode, city){
+    var full = pts.map(function(p){ return p === '@hotel' ? hotelFor(city) : p; });
+    if(full.length < 2) return mapsSearchUrl(full[0]||'', city);
+    var origin = full[0], destination = full[full.length-1], mids = full.slice(1,-1);
+    if(mode === 'transit') mids = [];            // Maps no admite paradas intermedias en transporte público
+    if(mids.length > 9) mids = mids.slice(0,9);  // límite de la API de URLs
+    var url = 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(origin) +
+      '&destination=' + encodeURIComponent(destination) + '&travelmode=' + mode;
+    if(mids.length) url += '&waypoints=' + encodeURIComponent(mids.join('|'));
+    return url;
+  }
+  function routesFor(day, idx){
+    var rs = (day.routes || []).map(function(r){ return {label:r.label, mode:r.mode, pts:r.pts.slice()}; });
+    var extras = addedFor(idx);
+    if(extras.length && rs.length){
+      var target = null;
+      for(var i=0;i<rs.length;i++){ if(rs[i].mode === 'walking' || rs[i].mode === 'driving'){ target = rs[i]; break; } }
+      if(!target) target = rs[rs.length-1];
+      extras.forEach(function(n){ target.pts.push(n + (cityGeo(day.city) ? ', ' + cityGeo(day.city) : '')); });
+    }
+    return rs;
+  }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function fmtDate(iso){ var p = iso.split('-'); return {num:parseInt(p[2],10), mon:MESES[parseInt(p[1],10)-1]}; }
+  function cityLabel(c){ return c==='ny' ? 'NUEVA YORK' : (c==='miami' ? 'MIAMI' : 'EN VUELO'); }
+  function placesForDay(day){
+    if(!day.zones || !day.zones.length) return [];
+    return places.filter(function(p){ return day.zones.indexOf(p.z) !== -1; });
+  }
+  function inPlan(place, day){
+    if(!day.stops) return false;
+    return day.stops.some(function(s){
+      var a = s.toLowerCase(), b = place.n.toLowerCase();
+      return a.indexOf(b.slice(0,12)) !== -1 || b.indexOf(a.slice(0,12)) !== -1;
+    });
+  }
+  function findPlace(name){
+    for(var i=0;i<places.length;i++){ if(places[i].n === name) return places[i]; }
+    return null;
+  }
+
+  var ICONS = {
+    route:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20l-5-2V5l5 2 6-2 5 2v13l-5-2-6 2z"/><line x1="9" y1="7" x2="9" y2="22"/><line x1="15" y1="5" x2="15" y2="20"/></svg>',
+    walk:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="M11 21l1-6-3-3 1-5 3 2 3 1M9 12l-2 9"/></svg>',
+    train:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><line x1="5" y1="10" x2="19" y2="10"/><path d="M8 20l-2 2M16 20l2 2"/><circle cx="9" cy="13.5" r=".6" fill="currentColor"/><circle cx="15" cy="13.5" r=".6" fill="currentColor"/></svg>',
+    car:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v-3l2-5h12l2 5v3"/><rect x="3" y="13" width="18" height="5" rx="1.5"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="16.5" cy="18" r="1.5"/></svg>',
+    plane:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16l20-7-7 20-3-8-8-3-2-2z"/></svg>',
+    bulb:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.55 1 1.32 1 2.2v.3h6v-.3c0-.88.4-1.65 1-2.2A6 6 0 0 0 12 3z"/></svg>',
+    chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
+    back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>',
+    ver:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>',
+    comer:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v7a3 3 0 0 0 6 0V3M7 10v11"/><path d="M17 3c-1.5 2-2 4-2 6.5 0 1.5.8 2.5 2 2.5v9"/></svg>',
+    cafe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h13v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V9z"/><path d="M17 10h2a2 2 0 0 1 0 5h-2"/><line x1="7" y1="2" x2="7" y2="5"/><line x1="11" y1="2" x2="11" y2="5"/></svg>',
+    compras:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>',
+    noche:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="18" r="3"/><path d="M11 18V5l9-2v11"/><circle cx="17" cy="14" r="3"/></svg>',
+    playa:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18c2 0 2 2 4 2s2-2 4-2 2 2 4 2 2-2 4-2 2 2 4 2"/><circle cx="17" cy="6" r="3"/><path d="M3 15l8-8"/></svg>'
+  };
+  function modeIcon(m){ return m==='transit' ? ICONS.train : (m==='driving' ? ICONS.car : ICONS.walk); }
+  var CAT_LABEL = {ver:'Para ver', comer:'Para comer', cafe:'Café', compras:'Compras', noche:'Noche', playa:'Playas'};
+  var CAT_ORDER = ['ver','playa','comer','cafe','noche','compras'];
+
+  function toast(msg){
+    var t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(t._t); t._t = setTimeout(function(){ t.classList.remove('show'); }, 2000);
+  }
+
+  // ===== day card =====
+  function dayCard(day, idx, opts){
+    opts = opts || {};
+    var d = fmtDate(day.date);
+    var pool = placesForDay(day);
+    var extras = addedFor(idx);
+    var rs = routesFor(day, idx);
+
+    var html = '<div class="day-card">';
+    html += '<div class="stripe city-'+day.city+'"></div>';
+    html += '<div class="datecol"><div class="num">'+d.num+'</div><div class="mon">'+d.mon+'</div><div class="dow">'+day.dow+'</div></div>';
+    html += '<div class="content">';
+    html += '<div class="city-tag city-'+day.city+'">'+cityLabel(day.city)+'</div>';
+    html += '<h4>'+esc(day.title)+'</h4>';
+
+    if(day.flight){
+      var parts = day.flight.route.split(' → ');
+      html += '<div class="flight-block">';
+      html += '<div class="flight-route"><span>'+parts[0]+'</span><span class="dashline">'+ICONS.plane+'</span><span>'+parts[1]+'</span></div>';
+      html += '<div class="flight-meta"><span>Sale <b>'+day.flight.dep+'</b></span><span>Llega <b>'+day.flight.arr+'</b></span><span>Dur. <b>'+day.flight.dur+'</b></span></div>';
+      html += '</div>';
+    }
+
+    if((day.stops && day.stops.length) || extras.length){
+      html += '<div class="stops">';
+      (day.stops||[]).forEach(function(s){
+        html += '<a class="stop-chip" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(s, day.city))+'">'+esc(s)+'</a>';
+      });
+      extras.forEach(function(s){
+        html += '<a class="stop-chip added" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(s, day.city))+'">+ '+esc(s)+'</a>';
+      });
+      html += '</div>';
+    }
+
+    if(day.note){ html += '<div class="note">'+esc(day.note)+'</div>'; }
+
+    if(rs.length && !opts.compact){
+      html += '<div class="day-actions">';
+      html += '<a class="route-btn" target="_blank" rel="noopener" href="'+esc(buildDirUrl(rs[0].pts, rs[0].mode, day.city))+'">'+modeIcon(rs[0].mode)+' '+esc(rs[0].label)+'</a>';
+      if(pool.length || day.best){
+        html += '<button class="detail-btn" data-day="'+idx+'">Detalle '+ICONS.chev+'</button>';
+      }
+      html += '</div>';
+      if(pool.length){
+        html += '<div class="count-hint">'+pool.length+' lugares en la zona'+(extras.length ? ' · '+extras.length+' sumados por vos' : '')+'</div>';
+      }
+    } else if((pool.length || day.best) && !opts.compact){
+      html += '<div class="day-actions"><button class="detail-btn" style="flex:1" data-day="'+idx+'">Ver detalle '+ICONS.chev+'</button></div>';
+    }
+
+    html += '</div></div>';
+    return html;
+  }
+
+  // ===== place row =====
+  function placeRow(p, day, idx){
+    var planned = inPlan(p, day);
+    var isAdd = isAdded(idx, p.n);
+    var cls = 'place' + (p.mine ? ' is-mine' : (p.pick ? ' is-pick' : '')) + ((planned||isAdd) ? ' in-plan' : '');
+    var h = '<div class="'+cls+'">';
+    h += '<a class="plink" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(p.n, day.city))+'">';
+    h += '<span class="pinfo"><span class="pname">'+esc(p.n)+'</span>';
+    var meta = [];
+    if(p.r) meta.push('<span class="star">★ '+p.r.toFixed(1)+'</span>');
+    if(p.p) meta.push(esc(p.p));
+    meta.push(esc(ZONE_NAMES[p.z]||''));
+    h += '<span class="pmeta">'+meta.join('<span>·</span>')+'</span>';
+    if(p.w) h += '<span class="pwhy">'+esc(p.w)+'</span>';
+    h += '</span>';
+    if(p.closed) h += '<span class="badge b-closed">Cerrado</span>';
+    else if(planned) h += '<span class="badge b-plan">En el plan</span>';
+    else if(isAdd) h += '<span class="badge b-plan">Sumado</span>';
+    else if(p.mine) h += '<span class="badge b-mine">Sugerido</span>';
+    else if(p.pick) h += '<span class="badge b-pick">Top</span>';
+    h += '</a>';
+    if(!planned && !p.closed){
+      h += '<button class="addbtn'+(isAdd?' remove':'')+'" data-add="'+esc(p.n)+'" data-idx="'+idx+'" title="'+(isAdd?'Quitar del día':'Sumar al día')+'">'+(isAdd?'−':'+')+'</button>';
+    }
+    h += '</div>';
+    return h;
+  }
+
+  // ===== detail =====
+  function renderDetail(idx){
+    var day = trip[idx];
+    var d = fmtDate(day.date);
+    var pool = placesForDay(day);
+    var rs = routesFor(day, idx);
+    var extras = addedFor(idx);
+    var el = document.getElementById('detailContent');
+
+    var h = '<div class="detail-head city-'+day.city+'">';
+    h += '<div class="eyebrow">'+day.dow+' '+d.num+' '+d.mon+' · '+cityLabel(day.city)+'</div>';
+    h += '<h2>'+esc(day.title)+'</h2>';
+
+    if(day.zones && day.zones.length){
+      h += '<div class="zone-tags">';
+      day.zones.forEach(function(z){ h += '<span class="zone-tag">'+esc(ZONE_NAMES[z]||z)+'</span>'; });
+      h += '</div>';
+    }
+
+    if(day.best){
+      h += '<div class="best-box"><div class="best-title">Lo mejor de este día</div>';
+      if(day.best.do) h += '<div class="best-row"><span class="lbl">Hacer</span><span>'+esc(day.best.do)+'</span></div>';
+      if(day.best.eat) h += '<div class="best-row"><span class="lbl">Comer</span><span>'+esc(day.best.eat)+'</span></div>';
+      h += '</div>';
+    }
+
+    if((day.stops && day.stops.length) || extras.length){
+      h += '<div class="mini-label">Plan del día</div><div class="stops">';
+      (day.stops||[]).forEach(function(s){
+        h += '<a class="stop-chip" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(s, day.city))+'">'+esc(s)+'</a>';
+      });
+      extras.forEach(function(s){
+        h += '<a class="stop-chip added" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(s, day.city))+'">+ '+esc(s)+'</a>';
+      });
+      h += '</div>';
+    }
+
+    if(rs.length){
+      h += '<div class="mini-label">Rutas (arrancan en el hotel)</div>';
+      rs.forEach(function(r, i){
+        h += '<a class="route-btn wide'+(i?' ghost':'')+'" style="margin-bottom:7px" target="_blank" rel="noopener" href="'+esc(buildDirUrl(r.pts, r.mode, day.city))+'">'+modeIcon(r.mode)+' '+esc(r.label)+'</a>';
+      });
+    }
+
+    if(day.tip){ h += '<div class="tip-box">'+ICONS.bulb+'<span>'+esc(day.tip)+'</span></div>'; }
+    h += '</div>';
+
+    if(pool.length){
+      CAT_ORDER.forEach(function(cat){
+        var list = pool.filter(function(p){ return p.c === cat; });
+        if(!list.length) return;
+        list.sort(function(a,b){
+          if(!!b.pick !== !!a.pick) return b.pick ? 1 : -1;
+          return (b.r||0) - (a.r||0);
+        });
+        h += '<div class="cat-block"><div class="cat-head">'+ICONS[cat]+CAT_LABEL[cat]+' <span class="n">('+list.length+')</span></div>';
+        list.forEach(function(p){ h += placeRow(p, day, idx); });
+        h += '</div>';
+      });
+    } else {
+      h += '<div class="empty-note">No hay lugares cargados en esta zona. Mirá la pestaña Ideas para sumar algo.</div>';
+    }
+
+    el.innerHTML = h;
+    el.setAttribute('data-current', idx);
+    setTab('detail', true);
+    document.getElementById('subline').innerHTML = '<button class="back-btn" id="backBtn">'+ICONS.back+' Volver al itinerario</button>';
+    var bb = document.getElementById('backBtn');
+    if(bb) bb.addEventListener('click', function(){ setTab('itin'); renderItin(); });
+    window.scrollTo(0,0);
+  }
+
+  // ===== renders =====
+  function renderItin(){
+    document.getElementById('itinList').innerHTML = trip.map(function(d,i){ return dayCard(d,i); }).join('');
+  }
+  function renderIdeas(){
+    document.getElementById('ideasList').innerHTML = ideas.map(function(it){
+      var day = trip[it.day];
+      var d = fmtDate(day.date);
+      var p = findPlace(it.n);
+      var isAdd = isAdded(it.day, it.n);
+      var h = '<div class="idea-card">';
+      h += '<div class="iname">'+esc(it.n)+'</div>';
+      h += '<div class="imeta">'+(p && p.r ? '★ '+p.r.toFixed(1)+' · ' : '')+'Sugerido para el '+d.num+' '+d.mon+' · '+esc(day.title)+'</div>';
+      h += '<div class="iwhy">'+esc(it.why)+'</div>';
+      h += '<div class="idea-foot">';
+      h += '<button class="route-btn'+(isAdd?' ghost':'')+'" data-add="'+esc(it.n)+'" data-idx="'+it.day+'" data-src="ideas">'+(isAdd ? '− Quitar del '+d.num+'/'+(parseInt(day.date.split('-')[1],10)) : '+ Sumar al '+d.num+'/'+(parseInt(day.date.split('-')[1],10)))+'</button>';
+      h += '<a class="route-btn ghost" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(it.n, day.city))+'">Ver en Maps</a>';
+      h += '</div></div>';
+      return h;
+    }).join('');
+  }
+  function renderStatic(){
+    document.getElementById('flightList').innerHTML =
+      trip.filter(function(d){ return d.flight; }).map(function(d){
+        var fd = fmtDate(d.date);
+        return '<div class="info-card"><h4>'+d.flight.route+'</h4>'+
+          '<div class="kv"><span class="k">Fecha</span><span class="v">'+d.dow+' '+fd.num+' '+fd.mon+'</span></div>'+
+          '<div class="kv"><span class="k">Aerolínea</span><span class="v">'+d.flight.airline+'</span></div>'+
+          '<div class="kv"><span class="k">Salida</span><span class="v">'+d.flight.dep+'</span></div>'+
+          '<div class="kv"><span class="k">Llegada</span><span class="v">'+d.flight.arr+'</span></div>'+
+          '<div class="kv"><span class="k">Duración</span><span class="v">'+d.flight.dur+'</span></div></div>';
+      }).join('');
+
+    document.getElementById('activityList').innerHTML = activities.map(function(a){
+      return '<div class="activity-card"><div style="min-width:0"><div class="name">'+esc(a.name)+'</div>'+
+        (a.note ? '<div class="note">'+esc(a.note)+'</div>' : '')+
+        '<a class="buy" href="'+esc(a.url)+'" target="_blank" rel="noopener">Comprar entrada →</a></div>'+
+        '<div class="price">$'+a.price+'</div></div>';
+    }).join('');
+
+    document.getElementById('tipsList').innerHTML = tips.map(function(t){
+      return '<div class="tip-card"><span class="tip-cat cat-'+t.cat+'">'+t.label+'</span><p>'+t.text+'</p></div>';
+    }).join('');
+  }
+
+  function todayISO(){
+    var d = new Date();
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  }
+  function daysBetween(a,b){ return Math.round((new Date(b+'T00:00:00') - new Date(a+'T00:00:00'))/86400000); }
+
+  function renderHoy(){
+    var today = todayISO(), start = trip[0].date, idx = -1;
+    for(var i=0;i<trip.length;i++){ if(trip[i].date === today){ idx = i; break; } }
+    var el = document.getElementById('hoyContent'), pill = document.getElementById('statusPill');
+    if(idx >= 0){
+      pill.textContent = 'DÍA ' + (idx+1) + '/' + trip.length;
+      var h = '<h2 class="section-title">Hoy</h2>' + dayCard(trip[idx], idx);
+      if(idx+1 < trip.length){ h += '<h3 class="sub-title">Mañana</h3>' + dayCard(trip[idx+1], idx+1, {compact:true}); }
+      el.innerHTML = h;
+    } else if(today < start){
+      var left = daysBetween(today, start);
+      pill.textContent = 'FALTAN ' + left + 'D';
+      el.innerHTML = '<div class="hero-count"><div class="big">'+left+'</div><div class="label">día'+(left===1?'':'s')+' para el primer vuelo · BUE → NYC</div></div>'+
+        '<h3 class="sub-title">Primer día en Nueva York</h3>' + dayCard(trip[1], 1);
+    } else {
+      pill.textContent = 'VIAJE FINALIZADO';
+      el.innerHTML = '<div class="hero-count"><div class="big">✓</div><div class="label">17 días · Buenos Aires · Nueva York · Miami</div></div>'+
+        '<h3 class="sub-title">Último día</h3>' + dayCard(trip[trip.length-1], trip.length-1);
+    }
+  }
+
+  function setTab(tab, isDetail){
+    var panels = document.querySelectorAll('.panel');
+    for(var i=0;i<panels.length;i++){ panels[i].classList.remove('active'); }
+    document.getElementById('panel-'+tab).classList.add('active');
+    var btns = document.querySelectorAll('.navbtn');
+    for(var j=0;j<btns.length;j++){
+      btns[j].classList.toggle('active', btns[j].getAttribute('data-tab') === (isDetail ? 'itin' : tab));
+    }
+    if(!isDetail){
+      document.getElementById('subline').textContent = '25 sep – 11 oct 2026 · 17 días · 4 viajeros';
+      try{ localStorage.setItem('viajeUsa2026.tab', tab); }catch(e){}
+    }
+    window.scrollTo(0,0);
+  }
+
+  document.getElementById('tabbar').addEventListener('click', function(e){
+    var b = e.target.closest('.navbtn');
+    if(b) setTab(b.getAttribute('data-tab'));
+  });
+
+  document.addEventListener('click', function(e){
+    var addBtn = e.target.closest('[data-add]');
+    if(addBtn){
+      e.preventDefault();
+      var name = addBtn.getAttribute('data-add');
+      var i = parseInt(addBtn.getAttribute('data-idx'),10);
+      var nowAdded = toggleAdd(i, name);
+      var d = fmtDate(trip[i].date);
+      toast(nowAdded ? '“'+name+'” sumado al '+d.num+' '+d.mon : '“'+name+'” quitado del '+d.num+' '+d.mon);
+      if(addBtn.getAttribute('data-src') === 'ideas'){ renderIdeas(); }
+      else { renderDetail(i); }
+      renderItin(); renderHoy();
+      return;
+    }
+    var det = e.target.closest('.detail-btn[data-day]');
+    if(det){ renderDetail(parseInt(det.getAttribute('data-day'),10)); }
+  });
+
+  renderItin(); renderIdeas(); renderStatic(); renderHoy();
+
+  var savedTab = 'hoy';
+  try{ savedTab = localStorage.getItem('viajeUsa2026.tab') || 'hoy'; }catch(e){}
+  // accesos directos del ícono instalado: ./?tab=itin
+  var qTab = (location.search.match(/[?&]tab=([a-z]+)/) || [])[1];
+  if(qTab) savedTab = qTab;
+  if(['hoy','itin','ideas','act','info'].indexOf(savedTab) === -1) savedTab = 'hoy';
+  setTab(savedTab);
+
+})();
+</script>
+
+<script>
+/* ===== PWA: registro del service worker, estado de conexión e instalación ===== */
+(function(){
+  var bar = document.getElementById('pwaBar');
+  var msg = document.getElementById('pwaMsg');
+  var act = document.getElementById('pwaAct');
+  var chip = document.getElementById('netChip');
+  var onAct = null;
+
+  function showBar(text, label, fn){
+    msg.textContent = text; act.textContent = label; onAct = fn; bar.classList.add('show');
+  }
+  function hideBar(){ bar.classList.remove('show'); onAct = null; }
+  act.addEventListener('click', function(){ var f = onAct; hideBar(); if(f) f(); });
+  document.getElementById('pwaDismiss').addEventListener('click', hideBar);
+
+  function paintNet(){ chip.classList.toggle('show', !navigator.onLine); }
+  window.addEventListener('online', paintNet);
+  window.addEventListener('offline', paintNet);
+  paintNet();
+
+  /* Instalar en la pantalla de inicio (Android/Chrome; en iPhone es Compartir → Agregar a inicio) */
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    var dismissed = false;
+    try{ dismissed = localStorage.getItem('viajeUsa2026.installDismissed') === '1'; }catch(err){}
+    if(dismissed) return;
+    showBar('Instalala en el celular para usarla sin datos.', 'Instalar', function(){
+      e.prompt();
+      try{ localStorage.setItem('viajeUsa2026.installDismissed','1'); }catch(err){}
+    });
+  });
+  document.getElementById('pwaDismiss').addEventListener('click', function(){
+    try{ localStorage.setItem('viajeUsa2026.installDismissed','1'); }catch(err){}
+  });
+
+  if(!('serviceWorker' in navigator)) return;
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      function watch(sw){
+        if(!sw) return;
+        sw.addEventListener('statechange', function(){
+          if(sw.state === 'installed' && navigator.serviceWorker.controller){
+            showBar('Hay una versión nueva del itinerario.', 'Actualizar', function(){
+              sw.postMessage({type:'SKIP_WAITING'});
+            });
+          }
+        });
+      }
+      if(reg.waiting && navigator.serviceWorker.controller){
+        showBar('Hay una versión nueva del itinerario.', 'Actualizar', function(){
+          reg.waiting.postMessage({type:'SKIP_WAITING'});
+        });
+      }
+      reg.addEventListener('updatefound', function(){ watch(reg.installing); });
+      document.addEventListener('visibilitychange', function(){
+        if(!document.hidden && navigator.onLine) reg.update();
+      });
+    }).catch(function(){});
+
+    var reloading = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function(){
+      if(reloading) return; reloading = true; location.reload();
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
