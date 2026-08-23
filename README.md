@@ -37,6 +37,13 @@ Queda en `https://<usuario>.github.io/viaje-usa-2026/`. Todas las rutas son rela
 
 Abrila **una vez con internet** antes de viajar: ahí el service worker guarda la app y las tipografías. Después abre sin señal.
 
+## Buscador
+
+El ícono de lupa en el header abre un buscador sobre los 160 lugares. Cruza nombre, barrio,
+categoría y el texto de la recomendación, ignorando tildes y mayúsculas ("cafe" = "CAFÉ").
+Cada resultado muestra en qué días del viaje cae esa zona: tocando el día se abre el detalle,
+y el botón Volver regresa a la búsqueda sin perder lo que escribiste. Escape la cierra.
+
 ## Al editar los datos
 
 Subí `VERSION` en `sw.js` (`'v1'` → `'v2'`) y volvé a publicar. La próxima vez que alguien abra la app con internet le aparece "Hay una versión nueva" con un botón para actualizar.

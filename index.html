@@ -247,6 +247,53 @@
   }
   .pwa-bar button.ghost{ background:none; color:var(--muted); border-color:var(--line); padding:7px 9px; }
 
+  /* ===== Buscador ===== */
+  .icon-btn{
+    display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; flex:none;
+    background:rgba(255,255,255,.1); border:1px solid var(--chrome-line); color:var(--chrome-ink);
+    border-radius:9px; cursor:pointer; padding:0;
+  }
+  .icon-btn:hover{ background:rgba(255,255,255,.18); }
+  .icon-btn svg{ width:17px; height:17px; }
+  .brand-actions{ display:flex; align-items:center; gap:8px; flex:none; }
+
+  .search-wrap{ position:sticky; top:0; z-index:6; background:var(--paper); padding:2px 0 8px; }
+  .search-field{
+    display:flex; align-items:center; gap:9px; background:var(--surface);
+    border:1px solid var(--line); border-radius:12px; padding:11px 12px; box-shadow:var(--shadow);
+  }
+  .search-field > svg{ width:17px; height:17px; color:var(--muted); flex:none; }
+  .search-field input{
+    flex:1; min-width:0; border:none; background:none; outline:none; color:var(--ink);
+    font-family:var(--font-body); font-size:15px; padding:0;
+  }
+  .search-field input::placeholder{ color:var(--muted); }
+  .search-x{ border:none; background:none; color:var(--muted); font-size:16px; cursor:pointer; padding:0 2px; line-height:1; }
+  .search-count{ font-family:var(--font-mono); font-size:11px; color:var(--muted); margin:0 2px 10px; }
+
+  .sres{ display:block; padding:11px 13px 9px; }
+  .sres .pname{ font-size:13.5px; font-weight:700; line-height:1.25; text-decoration:none; color:inherit; }
+  .sres .pname:hover{ text-decoration:underline; }
+  .sres .row1{ display:flex; align-items:flex-start; gap:8px; }
+  .sres .row1 > span:first-child{ flex:1; min-width:0; }
+  .sres .pwhy{ display:block; }
+  .sres mark{ background:var(--good-bg); color:inherit; border-radius:3px; padding:0 1px; }
+  .daychips{ display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; }
+  .daychip{
+    font-family:var(--font-mono); font-size:10.5px; font-weight:600; cursor:pointer;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--muted);
+    border-radius:999px; padding:4px 8px; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .daychip:hover{ color:var(--ink); border-color:var(--accent); }
+  .daychip.none{ cursor:default; border-style:dashed; }
+  .daychip.none:hover{ color:var(--muted); border-color:var(--line); }
+  .sugs{ display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+  .sug{
+    font-family:var(--font-mono); font-size:11.5px; cursor:pointer; border:1px solid var(--line);
+    background:var(--surface); color:var(--ink); border-radius:999px; padding:6px 11px;
+  }
+  .sug:hover{ border-color:var(--accent); }
+
 </style>
 
 <div class="backdrop">
@@ -255,7 +302,10 @@
   <header class="top">
     <div class="brand">
       <h1>BUE <span class="arrow">→</span> NYC <span class="arrow">→</span> MIA</h1>
-      <span class="status-pill" id="statusPill">—</span>
+      <div class="brand-actions">
+        <span class="status-pill" id="statusPill">—</span>
+        <button type="button" class="icon-btn" id="searchBtn" title="Buscar un lugar" aria-label="Buscar un lugar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
+      </div>
     </div>
     <div class="subline" id="subline">25 sep – 11 oct 2026 · 17 días · 4 viajeros</div>
     <div class="net-chip" id="netChip"><span class="dot"></span> Sin conexión · itinerario disponible igual</div>
@@ -268,6 +318,18 @@
       <h2 class="section-title">Itinerario</h2>
       <p class="note" style="margin:-6px 0 14px;">Cada ruta arranca en el hotel y va ordenada para no volver sobre los pasos. Tocá “Ver detalle” para todo lo que hay en la zona.</p>
       <div id="itinList"></div>
+    </section>
+
+    <section class="panel" id="panel-search">
+      <div class="search-wrap">
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+          <input type="search" id="searchInput" placeholder="Buscar entre 160 lugares…" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="search" />
+          <button type="button" class="search-x" id="searchX" aria-label="Borrar">✕</button>
+        </div>
+      </div>
+      <div class="search-count" id="searchCount"></div>
+      <div id="searchResults"></div>
     </section>
 
     <section class="panel" id="panel-detail"><div id="detailContent"></div></section>
@@ -985,7 +1047,10 @@
     setTab('detail', true);
     document.getElementById('subline').innerHTML = '<button class="back-btn" id="backBtn">'+ICONS.back+' Volver al itinerario</button>';
     var bb = document.getElementById('backBtn');
-    if(bb) bb.addEventListener('click', function(){ setTab('itin'); renderItin(); });
+    if(bb) bb.addEventListener('click', function(){
+      if(detailOrigin === 'search'){ detailOrigin = 'itin'; setTab('search'); }
+      else { setTab('itin'); renderItin(); }
+    });
     window.scrollTo(0,0);
   }
 
@@ -1071,7 +1136,7 @@
     }
     if(!isDetail){
       document.getElementById('subline').textContent = '25 sep – 11 oct 2026 · 17 días · 4 viajeros';
-      try{ localStorage.setItem('viajeUsa2026.tab', tab); }catch(e){}
+      if(tab !== 'search'){ try{ localStorage.setItem('viajeUsa2026.tab', tab); }catch(e){} }
     }
     window.scrollTo(0,0);
   }
@@ -1098,6 +1163,162 @@
     var det = e.target.closest('.detail-btn[data-day]');
     if(det){ renderDetail(parseInt(det.getAttribute('data-day'),10)); }
   });
+
+  // ===== Buscador global =====
+  // Cruza los lugares por nombre, zona, categoria y el texto del "por que",
+  // ignorando tildes y mayusculas, y muestra en que dias del viaje cae cada zona.
+  var detailOrigin = 'itin';
+
+  var MIA_ZONES = {southbeach:1, brickell:1, wynwood:1, keybiscayne:1, downtownmia:1, outletsmia:1};
+  var ZONE_DAYS = {};
+  for(var zi=0; zi<trip.length; zi++){
+    var zl = trip[zi].zones || [];
+    for(var zj=0; zj<zl.length; zj++){
+      if(!ZONE_DAYS[zl[zj]]) ZONE_DAYS[zl[zj]] = [];
+      ZONE_DAYS[zl[zj]].push(zi);
+    }
+  }
+  function cityForZone(z){ return MIA_ZONES[z] ? 'miami' : 'ny'; }
+
+  function norm(str){
+    return String(str).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
+  // Indice: una sola pasada, se arma al cargar
+  var SEARCH_INDEX = places.map(function(p, i){
+    var hay = [p.n, ZONE_NAMES[p.z] || '', CAT_LABEL[p.c] || '', p.w || '', p.p || ''].join(' ');
+    return { p:p, i:i, name:norm(p.n), hay:norm(hay) };
+  });
+
+  function searchPlaces(q){
+    var toks = norm(q).split(/\s+/).filter(Boolean);
+    if(!toks.length) return [];
+    var out = [];
+    for(var k=0; k<SEARCH_INDEX.length; k++){
+      var e = SEARCH_INDEX[k], ok = true, score = 0;
+      for(var t=0; t<toks.length; t++){
+        if(e.hay.indexOf(toks[t]) === -1){ ok = false; break; }
+        var at = e.name.indexOf(toks[t]);
+        if(at === 0) score += 100;          // empieza con lo que escribiste
+        else if(at > 0) score += 50;        // aparece en el nombre
+        else score += 5;                    // solo en zona / categoria / descripcion
+      }
+      if(!ok) continue;
+      if(e.p.pick) score += 6;
+      if(e.p.r) score += e.p.r;
+      out.push({e:e, s:score});
+    }
+    out.sort(function(a,b){ return b.s - a.s || (b.e.p.r||0) - (a.e.p.r||0); });
+    return out.map(function(o){ return o.e; });
+  }
+
+  // Resalta los terminos buscados. Compara sin tildes pero corta sobre el texto
+  // original, asi los indices coinciden y no se rompe el HTML escapado.
+  function highlight(text, toks){
+    var h = esc(text);
+    for(var t=0; t<toks.length; t++){
+      var tok = toks[t];
+      if(tok.length < 2) continue;
+      var flat = norm(h), from = 0, at, parts = [], last = 0;
+      while((at = flat.indexOf(tok, from)) !== -1){
+        parts.push(h.slice(last, at), '<mark>', h.slice(at, at + tok.length), '</mark>');
+        last = at + tok.length; from = last;
+      }
+      if(parts.length){ parts.push(h.slice(last)); h = parts.join(''); }
+    }
+    return h;
+  }
+
+  function searchRow(e, toks){
+    var p = e.p, city = cityForZone(p.z);
+    var cls = 'place sres' + (p.mine ? ' is-mine' : (p.pick ? ' is-pick' : ''));
+    var h = '<div class="' + cls + '">';
+    h += '<div class="row1"><span><a class="pname" target="_blank" rel="noopener" href="' +
+         esc(mapsSearchUrl(p.n, city)) + '">' + highlight(p.n, toks) + '</a>';
+    var meta = [];
+    if(p.r) meta.push('<span class="star">★ ' + p.r.toFixed(1) + '</span>');
+    if(p.p) meta.push(esc(p.p));
+    meta.push(esc(CAT_LABEL[p.c] || ''));
+    meta.push(esc(ZONE_NAMES[p.z] || ''));
+    h += '<span class="pmeta">' + meta.join('<span>·</span>') + '</span></span>';
+    if(p.closed) h += '<span class="badge b-closed">Cerrado</span>';
+    else if(p.mine) h += '<span class="badge b-mine">Sugerido</span>';
+    else if(p.pick) h += '<span class="badge b-pick">Top</span>';
+    h += '</div>';
+    if(p.w) h += '<span class="pwhy">' + highlight(p.w, toks) + '</span>';
+
+    var days = ZONE_DAYS[p.z] || [];
+    h += '<div class="daychips">';
+    if(days.length){
+      for(var d=0; d<days.length; d++){
+        var fd = fmtDate(trip[days[d]].date);
+        h += '<button type="button" class="daychip" data-goday="' + days[d] + '">' +
+             fd.num + ' ' + fd.mon + ' · ' + esc(trip[days[d]].title) + '</button>';
+      }
+    } else {
+      h += '<span class="daychip none">Ningun dia pasa por esta zona</span>';
+    }
+    h += '</div></div>';
+    return h;
+  }
+
+  var SUGERENCIAS = ['bagel', 'jazz', 'mirador', 'tacos', 'cafe', 'pizza', 'playa', 'museo', 'outlet'];
+
+  function renderSearch(){
+    var q = document.getElementById('searchInput').value.trim();
+    var box = document.getElementById('searchResults');
+    var count = document.getElementById('searchCount');
+    if(!q){
+      count.textContent = places.length + ' lugares cargados';
+      box.innerHTML = '<p class="note">Busca por nombre, barrio, categoria o por lo que te acordas ' +
+        'del lugar. Las tildes y las mayusculas dan igual.</p><div class="sugs">' +
+        SUGERENCIAS.map(function(x){ return '<button type="button" class="sug" data-sug="' + esc(x) + '">' + esc(x) + '</button>'; }).join('') +
+        '</div>';
+      return;
+    }
+    var toks = norm(q).split(/\s+/).filter(Boolean);
+    var res = searchPlaces(q);
+    if(!res.length){
+      count.textContent = 'Sin resultados';
+      box.innerHTML = '<p class="note">Nada coincide con “' + esc(q) + '”. Proba con menos palabras, ' +
+        'con el barrio (Wynwood, SoHo) o con la categoria (cafe, compras).</p>';
+      return;
+    }
+    var shown = res.slice(0, 40);
+    count.textContent = res.length + (res.length === 1 ? ' resultado' : ' resultados') +
+      (res.length > shown.length ? ' · se muestran los primeros ' + shown.length : '');
+    box.innerHTML = shown.map(function(e){ return searchRow(e, toks); }).join('');
+  }
+
+  function openSearch(){
+    setTab('search');
+    renderSearch();
+    var inp = document.getElementById('searchInput');
+    inp.focus(); inp.select();
+  }
+
+  document.getElementById('searchBtn').addEventListener('click', openSearch);
+  document.getElementById('searchInput').addEventListener('input', renderSearch);
+  document.getElementById('searchX').addEventListener('click', function(){
+    var inp = document.getElementById('searchInput');
+    inp.value = ''; renderSearch(); inp.focus();
+  });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && document.getElementById('panel-search').classList.contains('active')){
+      setTab('itin'); renderItin();
+    }
+  });
+  document.getElementById('searchResults').addEventListener('click', function(ev){
+    var sug = ev.target.closest('[data-sug]');
+    if(sug){
+      var inp = document.getElementById('searchInput');
+      inp.value = sug.getAttribute('data-sug'); renderSearch(); inp.focus();
+      return;
+    }
+    var go = ev.target.closest('[data-goday]');
+    if(go){ detailOrigin = 'search'; renderDetail(parseInt(go.getAttribute('data-goday'), 10)); }
+  });
+
 
   renderItin(); renderIdeas(); renderStatic(); renderHoy();
 
