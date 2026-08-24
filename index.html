@@ -339,6 +339,43 @@
   .tl-btn:disabled{ opacity:.3; cursor:default; }
   .tl-btn.danger:hover{ color:var(--miami); border-color:var(--miami); }
   .tl-empty{ font-size:12.5px; color:var(--muted); padding:6px 0 8px; }
+
+  /* marcar hecho */
+  .tl-dot{ cursor:pointer; }
+  .tl-dot i{ transition:background .15s, transform .15s; }
+  .tl-step.done .tl-dot i{ background:var(--good); transform:scale(1.15); }
+  .tl-step.done .tl-name{ text-decoration:line-through; color:var(--muted); }
+  .tl-check{ position:absolute; top:3px; left:50%; margin-left:-6px; width:12px; height:12px; color:#fff; display:none; }
+  .tl-step.done .tl-check{ display:block; }
+  .tl-prog{
+    font-family:var(--font-mono); font-size:10.5px; color:var(--good);
+    background:var(--good-bg); border-radius:999px; padding:3px 9px; display:inline-block; margin-left:6px;
+  }
+
+  /* horario y nota */
+  .tl-at{
+    display:inline-block; font-family:var(--font-mono); font-size:10.5px; font-weight:600;
+    color:var(--gold); background:rgba(156,114,9,.12); border-radius:999px; padding:2px 8px; margin-top:4px;
+  }
+  .tl-mine-at{ color:var(--accent); background:rgba(30,46,78,.10); }
+  :root[data-theme="dark"] .tl-mine-at, :root:not([data-theme="light"]) .tl-mine-at{ background:rgba(114,159,219,.14); }
+  .tl-note{ font-size:12px; color:var(--muted); margin-top:4px; line-height:1.4; white-space:pre-wrap; }
+  .tl-open{ cursor:pointer; }
+  .tl-editor{ margin:8px 0 2px 25px; padding:10px 11px; background:var(--surface-2); border:1px solid var(--line); border-radius:11px; }
+  .tl-editor label{ display:block; font-family:var(--font-mono); font-size:10px; color:var(--muted); margin:0 0 4px; }
+  .tl-editor input[type=time], .tl-editor textarea{
+    width:100%; box-sizing:border-box; border:1px solid var(--line); background:var(--surface);
+    color:var(--ink); border-radius:9px; padding:8px 10px; font-family:var(--font-body);
+    font-size:14px; outline:none; margin-bottom:9px;
+  }
+  .tl-editor textarea{ min-height:64px; resize:vertical; }
+  .tl-editor input:focus, .tl-editor textarea:focus{ border-color:var(--accent); }
+  .tl-editor .row{ display:flex; gap:7px; }
+  .tl-editor .row button{
+    font-family:var(--font-body); font-size:12px; cursor:pointer; border-radius:9px; padding:7px 11px;
+    border:1px solid var(--line); background:var(--surface); color:var(--muted);
+  }
+  .tl-editor .row button.prim{ background:var(--accent); color:var(--accent-ink); border-color:transparent; font-weight:700; }
   .tl-back{ margin-top:9px; padding-top:9px; border-top:1px dashed var(--line); }
   .tl-back-lbl{ font-family:var(--font-mono); font-size:10.5px; color:var(--muted); margin-bottom:6px; }
   .tl-back-list{ display:flex; flex-wrap:wrap; gap:6px; }
@@ -749,6 +786,8 @@
         {label:'Hotel → 9/11 Memorial en subte', mode:'transit', pts:['@hotel','9/11 Memorial & Museum, New York']},
         {label:'Recorrido a pie hasta DUMBO', mode:'walking', pts:['9/11 Memorial & Museum, New York','Oculus, New York','Pier 17, New York','Brooklyn Bridge, New York','DUMBO Manhattan Bridge View, Brooklyn','Time Out Market New York, Brooklyn','Empire Stores, Brooklyn','Pier 1, Brooklyn Bridge Park, Brooklyn']}
       ],
+      at:{'DUMBO Manhattan Bridge View, Brooklyn':'Antes de las 10, o hay fila para la foto',
+          'Pier 1, Brooklyn Bridge Park, Brooklyn':'Atardecer'},
       best:{do:'DUMBO Manhattan Bridge View (4.8★) — la foto icónica del puente entre los edificios. Ir antes de las 10 o hay fila.', eat:'Time Out Market ya está en el plan y es la mejor decisión: 20 puestos, cada uno come lo que quiere.'},
       tip:'Hoy ven las piletas del Memorial, que son al aire libre y gratis: el MUSEO quedó para el lunes 5/10, que entra gratis a las 17:30. La ruta cruza el puente a pie al mediodía y cae en DUMBO, donde tenés Time Out, Empire Stores, el mirador y Pier 1 para el atardecer.'},
 
@@ -787,6 +826,7 @@
         {label:'A la tarde: al museo del 9/11 en subte', mode:'transit', fixed:true, pts:['Union Square, New York','9/11 Memorial & Museum, New York']},
         {label:'Extra: teleférico a Roosevelt Island', mode:'transit', pts:['@hotel','Roosevelt Island Tramway, New York']}
       ],
+      at:{'9/11 Memorial & Museum, New York':'17:30 · entrada gratis, reservar 7am'},
       best:{do:'Museo del 9/11 a las 17:30: los lunes la entrada es gratis y hoy es el único lunes libre que les queda. Son USD 36 por cabeza que no gastan — USD 144 los cuatro.', eat:'Eataly (4.2★) frente al Flatiron a la tarde; después del museo, cualquier cosa en Brookfield Place o el Oculus.'},
       tip:'La caminata baja derecho sin volver sobre los pasos — hotel en la 31, Flatiron y Eataly en la 23, Harry Potter en la 22, Union Square en la 14 y Strand en la 12 — y termina justo donde sale el subte al museo. OJO CON EL HORARIO: las entradas gratis de los lunes se reservan online a las 7am de ESE MISMO día y se agotan en minutos. Pongan la alarma. Si no consiguen, el museo igual se puede pagar, o lo dejan pasar: las piletas del Memorial ya las vieron el 1/10 y esas son gratis siempre. Desde Union Square al museo son 15 min en subte (línea 4/5 hasta Fulton St).'},
 
@@ -797,6 +837,7 @@
         {label:'MIA → hotel en auto', mode:'driving', fixed:true, pts:['Miami International Airport','@hotel']},
         {label:'Hotel → South Beach', mode:'driving', pts:['@hotel','South Beach, Miami Beach, FL']}
       ],
+      at:{'South Beach, Miami Beach, FL':'Tarde · South Pointe al atardecer, entran los cruceros'},
       best:{do:'Llegan 12:33: alcanza para dejar valijas y meterse a la playa la misma tarde. South Pointe Park al atardecer para ver entrar los cruceros.', eat:'Skinny Louie (4.9★) — la mejor puntuada de todo el viaje.'},
       tip:'Vuelo 9:24 significa salir del hotel ~6:30. Preparen todo la noche anterior. En Miami van a necesitar auto o Uber: nada es caminable entre zonas.'},
 
@@ -809,12 +850,15 @@
     {date:'2026-10-08', dow:'JUE', city:'miami', title:'Playa + Wynwood', zones:['wynwood'],
       stops:['Wynwood Walls','Miami Design District'],
       routes:[{label:'Ruta del día desde el hotel', mode:'driving', pts:['@hotel','Wynwood Walls, Miami','Miami Design District, Miami']}],
+      at:{'Wynwood Walls, Miami':'Antes de las 11, después pega el calor'},
       best:{do:'Wynwood Walls antes de las 11 — después el calor y la gente arruinan las fotos. Después caminan al Design District.', eat:'Coyo Taco en Wynwood, con un bar escondido atrás. O Miami Slice si quieren algo rápido.'},
       tip:'El Design District está pegado a Wynwood y se camina entre los dos. Panther Coffee es la parada obligada entre murales.'},
 
     {date:'2026-10-09', dow:'VIE', city:'miami', title:'Playa', zones:['southbeach','downtownmia'],
       stops:['South Beach','Sunset Harbour Dr'],
       routes:[{label:'Ruta del día desde el hotel', mode:'driving', pts:['@hotel','South Pointe Park, Miami Beach','Ocean Drive, Miami Beach','Sunset Harbour Dr, Miami Beach']}],
+      at:{'South Pointe Park, Miami Beach':'Mañana', 'Ocean Drive, Miami Beach':'Mediodía',
+          'Sunset Harbour Dr, Miami Beach':'Tarde'},
       best:{do:'South Pointe Park a la mañana, Ocean Drive al mediodía y Sunset Harbour a la tarde: todo South Beach en un día sin manejar de más.', eat:'La Sandwicherie o Time Out Market Miami. Ocean Drive es lindo para caminar pero caro para comer.'},
       tip:'Buen día para meter Little Havana si el 7/10 no llegaron: Calle Ocho con dominó, tabaco y salsa en vivo es lo más característico de Miami.'},
 
@@ -920,9 +964,56 @@
   try{ state = JSON.parse(localStorage.getItem(STATE_KEY) || 'null'); }catch(e){}
   if(!state || !state.added){ state = migrateState(); }
 
-  state.custom = state.custom || {};   // lugares propios: {id:{id,n,q,custom:true}}
-  state.legs   = state.legs   || {};   // recorridos editados: {fecha:[{order:[],removed:[]}]}
-  state.v = 4;
+  state.custom  = state.custom  || {};   // lugares propios: {id:{id,n,q,custom:true}}
+  state.legs    = state.legs    || {};   // recorridos editados: {fecha:[{order:[],removed:[]}]}
+  state.visited = state.visited || {};   // paradas hechas: {fecha:[parada]}
+  state.times   = state.times   || {};   // horarios propios: {fecha:{parada:'18:30'}}
+  state.notes   = state.notes   || {};   // notas propias:    {fecha:{parada:'texto'}}
+  state.v = 5;
+
+  function isDone(date, pt){ return (state.visited[date] || []).indexOf(pt) !== -1; }
+  function toggleDone(date, pt){
+    var l = (state.visited[date] || []).slice();
+    var k = l.indexOf(pt);
+    if(k === -1){ l.push(pt); } else { l.splice(k, 1); }
+    if(l.length){ state.visited[date] = l; } else { delete state.visited[date]; }
+    saveState();
+    return k === -1;
+  }
+  function doneCount(day, idx){
+    var vistos = {}, total = 0, hechas = 0;
+    routesFor(day, idx).forEach(function(r){
+      r.pts.forEach(function(pt){
+        if(pt === '@hotel') return;                 // el hotel no es una parada
+        var k = stopLabel(pt, day.city, {});
+        if(vistos[k]) return;                       // el mismo lugar en dos tramos
+        vistos[k] = true;
+        total++;
+        if(isDone(day.date, k)) hechas++;
+      });
+    });
+    return {total:total, hechas:hechas};
+  }
+  function timeFor(day, pt){
+    var mio = (state.times[day.date] || {})[pt];
+    if(mio) return {t:mio, mio:true};
+    var dato = (day.at || {})[pt];
+    return dato ? {t:dato, mio:false} : null;
+  }
+  function setTime(date, pt, v){
+    state.times[date] = state.times[date] || {};
+    if(v){ state.times[date][pt] = v; } else { delete state.times[date][pt]; }
+    if(!Object.keys(state.times[date]).length) delete state.times[date];
+    saveState();
+  }
+  function noteFor(date, pt){ return (state.notes[date] || {})[pt] || ''; }
+  function setNote(date, pt, v){
+    state.notes[date] = state.notes[date] || {};
+    v = (v || '').trim();
+    if(v){ state.notes[date][pt] = v; } else { delete state.notes[date][pt]; }
+    if(!Object.keys(state.notes[date]).length) delete state.notes[date];
+    saveState();
+  }
 
   function saveState(){ try{ localStorage.setItem(STATE_KEY, JSON.stringify(state)); }catch(e){} }
   saveState();
@@ -1165,6 +1256,9 @@
     '<circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/>' +
     '<circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg>';
 
+  ICONS.tick = '<svg class="tl-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+
   function modeIcon(m){ return m==='transit' ? ICONS.train : (m==='driving' ? ICONS.car : ICONS.walk); }
   var CAT_LABEL = {ver:'Para ver', comer:'Para comer', cafe:'Café', compras:'Compras', noche:'Noche', playa:'Playas'};
   var CAT_ORDER = ['ver','playa','comer','cafe','noche','compras'];
@@ -1219,7 +1313,10 @@
       }
       html += '</div>';
       if(pool.length){
-        html += '<div class="count-hint">'+pool.length+' lugares en la zona'+(extras.length ? ' · '+extras.length+' sumados por vos' : '')+'</div>';
+        var pg = doneCount(day, idx);
+        html += '<div class="count-hint">'+pool.length+' lugares en la zona'+
+                (extras.length ? ' · '+extras.length+' sumados por vos' : '')+
+                (pg.hechas ? ' · <b style="color:var(--good)">'+pg.hechas+' de '+pg.total+' hechas</b>' : '')+'</div>';
       }
     } else if((pool.length || day.best) && !opts.compact){
       html += '<div class="day-actions"><button class="detail-btn" style="flex:1" data-day="'+idx+'">Ver detalle '+ICONS.chev+'</button></div>';
@@ -1351,7 +1448,10 @@
   }
 
   function renderTimeline(day, idx, rs){
-    var h = '<div class="mini-label">Recorrido paso a paso</div>';
+    var prog = doneCount(day, idx);
+    var h = '<div class="mini-label">Recorrido paso a paso' +
+            (prog.total ? '<span class="tl-prog">'+prog.hechas+' de '+prog.total+' hechas</span>' : '') +
+            '</div>';
 
     // los lugares sumados entran a la ruta como texto de búsqueda o como
     // coordenada: guardamos con qué nombre mostrarlos
@@ -1381,17 +1481,38 @@
       h += '<div class="tl-steps" data-legsteps="'+legI+'" data-day="'+idx+'">';
       r.pts.forEach(function(pt, i){
         var esExtra = (day.routes || [])[legI] ? (day.routes[legI].pts || []).indexOf(pt) === -1 : true;
-        h += '<div class="tl-step'+(esExtra ? ' is-extra' : '')+'" data-pt="'+esc(pt)+'">';
-        h += '<div class="tl-dot"><i></i></div>';
-        h += '<div class="tl-body"><div class="tl-name">'+esc(stopLabel(pt, day.city, nombres))+'</div>';
+        var claveHecha = stopLabel(pt, day.city, nombres);
+        var hecha = pt !== '@hotel' && isDone(day.date, claveHecha);
+        var hora = timeFor(day, pt);
+        var nota = noteFor(day.date, pt);
+        h += '<div class="tl-step'+(esExtra ? ' is-extra' : '')+(hecha ? ' done' : '')+'" data-pt="'+esc(pt)+'">';
+        h += pt === '@hotel'
+          ? '<div class="tl-dot"><i></i></div>'
+          : '<div class="tl-dot" data-done="'+esc(claveHecha)+'" data-day="'+idx+'" role="button" ' +
+            'aria-pressed="'+(hecha ? 'true' : 'false')+'" title="'+(hecha ? 'Marcar como pendiente' : 'Marcar como hecha')+'">' +
+            '<i></i>'+ICONS.tick+'</div>';
+        h += '<div class="tl-body tl-open" data-stopedit="'+esc(pt)+'" data-leg="'+legI+'" data-day="'+idx+'">';
+        h += '<div class="tl-name">'+esc(stopLabel(pt, day.city, nombres))+'</div>';
         h += '<div class="tl-sub">'+(i === 0 ? 'Salida' : (i === r.pts.length - 1 ? 'Llegada' : 'Parada ' + i))+
-             (esExtra ? ' · sumada por vos' : '')+'</div></div>';
+             (esExtra ? ' · sumada por vos' : '')+'</div>';
+        if(hora) h += '<span class="tl-at'+(hora.mio ? ' tl-mine-at' : '')+'">'+esc(hora.t)+'</span>';
+        if(nota) h += '<div class="tl-note">'+esc(nota)+'</div>';
+        h += '</div>';
         h += '<div class="tl-acts">';
         h += '<button type="button" class="tl-btn danger" data-rmstop="'+esc(pt)+'" data-leg="'+legI+'" data-day="'+idx+'" title="Sacar del recorrido">✕</button>';
         if(r.pts.length > 1){
           h += '<span class="tl-grip" role="button" aria-label="Arrastrar para reordenar" title="Arrastrar para reordenar">'+ICONS.grip+'</span>';
         }
         h += '</div></div>';
+        if(stopEditor && stopEditor.date === day.date && stopEditor.pt === pt){
+          h += '<div class="tl-editor">' +
+               '<label for="edTime">Horario</label>' +
+               '<input type="time" id="edTime" value="'+esc(/^\d{1,2}:\d{2}$/.test((state.times[day.date]||{})[pt] || '') ? state.times[day.date][pt] : '')+'" />' +
+               '<label for="edNote">Nota</label>' +
+               '<textarea id="edNote" placeholder="Reservamos 20:30, cerrado los martes…">'+esc(nota)+'</textarea>' +
+               '<div class="row"><button type="button" class="prim" data-saveedit="'+esc(pt)+'" data-day="'+idx+'">Guardar</button>' +
+               '<button type="button" data-canceledit="1">Cerrar</button></div></div>';
+        }
       });
       h += '</div>';
 
@@ -1632,6 +1753,38 @@
       keepScroll(); renderDetail(ri); renderItin();
       return;
     }
+    var dn = e.target.closest('[data-done]');
+    if(dn){
+      var di = parseInt(dn.getAttribute('data-day'), 10);
+      toggleDone(trip[di].date, dn.getAttribute('data-done'));
+      keepScroll(); renderDetail(di); renderItin(); renderHoy();
+      return;
+    }
+    var se = e.target.closest('[data-stopedit]');
+    if(se){
+      var ei = parseInt(se.getAttribute('data-day'), 10);
+      var pt = se.getAttribute('data-stopedit');
+      var abierto = stopEditor && stopEditor.pt === pt && stopEditor.date === trip[ei].date;
+      stopEditor = abierto ? null : {date: trip[ei].date, pt: pt};
+      keepScroll(); renderDetail(ei);
+      return;
+    }
+    var sv = e.target.closest('[data-saveedit]');
+    if(sv){
+      var vi = parseInt(sv.getAttribute('data-day'), 10);
+      var vpt = sv.getAttribute('data-saveedit');
+      setTime(trip[vi].date, vpt, (document.getElementById('edTime') || {}).value || '');
+      setNote(trip[vi].date, vpt, (document.getElementById('edNote') || {}).value || '');
+      stopEditor = null;
+      toast('Guardado');
+      keepScroll(); renderDetail(vi); renderItin();
+      return;
+    }
+    if(e.target.closest('[data-canceledit]')){
+      var cd = parseInt(document.getElementById('detailContent').getAttribute('data-current'), 10);
+      stopEditor = null; keepScroll(); renderDetail(cd);
+      return;
+    }
     var rs2 = e.target.closest('[data-restore]');
     if(rs2){
       var si = parseInt(rs2.getAttribute('data-day'), 10);
@@ -1666,6 +1819,7 @@
   // Cruza los lugares por nombre, zona, categoria y el texto del "por que",
   // ignorando tildes y mayusculas, y muestra en que dias del viaje cae cada zona.
   var detailOrigin = 'itin';
+  var stopEditor = null;      // {date, pt} de la parada con el editor abierto
 
   var MIA_ZONES = {southbeach:1, brickell:1, wynwood:1, keybiscayne:1, downtownmia:1, outletsmia:1};
   var ZONE_DAYS = {};
