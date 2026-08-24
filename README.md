@@ -92,6 +92,21 @@ Las ediciones se guardan como una **capa encima** del recorrido original, no com
 Así, si después se corrige un dato del itinerario o se suma un lugar nuevo, sigue apareciendo en vez de
 quedar congelado en la versión que había cuando se editó.
 
+### Sacar y devolver paradas
+
+La ✕ hace dos cosas distintas según qué parada sea, y esa distinción importa:
+
+- **Parada que vos sumaste** → se des-suma del día por completo (sale de `state.added`, desaparece el
+  chip, el botón vuelve a `+`). Antes quedaba agregada pero invisible y no había forma de recuperarla.
+- **Parada del plan original** → se anota en `removed` y aparece abajo del tramo, en "Paradas que
+  sacaste", con un botón para devolverla **a su posición original**, no al final.
+
+Un lugar propio que deja de estar en todos los días se borra de `state.custom` solo, para que no se
+acumule basura.
+
+El cartel "Recorrido modificado por vos" compara el resultado real contra el plan original: si sacás
+una parada y la devolvés, el cartel se va y la capa de ediciones se borra sola.
+
 ## Lugares propios desde Google Maps
 
 Dentro del detalle del día, "Agregar un lugar mío" acepta un nombre y, opcionalmente, un link de Maps.

@@ -339,6 +339,15 @@
   .tl-btn:disabled{ opacity:.3; cursor:default; }
   .tl-btn.danger:hover{ color:var(--miami); border-color:var(--miami); }
   .tl-empty{ font-size:12.5px; color:var(--muted); padding:6px 0 8px; }
+  .tl-back{ margin-top:9px; padding-top:9px; border-top:1px dashed var(--line); }
+  .tl-back-lbl{ font-family:var(--font-mono); font-size:10.5px; color:var(--muted); margin-bottom:6px; }
+  .tl-back-list{ display:flex; flex-wrap:wrap; gap:6px; }
+  .tl-back-list button{
+    font-size:11.5px; cursor:pointer; border:1px solid var(--line); background:var(--surface-2);
+    color:var(--muted); border-radius:999px; padding:5px 10px; font-family:var(--font-body);
+  }
+  .tl-back-list button:hover{ color:var(--ink); border-color:var(--accent); }
+  .tl-back-list button::before{ content:'+ '; font-weight:700; }
   .tl-foot{ display:flex; flex-wrap:wrap; gap:7px; margin:2px 0 4px; }
   .tl-foot .route-btn{ flex:1; min-width:150px; }
   .tl-edited{
@@ -696,7 +705,7 @@
       note:'Vuelo nocturno. Llegan con el día 26 entero por delante.'},
 
     {date:'2026-09-26', dow:'SÁB', city:'ny', title:'Llegada + compras', zones:['koreatown','midtown','timessquare'],
-      stops:['Aeropuerto JFK','Marshalls 6th Ave','Macy’s Herald Square','Times Square','Uniqlo 5th Avenue'],
+      stops:['Aeropuerto JFK','Marshalls, 620 6th Ave','Macy’s Herald Square','Times Square','Uniqlo 5th Avenue'],
       routes:[
         {label:'Ruta a pie desde el hotel', mode:'walking', pts:['@hotel','Marshalls, 620 6th Ave, New York','Macy’s Herald Square, New York','Times Square, New York','Uniqlo 5th Avenue, New York']},
         {label:'JFK → hotel en subte', mode:'transit', pts:['John F. Kennedy International Airport','@hotel']}
@@ -772,7 +781,7 @@
       tip:'Es el único día sin ningún lugar de tus listas. El Jardín Botánico del Bronx en octubre está en pleno color de otoño — esa sí es una razón para ir hasta allá.'},
 
     {date:'2026-10-05', dow:'LUN', city:'ny', title:'Día libre / compras + museo 9/11', zones:['flatiron','unionsquare','midtowneast','greenwich','fidi'],
-      stops:['Flatiron District','Eataly','Harry Potter Shop','Union Square','Strand Book Store','9/11 Memorial & Museum (17:30, gratis)'],
+      stops:['Flatiron District','Eataly','Harry Potter New York','Union Square','Strand Book Store','9/11 Memorial & Museum (17:30, gratis)'],
       routes:[
         {label:'Ruta a pie desde el hotel', mode:'walking', pts:['@hotel','Flatiron Building, New York','Eataly NYC Flatiron, New York','Harry Potter New York, New York','Union Square, New York','Strand Book Store, New York']},
         {label:'A la tarde: al museo del 9/11 en subte', mode:'transit', fixed:true, pts:['Union Square, New York','9/11 Memorial & Museum, New York']},
@@ -925,6 +934,29 @@
   function addedPlaces(i){                    // los mismos, ya resueltos a lugares
     return addedFor(i).map(placeById).filter(Boolean);
   }
+  // Con que texto entra un lugar a la ruta. Tiene que coincidir con lo que
+  // arma routesFor, porque es la clave con la que se identifica la parada.
+  function ptForPlace(p, city){
+    return p.q || (p.n + (cityGeo(city) ? ', ' + cityGeo(city) : ''));
+  }
+  function addedIdForPt(i, pt){
+    var day = trip[i];
+    if(!day) return null;
+    var ids = addedFor(i);
+    for(var k = 0; k < ids.length; k++){
+      var p = placeById(ids[k]);
+      if(p && ptForPlace(p, day.city) === pt) return ids[k];
+    }
+    return null;
+  }
+  // Un lugar propio que ya no esta en ningun dia no tiene por que seguir guardado.
+  function purgeCustom(id){
+    if(!state.custom[id]) return;
+    var enUso = Object.keys(state.added).some(function(fecha){
+      return (state.added[fecha] || []).indexOf(id) !== -1;
+    });
+    if(!enUso) delete state.custom[id];
+  }
   function isAdded(i, id){ return addedFor(i).indexOf(id) !== -1; }
   function toggleAdd(i, id){
     var d = trip[i];
@@ -954,7 +986,7 @@
     if(mids.length) url += '&waypoints=' + encodeURIComponent(mids.join('|'));
     return url;
   }
-  function routesFor(day, idx){
+  function baseRoutes(day, idx){
     var rs = (day.routes || []).map(function(r){ return {label:r.label, mode:r.mode, fixed:!!r.fixed, pts:r.pts.slice()}; });
     var extras = addedPlaces(idx);
     if(extras.length && rs.length){
@@ -969,6 +1001,11 @@
         target.pts.push(p.q || (p.n + (cityGeo(day.city) ? ', ' + cityGeo(day.city) : '')));
       });
     }
+    return rs;
+  }
+
+  function routesFor(day, idx){
+    var rs = baseRoutes(day, idx);
     applyLegEdits(day.date, rs);
     return rs;
   }
@@ -995,17 +1032,68 @@
     }
     return state.legs[date];
   }
-  function dayIsEdited(date){ return !!state.legs[date]; }
+  // No alcanza con que exista la capa de ediciones: se puede haber sacado una
+  // parada y devuelto despues. Comparamos contra el plan original de verdad.
+  function dayIsEdited(day, idx){
+    if(!state.legs[day.date]) return false;
+    var base = baseRoutes(day, idx).map(function(r){ return r.pts.join('|'); }).join('||');
+    var actual = routesFor(day, idx).map(function(r){ return r.pts.join('|'); }).join('||');
+    if(base === actual){ delete state.legs[day.date]; saveState(); return false; }
+    return true;
+  }
   function resetLegs(date){ delete state.legs[date]; saveState(); }
 
   function removeStop(idx, legI, pt){
     var day = trip[idx];
+    // Si la parada es un lugar que vos sumaste, sacarla es des-sumarla. Si no,
+    // quedaba agregada pero invisible y no habia forma de recuperarla.
+    var id = addedIdForPt(idx, pt);
+    if(id){
+      toggleAdd(idx, id);
+      purgeCustom(id);
+      saveState();
+      return true;
+    }
     var rs = routesFor(day, idx);
     var e = legEditsFor(day.date, rs);
     if(e[legI].removed.indexOf(pt) === -1) e[legI].removed.push(pt);
     e[legI].order = e[legI].order.filter(function(x){ return x !== pt; });
     saveState();
     return true;
+  }
+
+  // Devuelve una parada del plan que habias sacado, a su lugar original.
+  function restoreStop(idx, legI, pt){
+    var day = trip[idx];
+    var e = state.legs[day.date];
+    if(!e || !e[legI]) return false;
+    e[legI].removed = e[legI].removed.filter(function(x){ return x !== pt; });
+
+    var orig = (day.routes && day.routes[legI] && day.routes[legI].pts) || [];
+    var at = orig.indexOf(pt);
+    var order = e[legI].order.filter(function(x){ return x !== pt; });
+    if(at === -1){
+      order.push(pt);
+    } else {
+      var pos = 0;                       // cuantos de los que iban antes siguen puestos
+      for(var i = 0; i < at; i++){ if(order.indexOf(orig[i]) !== -1) pos++; }
+      order.splice(pos, 0, pt);
+    }
+    e[legI].order = order;
+    if(!e.some(function(l){ return l.removed.length || l.order.length; })) delete state.legs[day.date];
+    saveState();
+    return true;
+  }
+
+  // Al volver a sumar un lugar, limpiar cualquier baja vieja con ese texto.
+  function clearRemovedFor(idx, pt){
+    var day = trip[idx];
+    var e = state.legs[day.date];
+    if(!e) return;
+    e.forEach(function(l){
+      l.removed = (l.removed || []).filter(function(x){ return x !== pt; });
+    });
+    saveState();
   }
   // Acepta el link largo de Google Maps y saca de ahí nombre y coordenadas.
   // !3d/!4d son las del lugar; @lat,lng es apenas el centro del mapa, sirve de
@@ -1272,7 +1360,7 @@
       nombres[p.q || (p.n + (cityGeo(day.city) ? ', ' + cityGeo(day.city) : ''))] = p.n;
     });
 
-    if(dayIsEdited(day.date)){
+    if(dayIsEdited(day, idx)){
       h += '<div class="tl-edited"><span>Recorrido modificado por vos</span>' +
            '<button type="button" data-resetlegs="'+idx+'">Volver al original</button></div>';
     }
@@ -1306,6 +1394,17 @@
         h += '</div></div>';
       });
       h += '</div>';
+
+      var sacadas = (state.legs[day.date] && state.legs[day.date][legI] &&
+                     state.legs[day.date][legI].removed) || [];
+      if(sacadas.length){
+        h += '<div class="tl-back"><div class="tl-back-lbl">Paradas que sacaste</div><div class="tl-back-list">';
+        sacadas.forEach(function(pt){
+          h += '<button type="button" data-restore="'+esc(pt)+'" data-leg="'+legI+'" data-day="'+idx+'">'+
+               esc(stopLabel(pt, day.city, nombres))+'</button>';
+        });
+        h += '</div></div>';
+      }
 
       if(r.pts.length){
         h += '<a class="route-btn wide" style="margin-top:9px" target="_blank" rel="noopener" href="'+
@@ -1351,13 +1450,25 @@
       h += '</div>';
     }
 
-    if((day.stops && day.stops.length) || extras.length){
-      h += '<div class="mini-label">Plan del día</div><div class="stops">';
-      (day.stops||[]).forEach(function(s){
-        h += '<a class="stop-chip" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(s, day.city))+'">'+esc(s)+'</a>';
-      });
-      extras.forEach(function(p){
-        h += '<a class="stop-chip added" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(p.n, day.city))+'">+ '+esc(p.n)+'</a>';
+    // Solo las paradas que NO aparecen en el recorrido de abajo: repetir la
+    // misma lista dos veces en una pantalla de celular es puro ruido.
+    // Katz’s con apostrofe curvo y Katz's con apostrofe recto son el mismo
+    // lugar: hay que comparar sin puntuacion o se duplica en pantalla.
+    function clave(t){ return norm(t).replace(/[^a-z0-9]+/g, ''); }
+    var enRuta = {};
+    rs.forEach(function(r){
+      r.pts.forEach(function(pt){ enRuta[clave(stopLabel(pt, day.city, {}))] = true; });
+    });
+    var sueltas = (day.stops || []).filter(function(st){
+      var k = clave(st);
+      if(!k) return false;
+      if(enRuta[k]) return false;
+      return !Object.keys(enRuta).some(function(r){ return r.indexOf(k) !== -1 || k.indexOf(r) !== -1; });
+    });
+    if(sueltas.length){
+      h += '<div class="mini-label">También en este día</div><div class="stops">';
+      sueltas.forEach(function(st){
+        h += '<a class="stop-chip" target="_blank" rel="noopener" href="'+esc(mapsSearchUrl(st, day.city))+'">'+esc(st)+'</a>';
       });
       h += '</div>';
     }
@@ -1504,6 +1615,8 @@
       var pl = placeById(id);
       if(!pl || !trip[i]) return;
       var nowAdded = toggleAdd(i, id);
+      if(nowAdded){ clearRemovedFor(i, ptForPlace(pl, trip[i].city)); }
+      else { purgeCustom(id); saveState(); }
       var d = fmtDate(trip[i].date);
       toast(nowAdded ? '“'+pl.n+'” sumado al '+d.num+' '+d.mon : '“'+pl.n+'” quitado del '+d.num+' '+d.mon);
       if(addBtn.getAttribute('data-src') === 'ideas'){ renderIdeas(); }
@@ -1517,6 +1630,14 @@
       removeStop(ri, parseInt(rm.getAttribute('data-leg'), 10), rm.getAttribute('data-rmstop'));
       toast('Parada sacada del recorrido');
       keepScroll(); renderDetail(ri); renderItin();
+      return;
+    }
+    var rs2 = e.target.closest('[data-restore]');
+    if(rs2){
+      var si = parseInt(rs2.getAttribute('data-day'), 10);
+      restoreStop(si, parseInt(rs2.getAttribute('data-leg'), 10), rs2.getAttribute('data-restore'));
+      toast('Parada devuelta al recorrido');
+      keepScroll(); renderDetail(si); renderItin();
       return;
     }
     var rl = e.target.closest('[data-resetlegs]');
