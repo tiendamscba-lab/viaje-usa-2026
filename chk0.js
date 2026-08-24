@@ -1,487 +1,4 @@
-<!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8" />
-<title>BUE→NYC→MIA</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-<meta name="description" content="Itinerario, lugares, rutas y tickets del viaje Buenos Aires → Nueva York → Miami, 25 sep – 11 oct 2026. Funciona sin conexión." />
-<meta name="robots" content="noindex, nofollow" />
-<meta name="theme-color" content="#16213A" />
-<link rel="manifest" href="manifest.json" />
-<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-<meta name="apple-mobile-web-app-title" content="BUE→NYC→MIA" />
-
-<style>
-  :root{
-    --font-display:'Big Shoulders Display','Arial Narrow',sans-serif;
-    --font-body:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
-    --font-mono:'IBM Plex Mono','SFMono-Regular',Menlo,Consolas,monospace;
-
-    --chrome-bg:#16213A; --chrome-ink:#F3F5FA;
-    --chrome-muted:rgba(243,245,250,.66); --chrome-line:rgba(255,255,255,.14);
-
-    --paper:#EEF1F6; --surface:#FFFFFF; --surface-2:#F5F7FB;
-    --ink:#11151F; --muted:#5B6578; --line:#DEE3EC;
-    --accent:#1E2E4E; --accent-ink:#FFFFFF;
-    --ny:#2F6690; --miami:#C85A34; --gold:#9C7209;
-    --good:#1F7A52; --good-bg:#E4F3EC;
-    --mine:#6B4E9E; --mine-bg:rgba(107,78,158,.12);
-    --shadow:0 1px 2px rgba(20,26,40,.06), 0 8px 24px -12px rgba(20,26,40,.18);
-  }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --paper:#0B0F16; --surface:#141B27; --surface-2:#1A2231;
-      --ink:#ECEFF5; --muted:#97A1B5; --line:#283245;
-      --accent:#729FDB; --accent-ink:#0E1626;
-      --ny:#72AADC; --miami:#F0895F; --gold:#E3BC55;
-      --good:#57C094; --good-bg:rgba(87,192,148,.14);
-      --mine:#B79BE8; --mine-bg:rgba(183,155,232,.14);
-      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.6);
-    }
-  }
-  :root[data-theme="dark"]{
-    --paper:#0B0F16; --surface:#141B27; --surface-2:#1A2231;
-    --ink:#ECEFF5; --muted:#97A1B5; --line:#283245;
-    --accent:#729FDB; --accent-ink:#0E1626;
-    --ny:#72AADC; --miami:#F0895F; --gold:#E3BC55;
-    --good:#57C094; --good-bg:rgba(87,192,148,.14);
-    --mine:#B79BE8; --mine-bg:rgba(183,155,232,.14);
-    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.6);
-  }
-
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{ background:var(--paper); color:var(--ink); font-family:var(--font-body); -webkit-font-smoothing:antialiased; min-height:100vh; }
-  @media (prefers-reduced-motion: reduce){ *{animation-duration:.001ms !important; transition-duration:.001ms !important;} }
-
-  .backdrop{
-    min-height:100vh; display:flex; justify-content:center;
-    background: radial-gradient(circle at 1px 1px, var(--line) 1px, transparent 0) 0 0/28px 28px, var(--paper);
-  }
-  @media (max-width:560px){ .backdrop{ background:var(--paper); } }
-  .app{ width:100%; max-width:480px; min-height:100vh; background:var(--paper); display:flex; flex-direction:column; position:relative; box-shadow:var(--shadow); }
-  @media (min-width:561px){ .app{ min-height:calc(100vh - 48px); margin:24px 0; border-radius:22px; overflow:hidden; } .backdrop{ align-items:flex-start; } }
-
-  header.top{ background:var(--chrome-bg); color:var(--chrome-ink); padding:18px 20px 16px; position:sticky; top:0; z-index:20; }
-  .brand{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
-  .brand h1{ font-family:var(--font-display); font-weight:800; font-size:26px; letter-spacing:.02em; margin:0; text-wrap:balance; display:flex; align-items:center; gap:8px; }
-  .brand h1 .arrow{ color:var(--chrome-muted); font-weight:600; font-size:18px; }
-  .status-pill{ font-family:var(--font-mono); font-size:11.5px; font-weight:500; background:rgba(255,255,255,.1); border:1px solid var(--chrome-line); color:var(--chrome-ink); padding:5px 10px; border-radius:999px; white-space:nowrap; }
-  .subline{ margin-top:8px; font-family:var(--font-mono); font-size:12px; color:var(--chrome-muted); }
-  .back-btn{ display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.1); border:1px solid var(--chrome-line); color:var(--chrome-ink); font-family:var(--font-body); font-weight:600; font-size:12.5px; padding:6px 12px 6px 9px; border-radius:999px; cursor:pointer; }
-  .back-btn svg{ width:14px; height:14px; }
-
-  main{ flex:1; padding:16px 16px 96px; }
-  .panel{ display:none; }
-  .panel.active{ display:block; }
-
-  h2.section-title{ font-family:var(--font-display); font-size:20px; font-weight:700; margin:4px 0 12px; color:var(--ink); }
-  h3.sub-title{ font-family:var(--font-display); font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:22px 0 10px; }
-
-  .day-card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-bottom:12px; box-shadow:var(--shadow); display:flex; }
-  .day-card .stripe{ width:5px; flex:0 0 5px; }
-  .stripe.city-ny{ background:var(--ny); } .stripe.city-miami{ background:var(--miami); } .stripe.city-transit{ background:var(--accent); }
-  .day-card .datecol{ flex:0 0 64px; padding:14px 10px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; border-right:2px dashed var(--line); }
-  .datecol .num{ font-family:var(--font-mono); font-size:24px; font-weight:600; line-height:1; }
-  .datecol .mon{ font-family:var(--font-mono); font-size:9.5px; color:var(--muted); text-transform:uppercase; margin-top:2px; }
-  .datecol .dow{ margin-top:6px; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
-  .day-card .content{ flex:1; padding:14px 14px 14px 12px; min-width:0; }
-  .content .city-tag{ font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; }
-  .city-tag.city-ny{ color:var(--ny); } .city-tag.city-miami{ color:var(--miami); } .city-tag.city-transit{ color:var(--accent); }
-  .content h4{ font-family:var(--font-display); font-size:18px; font-weight:700; margin:2px 0 8px; line-height:1.15; }
-
-  .stops{ display:flex; flex-wrap:wrap; gap:6px; }
-  .stop-chip{ font-size:12.5px; font-weight:600; color:var(--ink); background:var(--surface-2); border:1px solid var(--line); padding:5px 10px; border-radius:999px; line-height:1.2; text-decoration:none; display:inline-block; }
-  .stop-chip:hover{ border-color:var(--accent); }
-  .stop-chip.added{ border-color:var(--mine); color:var(--mine); background:var(--mine-bg); }
-  a:focus-visible, button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
-
-  .day-actions{ display:flex; gap:7px; margin-top:11px; }
-  .route-btn{ display:inline-flex; align-items:center; justify-content:center; gap:6px; font-family:var(--font-body); font-weight:700; font-size:12.5px; color:var(--accent-ink); background:var(--accent); border:none; padding:9px 13px; border-radius:9px; text-decoration:none; cursor:pointer; flex:1; text-align:center; line-height:1.2; }
-  .route-btn svg{ width:13px; height:13px; flex:0 0 auto; }
-  .route-btn.ghost{ background:transparent; color:var(--accent); border:1.5px solid var(--accent); }
-  .route-btn.wide{ width:100%; flex:none; }
-  .detail-btn{ flex:0 0 auto; display:inline-flex; align-items:center; gap:4px; font-weight:700; font-size:12.5px; color:var(--accent); background:transparent; border:1.5px solid var(--line); border-radius:9px; padding:9px 11px; cursor:pointer; font-family:var(--font-body); }
-  .detail-btn svg{ width:12px; height:12px; }
-
-  .count-hint{ font-size:11.5px; color:var(--muted); font-weight:600; margin-top:9px; }
-  .note{ margin-top:8px; font-size:12.5px; color:var(--muted); }
-
-  .flight-block{ background:var(--surface-2); border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:10px; }
-  .flight-route{ display:flex; align-items:center; gap:8px; font-family:var(--font-mono); font-weight:600; font-size:15px; margin-bottom:8px; }
-  .flight-route .dashline{ flex:1; height:1px; background-image:linear-gradient(to right, var(--muted) 50%, transparent 0%); background-size:6px 1px; background-repeat:repeat-x; position:relative; }
-  .flight-route .dashline svg{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:14px; height:14px; color:var(--muted); }
-  .flight-meta{ display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:12px; color:var(--muted); }
-  .flight-meta b{ color:var(--ink); font-weight:600; }
-
-  .detail-head{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:16px 18px; margin-bottom:14px; box-shadow:var(--shadow); border-top:4px solid var(--accent); }
-  .detail-head.city-ny{ border-top-color:var(--ny); } .detail-head.city-miami{ border-top-color:var(--miami); }
-  .detail-head .eyebrow{ font-family:var(--font-mono); font-size:11.5px; color:var(--muted); }
-  .detail-head h2{ font-family:var(--font-display); font-size:27px; font-weight:800; margin:4px 0 10px; line-height:1.05; text-wrap:balance; }
-  .zone-tags{ display:flex; flex-wrap:wrap; gap:5px; margin-bottom:12px; }
-  .zone-tag{ font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; background:var(--surface-2); border:1px solid var(--line); color:var(--muted); padding:3px 8px; border-radius:5px; }
-
-  .best-box{ background:var(--good-bg); border-radius:10px; padding:12px 13px; margin-bottom:12px; }
-  .best-box .best-title{ font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--good); margin-bottom:7px; }
-  .best-row{ display:flex; gap:8px; font-size:13px; line-height:1.45; margin-top:5px; color:var(--ink); }
-  .best-row .lbl{ flex:0 0 auto; font-weight:800; color:var(--good); }
-
-  .mini-label{ font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:12px 0 6px; }
-
-  .tip-box{ display:flex; gap:8px; margin-top:11px; background:var(--surface-2); border:1px solid var(--line); border-left:3px solid var(--gold); border-radius:0 8px 8px 0; padding:9px 11px; font-size:12.5px; line-height:1.45; color:var(--ink); }
-  .tip-box svg{ flex:0 0 auto; width:15px; height:15px; margin-top:1.5px; color:var(--gold); }
-
-  .cat-block{ margin-bottom:18px; }
-  .cat-head{ display:flex; align-items:center; gap:7px; margin:0 0 9px; font-family:var(--font-display); font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
-  .cat-head svg{ width:15px; height:15px; }
-  .cat-head .n{ font-family:var(--font-mono); font-size:11px; font-weight:500; letter-spacing:0; }
-
-  .place{ display:flex; align-items:stretch; gap:0; background:var(--surface); border:1px solid var(--line); border-radius:11px; margin-bottom:7px; overflow:hidden; }
-  .place.is-pick{ border-left:3px solid var(--gold); }
-  .place.is-mine{ border-left:3px solid var(--mine); }
-  .place.in-plan{ background:var(--surface-2); }
-  .place .plink{ flex:1; min-width:0; display:flex; align-items:center; gap:10px; padding:11px 4px 11px 13px; text-decoration:none; color:inherit; }
-  .place .plink:hover .pname{ text-decoration:underline; }
-  .place .pinfo{ flex:1; min-width:0; }
-  .place .pname{ font-size:13.5px; font-weight:700; line-height:1.25; }
-  .place .pmeta{ font-family:var(--font-mono); font-size:11px; color:var(--muted); margin-top:3px; display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
-  .place .pmeta .star{ color:var(--gold); }
-  .place .pwhy{ font-size:12px; color:var(--muted); margin-top:5px; line-height:1.4; }
-  .badge{ flex:0 0 auto; font-size:9.5px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; padding:3px 7px; border-radius:5px; align-self:flex-start; margin-top:1px; }
-  .badge.b-plan{ background:var(--accent); color:var(--accent-ink); }
-  .badge.b-pick{ background:rgba(156,114,9,.16); color:var(--gold); }
-  .badge.b-mine{ background:var(--mine-bg); color:var(--mine); }
-  .badge.b-closed{ background:rgba(200,90,52,.16); color:var(--miami); }
-
-  .addbtn{
-    flex:0 0 46px; border:none; border-left:1px solid var(--line);
-    background:var(--surface-2); color:var(--accent);
-    font-size:22px; font-weight:400; line-height:1; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; font-family:var(--font-body);
-  }
-  .addbtn:hover{ background:var(--accent); color:var(--accent-ink); }
-  .addbtn.remove{ color:var(--miami); }
-  .addbtn.remove:hover{ background:var(--miami); color:#fff; }
-
-  .empty-note{ background:var(--surface-2); border:1px dashed var(--line); border-radius:11px; padding:14px; font-size:13px; color:var(--muted); line-height:1.5; }
-
-  .info-card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin-bottom:12px; box-shadow:var(--shadow); }
-  .info-card h4{ font-family:var(--font-display); font-size:17px; font-weight:700; margin:0 0 10px; }
-  .kv{ display:flex; justify-content:space-between; gap:10px; padding:6px 0; font-size:13.5px; border-top:1px solid var(--line); }
-  .kv:first-of-type{ border-top:none; }
-  .kv .k{ color:var(--muted); }
-  .kv .v{ font-family:var(--font-mono); font-weight:600; text-align:right; }
-  .badge-good{ display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; background:var(--good-bg); color:var(--good); padding:3px 8px; border-radius:999px; }
-
-  .activity-card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin-bottom:10px; box-shadow:var(--shadow); display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
-  .activity-card .name{ font-weight:700; font-size:14.5px; }
-  .activity-card .price{ font-family:var(--font-mono); font-weight:700; color:var(--gold); font-size:16px; white-space:nowrap; }
-  .activity-card .buy{ display:block; margin-top:8px; font-size:12px; font-weight:700; color:var(--accent); text-decoration:none; }
-
-  .compare-wrap{ display:flex; gap:10px; margin-top:6px; }
-  .compare-card{ flex:1; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px; text-align:center; }
-  .compare-card.best{ border-color:var(--good); background:var(--good-bg); }
-  .compare-card .label{ font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700; }
-  .compare-card.best .label{ color:var(--good); }
-  .compare-card .amount{ font-family:var(--font-mono); font-size:20px; font-weight:700; margin-top:4px; }
-
-  .hero-count{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:22px 18px; text-align:center; margin-bottom:16px; box-shadow:var(--shadow); }
-  .hero-count .big{ font-family:var(--font-display); font-weight:800; font-size:52px; line-height:1; color:var(--accent); }
-  .hero-count .label{ font-size:13px; color:var(--muted); margin-top:6px; }
-
-  .tip-card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:13px 15px; margin-bottom:10px; box-shadow:var(--shadow); }
-  .tip-cat{ display:inline-block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; padding:3px 8px; border-radius:999px; margin-bottom:7px; }
-  .tip-cat.cat-hueco{ background:var(--good-bg); color:var(--good); }
-  .tip-cat.cat-aviso{ background:rgba(200,90,52,.14); color:var(--miami); }
-  .tip-cat.cat-ahorro{ background:rgba(156,114,9,.14); color:var(--gold); }
-  .tip-cat.cat-tip{ background:rgba(47,102,144,.14); color:var(--ny); }
-  .tip-card p{ margin:0; font-size:13px; line-height:1.5; color:var(--ink); }
-
-  .idea-card{ background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--mine); border-radius:12px; padding:13px 15px; margin-bottom:9px; box-shadow:var(--shadow); }
-  .idea-card .iname{ font-size:14.5px; font-weight:700; }
-  .idea-card .imeta{ font-family:var(--font-mono); font-size:11px; color:var(--muted); margin-top:3px; }
-  .idea-card .iwhy{ font-size:12.5px; color:var(--muted); line-height:1.45; margin-top:6px; }
-  .idea-foot{ display:flex; gap:7px; margin-top:10px; }
-  .idea-foot .route-btn{ font-size:12px; padding:8px 11px; }
-
-  nav.tabbar{ position:sticky; bottom:0; left:0; right:0; display:flex; background:var(--chrome-bg); border-top:1px solid var(--chrome-line); padding:6px 4px calc(6px + env(safe-area-inset-bottom)); z-index:20; }
-  .navbtn{ flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; color:var(--chrome-muted); font-family:var(--font-body); font-size:10px; font-weight:600; padding:8px 1px 6px; cursor:pointer; border-radius:10px; }
-  .navbtn svg{ width:20px; height:20px; }
-  .navbtn.active{ color:var(--chrome-ink); background:rgba(255,255,255,.08); }
-
-  .toast{
-    position:fixed; left:50%; bottom:78px; transform:translateX(-50%);
-    background:var(--chrome-bg); color:var(--chrome-ink); border:1px solid var(--chrome-line);
-    padding:10px 16px; border-radius:999px; font-size:13px; font-weight:600;
-    z-index:60; opacity:0; pointer-events:none; transition:opacity .18s;
-    box-shadow:0 8px 24px rgba(0,0,0,.35); max-width:90vw; text-align:center;
-  }
-  .toast.show{ opacity:1; }
-  ::selection{ background:var(--accent); color:var(--accent-ink); }
-  /* ===== PWA: conexión, instalación y actualización ===== */
-  .net-chip{ display:none; align-items:center; gap:6px; margin-top:8px; padding:4px 9px; border-radius:999px;
-    font-family:var(--font-mono); font-size:11px; color:var(--chrome-ink);
-    background:rgba(255,255,255,.09); border:1px solid var(--chrome-line); }
-  .net-chip.show{ display:inline-flex; }
-  .net-chip .dot{ width:7px; height:7px; border-radius:50%; background:var(--gold); flex:none; }
-  .pwa-bar{
-    position:fixed; left:50%; transform:translateX(-50%); bottom:78px; z-index:40;
-    width:calc(100% - 32px); max-width:440px; display:none; align-items:center; gap:10px;
-    background:var(--surface); color:var(--ink); border:1px solid var(--line);
-    border-radius:14px; box-shadow:var(--shadow); padding:10px 10px 10px 14px; font-size:13px;
-  }
-  .pwa-bar.show{ display:flex; }
-  .pwa-bar p{ margin:0; flex:1; line-height:1.35; }
-  .pwa-bar button{
-    font-family:var(--font-body); font-size:12px; font-weight:700; cursor:pointer;
-    border-radius:9px; padding:7px 11px; border:1px solid transparent;
-    background:var(--accent); color:var(--accent-ink);
-  }
-  .pwa-bar button.ghost{ background:none; color:var(--muted); border-color:var(--line); padding:7px 9px; }
-
-  /* ===== Buscador ===== */
-  .icon-btn{
-    display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; flex:none;
-    background:rgba(255,255,255,.1); border:1px solid var(--chrome-line); color:var(--chrome-ink);
-    border-radius:9px; cursor:pointer; padding:0;
-  }
-  .icon-btn:hover{ background:rgba(255,255,255,.18); }
-  .icon-btn svg{ width:17px; height:17px; }
-  .brand-actions{ display:flex; align-items:center; gap:8px; flex:none; }
-
-  .search-wrap{ position:sticky; top:0; z-index:6; background:var(--paper); padding:2px 0 8px; }
-  .search-field{
-    display:flex; align-items:center; gap:9px; background:var(--surface);
-    border:1px solid var(--line); border-radius:12px; padding:11px 12px; box-shadow:var(--shadow);
-  }
-  .search-field > svg{ width:17px; height:17px; color:var(--muted); flex:none; }
-  .search-field input{
-    flex:1; min-width:0; border:none; background:none; outline:none; color:var(--ink);
-    font-family:var(--font-body); font-size:15px; padding:0;
-  }
-  .search-field input::placeholder{ color:var(--muted); }
-  .search-x{ border:none; background:none; color:var(--muted); font-size:16px; cursor:pointer; padding:0 2px; line-height:1; }
-  .search-count{ font-family:var(--font-mono); font-size:11px; color:var(--muted); margin:0 2px 10px; }
-
-  .sres{ display:block; padding:11px 13px 9px; }
-  .sres .pname{ font-size:13.5px; font-weight:700; line-height:1.25; text-decoration:none; color:inherit; }
-  .sres .pname:hover{ text-decoration:underline; }
-  .sres .row1{ display:flex; align-items:flex-start; gap:8px; }
-  .sres .row1 > span:first-child{ flex:1; min-width:0; }
-  .sres .pwhy{ display:block; }
-  .sres mark{ background:var(--good-bg); color:inherit; border-radius:3px; padding:0 1px; }
-  .daychips{ display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; }
-  .daychip{
-    font-family:var(--font-mono); font-size:10.5px; font-weight:600; cursor:pointer;
-    border:1px solid var(--line); background:var(--surface-2); color:var(--muted);
-    border-radius:999px; padding:4px 8px; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-  }
-  .daychip:hover{ color:var(--ink); border-color:var(--accent); }
-  .daychip.none{ cursor:default; border-style:dashed; }
-  .daychip.none:hover{ color:var(--muted); border-color:var(--line); }
-  .sugs{ display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
-  .sug{
-    font-family:var(--font-mono); font-size:11.5px; cursor:pointer; border:1px solid var(--line);
-    background:var(--surface); color:var(--ink); border-radius:999px; padding:6px 11px;
-  }
-  .sug:hover{ border-color:var(--accent); }
-
-  /* ===== Recorrido paso a paso ===== */
-  .tl-leg{ border:1px solid var(--line); background:var(--surface); border-radius:12px; padding:11px 12px 10px; margin-bottom:9px; }
-  .tl-leg.is-fixed{ border-style:dashed; }
-  .tl-head{ display:flex; align-items:center; gap:7px; margin-bottom:9px;
-    font-family:var(--font-mono); font-size:10.5px; font-weight:600; letter-spacing:.05em;
-    text-transform:uppercase; color:var(--muted); }
-  .tl-head svg{ width:14px; height:14px; flex:none; }
-  .tl-head span{ flex:1; min-width:0; }
-  .tl-step{ display:flex; align-items:flex-start; gap:9px; padding:4px 0; }
-  .tl-dot{ position:relative; width:16px; flex:none; display:flex; justify-content:center; padding-top:5px; }
-  .tl-dot i{ width:9px; height:9px; border-radius:50%; background:var(--accent); display:block; z-index:1; }
-  .tl-step.is-extra .tl-dot i{ background:var(--mine); }
-  .tl-step:not(:last-of-type) .tl-dot::after{
-    content:''; position:absolute; top:12px; bottom:-14px; left:50%; margin-left:-1px; width:2px; background:var(--line);
-  }
-  .tl-body{ flex:1; min-width:0; padding-top:1px; }
-  .tl-name{ font-size:13px; line-height:1.3; font-weight:600; }
-  .tl-sub{ font-family:var(--font-mono); font-size:10.5px; color:var(--muted); margin-top:2px; }
-  .tl-acts{ display:flex; gap:5px; flex:none; align-items:center; }
-  .tl-grip{
-    width:34px; height:34px; flex:none; display:inline-flex; align-items:center; justify-content:center;
-    border:1px solid var(--line); background:var(--surface-2); color:var(--muted);
-    border-radius:8px; cursor:grab; padding:0;
-    touch-action:none;              /* sin esto el dedo scrollea la pagina en vez de arrastrar */
-    -webkit-user-select:none; user-select:none; -webkit-touch-callout:none;
-  }
-  .tl-grip:active{ cursor:grabbing; }
-  .tl-grip svg{ width:15px; height:15px; pointer-events:none; }
-  .tl-steps.sorting .tl-step:not(.dragging){ transition:transform .12s ease; }
-  .tl-step.dragging{
-    position:relative; z-index:5;
-    background:var(--surface-2); border-radius:10px;
-    box-shadow:0 6px 18px -6px rgba(20,26,40,.35);
-  }
-  .tl-step.dragging .tl-dot::after{ display:none; }
-  .tl-hint{ font-family:var(--font-mono); font-size:10.5px; color:var(--muted); margin:0 0 7px 2px; }
-  .tl-btn{
-    width:34px; height:34px; display:inline-flex; align-items:center; justify-content:center;
-    border:1px solid var(--line); background:var(--surface-2); color:var(--muted);
-    border-radius:8px; cursor:pointer; padding:0; font-size:13px; line-height:1;
-  }
-  .tl-btn:hover:not(:disabled){ color:var(--ink); border-color:var(--accent); }
-  .tl-btn:disabled{ opacity:.3; cursor:default; }
-  .tl-btn.danger:hover{ color:var(--miami); border-color:var(--miami); }
-  .tl-empty{ font-size:12.5px; color:var(--muted); padding:6px 0 8px; }
-  .tl-foot{ display:flex; flex-wrap:wrap; gap:7px; margin:2px 0 4px; }
-  .tl-foot .route-btn{ flex:1; min-width:150px; }
-  .tl-edited{
-    font-family:var(--font-mono); font-size:10.5px; color:var(--gold);
-    display:flex; align-items:center; gap:7px; margin:0 2px 9px;
-  }
-  .tl-edited button{
-    font-family:var(--font-mono); font-size:10.5px; cursor:pointer; color:var(--muted);
-    background:none; border:1px solid var(--line); border-radius:999px; padding:3px 9px;
-  }
-  .tl-edited button:hover{ color:var(--ink); border-color:var(--accent); }
-
-  /* alta de un lugar propio */
-  .addown{ border:1px dashed var(--line); border-radius:12px; padding:11px 12px; margin-bottom:12px; background:var(--surface-2); }
-  .addown > summary{ cursor:pointer; font-size:12.5px; font-weight:600; color:var(--accent); list-style:none; }
-  .addown > summary::-webkit-details-marker{ display:none; }
-  .addown > summary::before{ content:'+ '; font-weight:700; }
-  .addown[open] > summary{ margin-bottom:10px; }
-  .addown label{ display:block; font-family:var(--font-mono); font-size:10.5px; color:var(--muted); margin:0 0 4px; }
-  .addown input{
-    width:100%; box-sizing:border-box; border:1px solid var(--line); background:var(--surface);
-    color:var(--ink); border-radius:9px; padding:9px 10px; font-family:var(--font-body); font-size:14px;
-    outline:none; margin-bottom:9px;
-  }
-  .addown input:focus{ border-color:var(--accent); }
-  .addown .hint{ font-size:11.5px; color:var(--muted); line-height:1.4; margin:0 0 10px; }
-
-</style>
-
-<div class="backdrop">
-<div class="app">
-
-  <header class="top">
-    <div class="brand">
-      <h1>BUE <span class="arrow">→</span> NYC <span class="arrow">→</span> MIA</h1>
-      <div class="brand-actions">
-        <span class="status-pill" id="statusPill">—</span>
-        <button type="button" class="icon-btn" id="searchBtn" title="Buscar un lugar" aria-label="Buscar un lugar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
-      </div>
-    </div>
-    <div class="subline" id="subline">25 sep – 11 oct 2026 · 17 días · 4 viajeros</div>
-    <div class="net-chip" id="netChip"><span class="dot"></span> Sin conexión · itinerario disponible igual</div>
-  </header>
-
-  <main>
-    <section class="panel" id="panel-hoy"><div id="hoyContent"></div></section>
-
-    <section class="panel" id="panel-itin">
-      <h2 class="section-title">Itinerario</h2>
-      <p class="note" style="margin:-6px 0 14px;">Cada ruta arranca en el hotel y va ordenada para no volver sobre los pasos. Tocá “Ver detalle” para todo lo que hay en la zona.</p>
-      <div id="itinList"></div>
-    </section>
-
-    <section class="panel" id="panel-search">
-      <div class="search-wrap">
-        <div class="search-field">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
-          <input type="search" id="searchInput" placeholder="Buscar entre 160 lugares…" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="search" />
-          <button type="button" class="search-x" id="searchX" aria-label="Borrar">✕</button>
-        </div>
-      </div>
-      <div class="search-count" id="searchCount"></div>
-      <div id="searchResults"></div>
-    </section>
-
-    <section class="panel" id="panel-detail"><div id="detailContent"></div></section>
-
-    <section class="panel" id="panel-ideas">
-      <h2 class="section-title">Ideas que te faltan</h2>
-      <p class="note" style="margin:-6px 0 14px;">Lugares que <b>no están en tus listas de Google Maps</b> ni en el Excel, pero que creo que valen la pena. Tocá “Sumar” y quedan guardados en el día que corresponda.</p>
-      <div id="ideasList"></div>
-    </section>
-
-    <section class="panel" id="panel-act">
-      <h2 class="section-title">Actividades y entradas</h2>
-      <div id="activityList"></div>
-      <h3 class="sub-title">Pase vs. entradas sueltas</h3>
-      <p class="note" style="margin-top:-4px;">Las 6 actividades por separado dan <b style="color:var(--ink)">USD 250</b> por persona.</p>
-      <div class="compare-wrap">
-        <div class="compare-card"><div class="label">CityPASS 3</div><div class="amount">$116</div></div>
-        <div class="compare-card"><div class="label">Go City</div><div class="amount">$119</div></div>
-        <div class="compare-card best"><div class="label">Ahorro</div><div class="amount">~$130</div></div>
-      </div>
-    </section>
-
-    <section class="panel" id="panel-info">
-      <h2 class="section-title">Info del viaje</h2>
-      <h3 class="sub-title">Vuelos</h3>
-      <div id="flightList"></div>
-      <h3 class="sub-title">Hospedaje</h3>
-      <div class="info-card">
-        <h4>Nueva York — Hotel and the City</h4>
-        <div class="kv"><span class="k">Dirección</span><span class="v">38 W 31st St</span></div>
-        <div class="kv"><span class="k">Zona</span><span class="v">Koreatown / Herald Sq</span></div>
-        <div class="kv"><span class="k">Rating</span><span class="v">3.6★ · hotel 4★</span></div>
-        <div class="kv"><span class="k">Noches</span><span class="v">10 · 25 sep a 6 oct</span></div>
-        <div class="kv"><span class="k">Reserva</span><span class="v"><span class="badge-good">Confirmada</span></span></div>
-        <a class="route-btn wide" style="margin-top:11px" target="_blank" rel="noopener"
-           href="https://www.google.com/maps/search/?api=1&query=Hotel%20and%20the%20City%2C%2038%20W%2031st%20St%2C%20New%20York">Ver en Maps</a>
-      </div>
-      <div class="info-card">
-        <h4>Miami — Roami at The Carmela</h4>
-        <div class="kv"><span class="k">Zona</span><span class="v">Miami, FL</span></div>
-        <div class="kv"><span class="k">Rating</span><span class="v">2.5★ (8 reseñas)</span></div>
-        <div class="kv"><span class="k">Noches</span><span class="v">5 · 6 a 11 oct</span></div>
-        <div class="kv"><span class="k">Reserva</span><span class="v"><span class="badge-good">Confirmada</span></span></div>
-        <a class="route-btn wide" style="margin-top:11px" target="_blank" rel="noopener"
-           href="https://www.google.com/maps/search/?api=1&query=Roami%20at%20The%20Carmela%2C%20Miami%2C%20FL">Ver en Maps</a>
-      </div>
-      <h3 class="sub-title">Tips y huecos</h3>
-      <div id="tipsList"></div>
-    </section>
-  </main>
-
-  <nav class="tabbar" id="tabbar">
-    <button class="navbtn active" data-tab="hoy">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>
-      Hoy
-    </button>
-    <button class="navbtn" data-tab="itin">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      Itinerario
-    </button>
-    <button class="navbtn" data-tab="ideas">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.55 1 1.32 1 2.2v.3h6v-.3c0-.88.4-1.65 1-2.2A6 6 0 0 0 12 3z"/></svg>
-      Ideas
-    </button>
-    <button class="navbtn" data-tab="act">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V8z"/><line x1="9" y1="6" x2="9" y2="18" stroke-dasharray="2 3"/></svg>
-      Tickets
-    </button>
-    <button class="navbtn" data-tab="info">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="8" r="1" fill="currentColor" stroke="none"/></svg>
-      Info
-    </button>
-  </nav>
-
-</div>
-</div>
-<div class="toast" id="toast"></div>
-<div class="pwa-bar" id="pwaBar"><p id="pwaMsg"></p><button type="button" id="pwaAct"></button><button type="button" class="ghost" id="pwaDismiss" aria-label="Cerrar">✕</button></div>
-
-<script>
 (function(){
   "use strict";
 
@@ -998,6 +515,19 @@
   function dayIsEdited(date){ return !!state.legs[date]; }
   function resetLegs(date){ delete state.legs[date]; saveState(); }
 
+  function moveStop(idx, legI, pt, dir){
+    var day = trip[idx];
+    var rs = routesFor(day, idx);
+    var e = legEditsFor(day.date, rs);
+    var list = rs[legI].pts.slice();
+    var at = list.indexOf(pt), to = at + dir;
+    if(at === -1 || to < 0 || to >= list.length) return false;
+    list.splice(to, 0, list.splice(at, 1)[0]);
+    e[legI].order = list;
+    saveState();
+    return true;
+  }
+
   function removeStop(idx, legI, pt){
     var day = trip[idx];
     var rs = routesFor(day, idx);
@@ -1072,11 +602,6 @@
     noche:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="18" r="3"/><path d="M11 18V5l9-2v11"/><circle cx="17" cy="14" r="3"/></svg>',
     playa:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18c2 0 2 2 4 2s2-2 4-2 2 2 4 2 2-2 4-2 2 2 4 2"/><circle cx="17" cy="6" r="3"/><path d="M3 15l8-8"/></svg>'
   };
-  ICONS.grip = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
-    '<circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/>' +
-    '<circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/>' +
-    '<circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg>';
-
   function modeIcon(m){ return m==='transit' ? ICONS.train : (m==='driving' ? ICONS.car : ICONS.walk); }
   var CAT_LABEL = {ver:'Para ver', comer:'Para comer', cafe:'Café', compras:'Compras', noche:'Noche', playa:'Playas'};
   var CAT_ORDER = ['ver','playa','comer','cafe','noche','compras'];
@@ -1180,88 +705,6 @@
              .replace(/,\s*(Estados Unidos|USA)$/i, '');
   }
 
-  // ===== Reordenar arrastrando =====
-  // Pointer events cubren dedo y mouse con el mismo codigo. Cada vez que la
-  // fila cambia de lugar en el DOM se reinicia el punto de referencia, asi
-  // sigue al dedo sin acumular saltos.
-  function initDragSort(){
-    var conts = document.querySelectorAll('#panel-detail .tl-steps');
-    Array.prototype.forEach.call(conts, function(cont){
-      Array.prototype.forEach.call(cont.querySelectorAll('.tl-grip'), function(grip){
-        grip.addEventListener('pointerdown', function(ev){ startDrag(ev, cont, grip); });
-      });
-    });
-  }
-
-  function startDrag(ev, cont, grip){
-    if(ev.button != null && ev.button !== 0) return;
-    var row = grip.closest('.tl-step');
-    if(!row) return;
-    ev.preventDefault();
-
-    var baseY = ev.clientY;
-    var movido = false;
-    try{ grip.setPointerCapture(ev.pointerId); }catch(e){}
-    cont.classList.add('sorting');
-    row.classList.add('dragging');
-
-    function onMove(e){
-      row.style.transform = 'translateY(' + (e.clientY - baseY) + 'px)';
-      var rect = row.getBoundingClientRect();
-      var mid = rect.top + rect.height / 2;
-      var hermanos = Array.prototype.filter.call(cont.children, function(n){
-        return n !== row && n.classList.contains('tl-step');
-      });
-      for(var i = 0; i < hermanos.length; i++){
-        var sib = hermanos[i];
-        var sr = sib.getBoundingClientRect();
-        var smid = sr.top + sr.height / 2;
-        var filaVaDespues = !!(sib.compareDocumentPosition(row) & Node.DOCUMENT_POSITION_FOLLOWING);
-        if(mid < smid && filaVaDespues){
-          cont.insertBefore(row, sib);
-          baseY = e.clientY; row.style.transform = ''; movido = true;
-          break;
-        }
-        if(mid > smid && !filaVaDespues){
-          cont.insertBefore(row, sib.nextSibling);
-          baseY = e.clientY; row.style.transform = ''; movido = true;
-          break;
-        }
-      }
-    }
-
-    function onUp(){
-      grip.removeEventListener('pointermove', onMove);
-      grip.removeEventListener('pointerup', onUp);
-      grip.removeEventListener('pointercancel', onUp);
-      row.style.transform = '';
-      row.classList.remove('dragging');
-      cont.classList.remove('sorting');
-      if(movido) commitDrag(cont);
-    }
-
-    grip.addEventListener('pointermove', onMove);
-    grip.addEventListener('pointerup', onUp);
-    grip.addEventListener('pointercancel', onUp);
-  }
-
-  function commitDrag(cont){
-    var idx  = parseInt(cont.getAttribute('data-day'), 10);
-    var legI = parseInt(cont.getAttribute('data-legsteps'), 10);
-    var day = trip[idx];
-    if(!day) return;
-    var orden = Array.prototype.map.call(cont.querySelectorAll('.tl-step'), function(n){
-      return n.getAttribute('data-pt');
-    }).filter(Boolean);
-    var rs = routesFor(day, idx);
-    var e = legEditsFor(day.date, rs);
-    e[legI].order = orden;
-    saveState();
-    keepScroll();
-    renderDetail(idx);
-    renderItin();
-  }
-
   function renderTimeline(day, idx, rs){
     var h = '<div class="mini-label">Recorrido paso a paso</div>';
 
@@ -1289,23 +732,19 @@
       if(!r.pts.length){
         h += '<div class="tl-empty">Sacaste todas las paradas de este tramo.</div>';
       }
-      if(r.pts.length > 1) h += '<div class="tl-hint">Mantené apretado ⠿ y arrastrá para reordenar</div>';
-      h += '<div class="tl-steps" data-legsteps="'+legI+'" data-day="'+idx+'">';
       r.pts.forEach(function(pt, i){
         var esExtra = (day.routes || [])[legI] ? (day.routes[legI].pts || []).indexOf(pt) === -1 : true;
-        h += '<div class="tl-step'+(esExtra ? ' is-extra' : '')+'" data-pt="'+esc(pt)+'">';
+        h += '<div class="tl-step'+(esExtra ? ' is-extra' : '')+'">';
         h += '<div class="tl-dot"><i></i></div>';
         h += '<div class="tl-body"><div class="tl-name">'+esc(stopLabel(pt, day.city, nombres))+'</div>';
         h += '<div class="tl-sub">'+(i === 0 ? 'Salida' : (i === r.pts.length - 1 ? 'Llegada' : 'Parada ' + i))+
              (esExtra ? ' · sumada por vos' : '')+'</div></div>';
         h += '<div class="tl-acts">';
+        h += '<button type="button" class="tl-btn" data-mv="up" data-leg="'+legI+'" data-day="'+idx+'" data-pt="'+esc(pt)+'" title="Subir"'+(i === 0 ? ' disabled' : '')+'>↑</button>';
+        h += '<button type="button" class="tl-btn" data-mv="down" data-leg="'+legI+'" data-day="'+idx+'" data-pt="'+esc(pt)+'" title="Bajar"'+(i === r.pts.length - 1 ? ' disabled' : '')+'>↓</button>';
         h += '<button type="button" class="tl-btn danger" data-rmstop="'+esc(pt)+'" data-leg="'+legI+'" data-day="'+idx+'" title="Sacar del recorrido">✕</button>';
-        if(r.pts.length > 1){
-          h += '<span class="tl-grip" role="button" aria-label="Arrastrar para reordenar" title="Arrastrar para reordenar">'+ICONS.grip+'</span>';
-        }
         h += '</div></div>';
       });
-      h += '</div>';
 
       if(r.pts.length){
         h += '<a class="route-btn wide" style="margin-top:9px" target="_blank" rel="noopener" href="'+
@@ -1392,8 +831,7 @@
       if(detailOrigin === 'search'){ detailOrigin = 'itin'; setTab('search'); }
       else { setTab('itin'); renderItin(); }
     });
-    if(keepScrollOnce){ keepScrollOnce = false; } else { window.scrollTo(0,0); }
-    initDragSort();
+    window.scrollTo(0,0);
   }
 
   // ===== renders =====
@@ -1470,11 +908,6 @@
     }
   }
 
-  // Al reordenar o sacar una parada se vuelve a dibujar el detalle. Sin esto,
-  // cada toque devolvia la pantalla al principio y habia que bajar de nuevo.
-  var keepScrollOnce = false;
-  function keepScroll(){ keepScrollOnce = true; }
-
   function setTab(tab, isDetail){
     var panels = document.querySelectorAll('.panel');
     for(var i=0;i<panels.length;i++){ panels[i].classList.remove('active'); }
@@ -1487,7 +920,7 @@
       document.getElementById('subline').textContent = '25 sep – 11 oct 2026 · 17 días · 4 viajeros';
       if(tab !== 'search'){ try{ localStorage.setItem('viajeUsa2026.tab', tab); }catch(e){} }
     }
-    if(!keepScrollOnce) window.scrollTo(0,0);
+    window.scrollTo(0,0);
   }
 
   document.getElementById('tabbar').addEventListener('click', function(e){
@@ -1507,8 +940,16 @@
       var d = fmtDate(trip[i].date);
       toast(nowAdded ? '“'+pl.n+'” sumado al '+d.num+' '+d.mon : '“'+pl.n+'” quitado del '+d.num+' '+d.mon);
       if(addBtn.getAttribute('data-src') === 'ideas'){ renderIdeas(); }
-      else { keepScroll(); renderDetail(i); }
+      else { renderDetail(i); }
       renderItin(); renderHoy();
+      return;
+    }
+    var mv = e.target.closest('[data-mv]');
+    if(mv){
+      var mi = parseInt(mv.getAttribute('data-day'), 10);
+      moveStop(mi, parseInt(mv.getAttribute('data-leg'), 10), mv.getAttribute('data-pt'),
+               mv.getAttribute('data-mv') === 'up' ? -1 : 1);
+      renderDetail(mi); renderItin();
       return;
     }
     var rm = e.target.closest('[data-rmstop]');
@@ -1516,7 +957,7 @@
       var ri = parseInt(rm.getAttribute('data-day'), 10);
       removeStop(ri, parseInt(rm.getAttribute('data-leg'), 10), rm.getAttribute('data-rmstop'));
       toast('Parada sacada del recorrido');
-      keepScroll(); renderDetail(ri); renderItin();
+      renderDetail(ri); renderItin();
       return;
     }
     var rl = e.target.closest('[data-resetlegs]');
@@ -1524,7 +965,7 @@
       var li = parseInt(rl.getAttribute('data-resetlegs'), 10);
       resetLegs(trip[li].date);
       toast('Recorrido restablecido');
-      keepScroll(); renderDetail(li); renderItin();
+      renderDetail(li); renderItin();
       return;
     }
     var ao = e.target.closest('[data-addown]');
@@ -1534,7 +975,7 @@
       var creado = addCustomPlace(ai, nm ? nm.value : '', lk ? lk.value : '');
       if(!creado){ toast('Escribí el nombre del lugar'); return; }
       toast('“' + creado.n + '” sumado al recorrido');
-      keepScroll(); renderDetail(ai); renderItin(); renderHoy();
+      renderDetail(ai); renderItin(); renderHoy();
       return;
     }
     var det = e.target.closest('.detail-btn[data-day]');
@@ -1708,101 +1149,3 @@
   setTab(savedTab);
 
 })();
-</script>
-
-<script>
-/* ===== PWA: registro del service worker, estado de conexión e instalación ===== */
-(function(){
-  var bar = document.getElementById('pwaBar');
-  var msg = document.getElementById('pwaMsg');
-  var act = document.getElementById('pwaAct');
-  var chip = document.getElementById('netChip');
-  var onAct = null;
-
-  function showBar(text, label, fn){
-    msg.textContent = text; act.textContent = label; onAct = fn; bar.classList.add('show');
-  }
-  function hideBar(){ bar.classList.remove('show'); onAct = null; }
-  act.addEventListener('click', function(){ var f = onAct; hideBar(); if(f) f(); });
-  document.getElementById('pwaDismiss').addEventListener('click', hideBar);
-
-  // Instalada en la pantalla de inicio, la app corre en su propia ventana sin
-  // barra del navegador. Ahi los <a target="_blank"> no tienen donde abrirse y
-  // en iPhone directamente no hacen nada: es por eso que las rutas de Google
-  // Maps y los links de entradas no respondian. Los abrimos a mano.
-  var STANDALONE = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
-                   window.navigator.standalone === true;
-  if(STANDALONE){
-    document.addEventListener('click', function(ev){
-      var a = ev.target.closest('a[href]');
-      if(!a) return;
-      var href = a.getAttribute('href') || '';
-      if(!/^https?:/i.test(href)) return;
-      var externo = true;
-      try{ externo = new URL(a.href).origin !== location.origin; }catch(err){}
-      if(!externo) return;
-      ev.preventDefault();
-      var w = null;
-      try{ w = window.open(a.href, '_blank'); }catch(err){}
-      if(!w) window.location.href = a.href;   // iPhone: window.open devuelve null
-    });
-  }
-
-  function paintNet(){ chip.classList.toggle('show', !navigator.onLine); }
-  window.addEventListener('online', paintNet);
-  window.addEventListener('offline', paintNet);
-  paintNet();
-
-  /* Instalar en la pantalla de inicio (Android/Chrome; en iPhone es Compartir → Agregar a inicio) */
-  window.addEventListener('beforeinstallprompt', function(e){
-    e.preventDefault();
-    var dismissed = false;
-    try{ dismissed = localStorage.getItem('viajeUsa2026.installDismissed') === '1'; }catch(err){}
-    if(dismissed) return;
-    showBar('Instalala en el celular para usarla sin datos.', 'Instalar', function(){
-      e.prompt();
-      try{ localStorage.setItem('viajeUsa2026.installDismissed','1'); }catch(err){}
-    });
-  });
-  document.getElementById('pwaDismiss').addEventListener('click', function(){
-    try{ localStorage.setItem('viajeUsa2026.installDismissed','1'); }catch(err){}
-  });
-
-  if(!('serviceWorker' in navigator)) return;
-  window.addEventListener('load', function(){
-    navigator.serviceWorker.register('sw.js').then(function(reg){
-      function watch(sw){
-        if(!sw) return;
-        sw.addEventListener('statechange', function(){
-          if(sw.state === 'installed' && navigator.serviceWorker.controller){
-            showBar('Hay una versión nueva del itinerario.', 'Actualizar', function(){
-              sw.postMessage({type:'SKIP_WAITING'});
-            });
-          }
-        });
-      }
-      if(reg.waiting && navigator.serviceWorker.controller){
-        showBar('Hay una versión nueva del itinerario.', 'Actualizar', function(){
-          reg.waiting.postMessage({type:'SKIP_WAITING'});
-        });
-      }
-      reg.addEventListener('updatefound', function(){ watch(reg.installing); });
-      document.addEventListener('visibilitychange', function(){
-        // navigator.onLine miente con el wifi de hoteles y aeropuertos (portal
-        // cautivo: hay red pero no internet), asi que la promesa puede fallar.
-        if(!document.hidden && navigator.onLine){
-          try{ var u = reg.update(); if(u && u.catch) u.catch(function(){}); }catch(err){}
-        }
-      });
-    }).catch(function(){});
-
-    var reloading = false;
-    navigator.serviceWorker.addEventListener('controllerchange', function(){
-      if(reloading) return; reloading = true; location.reload();
-    });
-  });
-})();
-</script>
-
-</body>
-</html>

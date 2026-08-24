@@ -78,8 +78,10 @@ que ser directo.
 ## Recorrido paso a paso (editable)
 
 El detalle de cada día muestra el recorrido como una lista vertical de paradas, un tramo por ruta.
-Cada parada se puede subir, bajar o sacar; el botón "Abrir este tramo en Maps" se rearma con el orden
-que quedó. Un cartel avisa cuando el día está modificado y ofrece volver al plan original.
+Cada parada se reordena **arrastrándola del asa ⠿** (pointer events: mismo código para dedo y mouse) y
+se saca con la ✕; el botón "Abrir este tramo en Maps" se rearma con el orden que quedó. El asa lleva
+`touch-action:none`, si no el dedo scrollea la página en vez de arrastrar. Editar **no mueve el scroll**:
+la pantalla se queda donde estaba. Un cartel avisa cuando el día está modificado y ofrece volver al plan original.
 
 Las ediciones se guardan como una **capa encima** del recorrido original, no como una copia:
 
@@ -98,31 +100,6 @@ exactas de `!3d…!4d…`, que es más preciso que buscar por nombre. Del link *
 (`maps.app.goo.gl`) no se puede sacar nada sin conexión: ahí hace falta escribir el nombre.
 
 Los lugares propios se guardan en `state.custom` y entran a la ruta como cualquier otro.
-
-## Conexión opcional con Google Maps
-
-La app funciona entera sin conexión y sin clave. Si se carga una **clave propia de Google Maps** en
-la pestaña Info, se habilitan tres cosas que necesitan internet:
-
-- **mapa embebido** dentro del detalle del día, con las paradas ubicadas;
-- **búsqueda de lugares** (Places Autocomplete) y toque directo sobre cualquier punto del mapa;
-- **optimización real del recorrido** con `DirectionsService` + `optimizeWaypoints`, que devuelve el
-  orden más eficiente según Google, con distancia y tiempo.
-
-Todo lo que se elige en el mapa se guarda con **nombre y coordenadas** en el dispositivo, así que
-después funciona sin conexión. Lo mismo el orden optimizado: se guarda como una edición del recorrido.
-
-### La clave nunca entra al repositorio
-
-Se guarda en `localStorage` (`viajeUsa2026.gmapsKey`), en el dispositivo de cada uno. No está en el
-código, no se publica y no se sincroniza. Al mostrarla en pantalla queda enmascarada.
-
-Para crearla: proyecto en Google Cloud → habilitar **Maps JavaScript API**, **Places API (New)** y
-**Directions API** → crear credencial → restringirla por sitio web y por API → ponerle tope de cuota.
-
-Nota: `google.maps.places.Autocomplete` (el buscador viejo) **no está disponible para cuentas nuevas**
-desde marzo de 2025. La app usa `PlaceAutocompleteElement`, el componente actual. El script se carga con
-`loading=async`, así que cada librería se pide con `importLibrary` antes de usarla.
 
 ## Al editar los datos
 
