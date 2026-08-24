@@ -116,6 +116,26 @@ exactas de `!3d…!4d…`, que es más preciso que buscar por nombre. Del link *
 
 Los lugares propios se guardan en `state.custom` y entran a la ruta como cualquier otro.
 
+## Paradas hechas, horarios y notas
+
+- El punto de cada parada es un botón: la marca como hecha, la tacha y suma al contador del día.
+  Se cuenta **por lugar, no por punto de ruta**: el hotel no es parada, y un lugar que cierra un tramo
+  y abre el siguiente cuenta una sola vez.
+- Tocando el nombre se abre un editor con **horario** (`input type=time`, selector nativo en el celular)
+  y una **nota** libre.
+- Cada día puede llevar un mapa `at:{}` con horarios que vienen del itinerario (DUMBO antes de las 10,
+  museo del 9/11 a las 17:30, Wynwood antes de las 11…). El horario propio del usuario pisa al del dato.
+
+## Hoy
+
+Durante el viaje, la pestaña abre con la **próxima parada pendiente** en grande, con "Cómo llegar" y
+"Marcar hecha". Los días de vuelo muestran primero el horario del vuelo.
+
+## Compartir el plan
+
+Info → Compartir. Exporta todo el estado a un JSON con la fecha en el nombre; importar **reemplaza** lo
+que haya (avisa antes). Un archivo que no sea un plan de este viaje se rechaza sin tocar nada.
+
 ## Al editar los datos
 
 Subí `VERSION` en `sw.js` (`'v1'` → `'v2'`) y volvé a publicar. La próxima vez que alguien abra la app con internet le aparece "Hay una versión nueva" con un botón para actualizar.
